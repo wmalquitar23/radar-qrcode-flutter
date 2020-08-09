@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
@@ -11,9 +13,7 @@ class OnBoardingPage extends StatefulWidget {
 class _OnBoardingPageState extends State<OnBoardingPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+    return MobileStatusMarginTop(
       child: Scaffold(
         body: Container(
           margin: EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
@@ -43,6 +43,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               PrimaryButton(
                 text: "Next",
                 fontSize: 14,
+                onPressed: () {
+                  Navigator.pushNamed(context, GETSTARTED_ROUTE);
+                },
               )
             ],
           ),
