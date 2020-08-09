@@ -5,11 +5,13 @@ class HeaderText extends StatelessWidget {
   final String title;
   final FontWeight fontWeight;
   final double fontSize;
+  final Color color;
 
   HeaderText(
       {@required this.title,
       this.fontWeight = FontWeight.w700,
-      this.fontSize = 21});
+      this.fontSize = 21,
+      this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class HeaderText extends StatelessWidget {
         style: TextStyle(
           height: 1.0,
           fontSize: fontSize,
-          color: ColorUtil.primaryTextColor,
+          color: color ?? ColorUtil.primaryTextColor,
           fontWeight: fontWeight,
         ));
   }

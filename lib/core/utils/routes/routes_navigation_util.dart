@@ -7,6 +7,7 @@ import 'package:radar_qrcode_flutter/presentation/pages/basic_information/basic_
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/getstarted/get_started_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/onboarding/onboarding_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/verification_code/verification_page.dart.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   // final args = settings.arguments;
@@ -23,6 +24,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case BASIC_INFORMATION_ROUTE:
       return pushNamed(
           page: BasicInformation(),
+          settings: settings,
+          pageTransitionType: PageTransitionType.rightToLeftWithFade);
+      break;
+    case VERIFICATION_CODE_ROUTE:
+      return pushNamed(
+          page: VerificationPage(),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;

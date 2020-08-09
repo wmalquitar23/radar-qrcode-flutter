@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/core/utils/style/textfield_theme.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
@@ -191,7 +192,9 @@ class _BasicInformationState extends State<BasicInformation> {
       child: PrimaryButton(
         text: "Submit",
         fontSize: 14,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, VERIFICATION_CODE_ROUTE);
+        },
       ),
     );
   }
