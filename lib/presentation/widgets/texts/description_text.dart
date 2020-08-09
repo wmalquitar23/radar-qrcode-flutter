@@ -6,12 +6,14 @@ class DescriptionText extends StatelessWidget {
   final FontWeight fontWeight;
   final double fontSize;
   final TextAlign textAlign;
+  final Color color;
 
   DescriptionText(
       {@required this.title,
-      this.fontWeight = FontWeight.w700,
+      this.fontWeight,
       this.fontSize = 13,
-      this.textAlign = TextAlign.center});
+      this.textAlign = TextAlign.center,
+      this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,8 @@ class DescriptionText extends StatelessWidget {
       style: TextStyle(
         height: 1.0,
         fontSize: fontSize,
-        color: ColorUtil.primarySubTextColor,
-        fontWeight: FontWeight.w300,
+        color: color ?? ColorUtil.primarySubTextColor,
+        fontWeight: fontWeight ?? FontWeight.w300,
       ),
       textAlign: textAlign ?? TextAlign.left,
     );
