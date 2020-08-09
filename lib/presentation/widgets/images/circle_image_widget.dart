@@ -25,7 +25,7 @@ class CircleImage extends StatelessWidget {
             image: DecorationImage(
                 image:
                     fromNetwork ? NetworkImage(imageUrl) : AssetImage(imageUrl),
-                fit: BoxFit.fill)),
+                fit: BoxFit.cover)),
         width: size,
         height: size,
       ),

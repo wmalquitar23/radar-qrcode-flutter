@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   page_transition: 1.1.5
+  qr_flutter: ^3.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -50,6 +51,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/images/undraw/
+    - assets/images/profile/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
