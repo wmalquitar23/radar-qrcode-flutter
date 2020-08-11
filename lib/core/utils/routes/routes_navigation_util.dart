@@ -5,10 +5,13 @@ import 'package:radar_qrcode_flutter/core/utils/routes/router_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/basic_information.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/establishment_info/establishment_info_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/getstarted/get_started_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/home/home_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/onboarding/onboarding_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/verification_code/verification_page.dart';
+
+import 'routes_list.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   // final args = settings.arguments;
@@ -40,6 +43,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
+    case ESTABLISHMENT_INFO_ROUTE:
+      return pushNamed(
+          page: EstablishmentInfoPage(),
+          settings: settings,
+          pageTransitionType: PageTransitionType.rightToLeftWithFade);
+      break;
     default:
       return _errorRoute(settings);
       break;
@@ -48,7 +57,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
 Route<dynamic> _errorRoute(RouteSettings settings) {
   return MaterialPageRoute(
-      builder: (context) => NotFoundPage(
-            name: settings.name,
-          ));
+    builder: (context) => NotFoundPage(
+      name: settings.name,
+    ),
+  );
 }

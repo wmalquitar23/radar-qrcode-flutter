@@ -8,6 +8,8 @@ import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/label_text.dart';
 
+import '../../../core/utils/routes/routes_list.dart';
+
 class GetStartedPage extends StatefulWidget {
   @override
   _GetStartedPageState createState() => _GetStartedPageState();
@@ -68,6 +70,8 @@ class _GetStartedPageState extends State<GetStartedPage> {
                         size: 125.0,
                         imageUrl: "assets/images/undraw/establishment.png",
                         fromNetwork: false,
+                        onClick: () => Navigator.pushNamed(
+                            context, ESTABLISHMENT_INFO_ROUTE),
                       ),
                       SizedBox(
                         height: 23.0,
