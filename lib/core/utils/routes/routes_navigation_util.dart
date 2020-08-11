@@ -6,6 +6,7 @@ import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/basic_information.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_info/establishment_info_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/establishment_home/establishment_home_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/getstarted/get_started_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/home/home_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/onboarding/onboarding_page.dart';
@@ -46,6 +47,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case ESTABLISHMENT_INFO_ROUTE:
       return pushNamed(
           page: EstablishmentInfoPage(),
+          settings: settings,
+          pageTransitionType: PageTransitionType.rightToLeftWithFade);
+      break;
+    case ESTABLISHMENT_HOME_ROUTE:
+      return pushNamed(
+          page: EstablishmentHomePage(),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
