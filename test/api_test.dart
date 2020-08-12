@@ -30,7 +30,7 @@ void main() {
     var firstName = "Jesther${formatter.format(DateTime.now())}";
     var lastName = "Minor${formatter.format(DateTime.now())}";
     var pin = "1234";
-    var contactNumber = "09451096905";
+    var contactNumber = "09451096915";
     var address = "Maniki, Kapalong, Davao del Norte";
 
     //WHEN
