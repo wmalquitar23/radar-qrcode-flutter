@@ -7,13 +7,13 @@ class CircleImage extends StatelessWidget {
   final Function onClick;
   final bool fromNetwork;
 
-  const CircleImage(
-      {Key key,
-      @required this.size,
-      @required this.imageUrl,
-      this.onClick,
-      this.fromNetwork = true})
-      : super(key: key);
+  const CircleImage({
+    Key key,
+    @required this.size,
+    @required this.imageUrl,
+    this.onClick,
+    this.fromNetwork = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

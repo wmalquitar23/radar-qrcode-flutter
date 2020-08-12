@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/router_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/presentation/cubit/get_started_page_cubit.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/basic_information.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_info/establishment_info_page.dart';
@@ -22,7 +24,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case GETSTARTED_ROUTE:
       return pushNamed(
-          page: GetStartedPage(),
+          page: BlocProvider<GettingstartedCubit>(
+            create: (_) => GettingstartedCubit(),
+            child: GetStartedPage(),
+          ),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
