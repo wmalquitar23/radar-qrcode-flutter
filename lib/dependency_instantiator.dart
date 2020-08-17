@@ -8,6 +8,8 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 
+import 'presentation/bloc/splash/splash_bloc.dart';
+
 final sl = GetIt.instance;
 
 class DataInstantiator extends RadarDataInstantiator {
@@ -24,6 +26,8 @@ class DataInstantiator extends RadarDataInstantiator {
     GetIt.I.registerSingleton<RestClient>(restClient);
     GetIt.I.registerSingleton<Dio>(dio);
     GetIt.I.registerSingleton<Database>(database);
+
+    GetIt.I.registerSingleton<SplashBloc>(SplashBloc());
   }
 
   Future<Database> getDatabase(Map<String, String> env) async {
@@ -37,10 +41,7 @@ class DataInstantiator extends RadarDataInstantiator {
   Dio getDio(Database database, Map<String, String> env) {
     BaseOptions options = new BaseOptions(
       baseUrl: env['API_URL'],
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
+      headers: {"Content-Type": "application/json", "Accept": "application/json"},
       connectTimeout: 15000,
       receiveTimeout: 15000,
     );

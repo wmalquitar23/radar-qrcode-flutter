@@ -11,6 +11,7 @@ import 'package:radar_qrcode_flutter/presentation/pages/establishment_info/estab
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_home/establishment_home_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/getstarted/get_started_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/home/home_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/onboard/onboard_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/onboarding/onboarding_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/verification_code/verification_page.dart';
 
@@ -22,6 +23,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case ONBOARD_ROUTE:
       return pushNamed(page: OnBoardingPage(), settings: settings);
       break;
+    case ONBOARD_PAGE_ROUTE:
+      return pushNamed(page: OnboardPage(), settings: settings);
+      break;
     case GETSTARTED_ROUTE:
       return pushNamed(
           page: BlocProvider<GettingstartedCubit>(
@@ -32,34 +36,19 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
     case BASIC_INFORMATION_ROUTE:
-      return pushNamed(
-          page: BasicInformation(),
-          settings: settings,
-          pageTransitionType: PageTransitionType.rightToLeftWithFade);
+      return pushNamed(page: BasicInformation(), settings: settings, pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
     case VERIFICATION_CODE_ROUTE:
-      return pushNamed(
-          page: VerificationPage(),
-          settings: settings,
-          pageTransitionType: PageTransitionType.rightToLeftWithFade);
+      return pushNamed(page: VerificationPage(), settings: settings, pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
     case HOME_PAGE_ROUTE:
-      return pushNamed(
-          page: HomePage(),
-          settings: settings,
-          pageTransitionType: PageTransitionType.rightToLeftWithFade);
+      return pushNamed(page: HomePage(), settings: settings, pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
     case ESTABLISHMENT_INFO_ROUTE:
-      return pushNamed(
-          page: EstablishmentInfoPage(),
-          settings: settings,
-          pageTransitionType: PageTransitionType.rightToLeftWithFade);
+      return pushNamed(page: EstablishmentInfoPage(), settings: settings, pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
     case ESTABLISHMENT_HOME_ROUTE:
-      return pushNamed(
-          page: EstablishmentHomePage(),
-          settings: settings,
-          pageTransitionType: PageTransitionType.rightToLeftWithFade);
+      return pushNamed(page: EstablishmentHomePage(), settings: settings, pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
     default:
       return _errorRoute(settings);
