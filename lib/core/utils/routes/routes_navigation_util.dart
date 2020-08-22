@@ -12,6 +12,7 @@ import 'package:radar_qrcode_flutter/presentation/pages/establishment_home/estab
 import 'package:radar_qrcode_flutter/presentation/pages/home/home_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/onboard/onboard_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/register_as/register_as_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/success/success_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/verification_code/verification_page.dart';
 
 import '../../../dependency_instantiator.dart';
@@ -59,6 +60,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case ESTABLISHMENT_HOME_ROUTE:
       return pushNamed(
           page: EstablishmentHomePage(),
+          settings: settings,
+          pageTransitionType: PageTransitionType.rightToLeftWithFade);
+      break;
+    case SUCCESS_ROUTE:
+      return pushNamed(
+          page: SuccessPage(),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
