@@ -15,12 +15,14 @@ class HeaderText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(title,
-        style: TextStyle(
-          height: 1.0,
-          fontSize: fontSize,
-          color: color ?? ColorUtil.primaryTextColor,
-          fontWeight: fontWeight,
-        ));
+    return Text(
+      title,
+      style: TextStyle(
+        height: 1.0,
+        fontSize: fontSize,
+        color: color ?? ColorUtil.primaryTextColor,
+        fontWeight: fontWeight,
+      ),
+    );
   }
 }

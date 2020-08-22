@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
-import 'package:radar_qrcode_flutter/presentation/widgets/buttons/secondary_button.dart';
-import 'package:radar_qrcode_flutter/presentation/widgets/images/circle_image_widget.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_with_icon_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
-import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
 class EstablishmentHomePage extends StatefulWidget {
@@ -18,56 +16,158 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
   @override
   Widget build(BuildContext context) {
     return MobileStatusMarginTop(
-        child: Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorUtil.primaryColor,
-        title: Text("Scan Code"),
-        centerTitle: true,
-        leading: GestureDetector(
-            onTap: () {
-              mainBottomSheet(context);
-            },
-            child: Icon(Icons.menu)),
-        elevation: 0.0,
+      child: Scaffold(
+        backgroundColor: Color(0xFFF8F8F8),
+        appBar: _buildAppBar(context),
+        body: _buildBody(),
       ),
-      body: Container(
-        color: ColorUtil.primaryColor,
-        height: double.infinity,
-        child: Container(
-          margin: EdgeInsets.all(20.0),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: ColorUtil.primaryBackgroundColor,
-            borderRadius: BorderRadius.all(Radius.circular(25.0)),
+    );
+  }
+
+  Stack _buildBody() {
+    return Stack(
+      children: [
+        LayoutBuilder(
+          builder: (_, constraints) => Container(
+            height: constraints.maxHeight * 0.50,
+            decoration: BoxDecoration(
+              color: ColorUtil.primaryColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(50),
+                bottomRight: Radius.circular(50),
+              ),
+            ),
           ),
-          child: Column(
-            children: <Widget>[
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildEstablishmentDetails(),
+            Text(
+              "Please scan a QR Code to retrieve user's information.",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            _buildScanQRCodeButton(),
+          ],
+        )
+      ],
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: ColorUtil.primaryColor,
+      centerTitle: true,
+      elevation: 0.0,
+      actions: [
+        Container(
+          margin: EdgeInsets.only(right: 20),
+          child: Image.asset(
+            'assets/images/app/logo-white.png',
+            scale: 4,
+            alignment: Alignment.centerRight,
+          ),
+        ),
+      ],
+      leading: GestureDetector(
+        onTap: () {
+          mainBottomSheet(context);
+        },
+        child: Icon(Icons.menu),
+      ),
+    );
+  }
+
+  Container _buildEstablishmentDetails() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0),
+      padding: EdgeInsets.symmetric(vertical: 60.0, horizontal: 20.0),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: ColorUtil.primaryBackgroundColor,
+        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+      ),
+      child: Column(
+        children: <Widget>[
+          Column(
+            children: [
               Stack(
+                alignment: Alignment.center,
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 30.0),
-                    child: CircleImage(
-                      imageUrl: "assets/images/profile/lalisa.jpeg",
-                      size: 200.0,
-                      fromNetwork: false,
+                  ClipRRect(
+                    child: Image.asset(
+                      'assets/images/undraw/establishment.png',
+                      scale: 2.5,
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 7,
+                    child: Container(
+                      padding: EdgeInsets.all(2.5),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 2.5,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],
               ),
-              HeaderText(title: "NCCC MALL"),
-              SizedBox(height: 8.0),
-              DescriptionText(
-                title: "#TG2351E2121",
+              SizedBox(height: 25),
+              Align(
+                alignment: Alignment.center,
+                child: HeaderText(
+                  title: "Lorem Company",
+                  color: ColorUtil.primaryColor,
+                ),
               ),
-              SizedBox(
-                height: 10.0,
-              ),
-              _buildScanQRCodeButton(),
             ],
           ),
-        ),
+          SizedBox(
+            height: 50,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ..._buildTitleAndContentWithDivider(
+                  'Address', 'Purok 123, Brgy 4, Bacolod Negros Occ.'),
+              SizedBox(
+                height: 10,
+              ),
+              ..._buildTitleAndContentWithDivider(
+                  'Contact Number', '092112345678'),
+            ],
+          )
+        ],
       ),
-    ));
+    );
+  }
+
+  List<Widget> _buildTitleAndContentWithDivider(String title, String content) {
+    return [
+      Text(
+        title,
+        style: Theme.of(context).textTheme.headline5.copyWith(
+              color: ColorUtil.primaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+      SizedBox(height: 5.0),
+      Text(
+        content,
+        style: Theme.of(context).textTheme.subtitle2,
+      ),
+      Divider(),
+    ];
   }
 
   Widget _buildScanQRCodeButton() {
@@ -76,7 +176,9 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
         vertical: textFieldVerticalMargin,
         horizontal: textFieldHorizontalMargin,
       ),
-      child: SecondaryButton(text: 'Scan QR Code'),
+      child: PrimaryButtonWithIcon(
+        text: 'SCAN QR CODE',
+      ),
     );
   }
 
