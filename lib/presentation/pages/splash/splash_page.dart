@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void onboard() async {
-    Navigator.pushNamed(context, ONBOARD_PAGE_ROUTE);
+    Navigator.pushNamed(context, ONBOARD_ROUTE);
   }
 
   @override
@@ -58,7 +58,7 @@ class _SplashPageState extends State<SplashPage> {
                     Text(
                       'travelpud',
                       style: TextStyle(
-                        color: ColorUtil.primaryColor2,
+                        color: ColorUtil.primaryColor,
                         fontSize: sy(14),
                         fontWeight: FontWeight.w700,
                       ),

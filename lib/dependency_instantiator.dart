@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.dart';
 import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
@@ -27,7 +28,11 @@ class DataInstantiator extends RadarDataInstantiator {
     GetIt.I.registerSingleton<Dio>(dio);
     GetIt.I.registerSingleton<Database>(database);
 
+    //bloc
     GetIt.I.registerSingleton<SplashBloc>(SplashBloc());
+    sl.registerFactory<RegisterAsBloc>(
+      () => RegisterAsBloc(),
+    );
   }
 
   Future<Database> getDatabase(Map<String, String> env) async {
@@ -41,7 +46,10 @@ class DataInstantiator extends RadarDataInstantiator {
   Dio getDio(Database database, Map<String, String> env) {
     BaseOptions options = new BaseOptions(
       baseUrl: env['API_URL'],
-      headers: {"Content-Type": "application/json", "Accept": "application/json"},
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
       connectTimeout: 15000,
       receiveTimeout: 15000,
     );

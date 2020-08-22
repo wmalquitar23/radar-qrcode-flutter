@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
@@ -21,18 +22,18 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: this.height ?? 50.0,
+      height: this.height ?? 60.0,
       width: this.width ?? double.infinity,
       child: FlatButton(
         onPressed: onPressed ?? () {},
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(this.radius ?? 25)),
-        color: Theme.of(context).primaryColor,
+        color: ColorUtil.primaryColor,
         child: Text(
           text,
           style: TextStyle(
             color: Colors.white,
-            fontSize: this.fontSize,
+            fontSize: 16 ?? this.fontSize,
           ),
         ),
       ),

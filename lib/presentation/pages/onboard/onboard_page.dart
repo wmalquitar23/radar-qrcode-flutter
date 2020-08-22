@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:relative_scale/relative_scale.dart';
 
 import '../../../core/utils/color_util.dart';
@@ -40,14 +41,23 @@ class OnboardPage extends StatelessWidget {
                     letterSpacing: 1,
                   ),
                 ),
-                LightText(text: 'By using Radar, you are helping to stop the spread of COVID-19, and protecting your community.'),
+                LightText(
+                    text:
+                        'By using Radar, you are helping to stop the spread of COVID-19, and protecting your community.'),
                 Spacer(flex: 30),
-                StandardButton(text: 'REGISTER NOW'),
+                StandardButton(
+                  text: 'REGISTER NOW',
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(REGISTER_AS_ROUTE);
+                  },
+                ),
                 Spacer(flex: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    LightText(text: 'Already have an account?', horizontalPadding: sy(4)),
+                    LightText(
+                        text: 'Already have an account?',
+                        horizontalPadding: sy(4)),
                     Text(
                       'Sign In',
                       style: TextStyle(

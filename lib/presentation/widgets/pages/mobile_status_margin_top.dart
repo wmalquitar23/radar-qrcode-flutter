@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 
 class MobileStatusMarginTop extends StatelessWidget {
   final Widget child;
@@ -8,7 +9,7 @@ class MobileStatusMarginTop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: ColorUtil.primaryBackgroundColor,
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: child,
     );

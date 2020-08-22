@@ -9,11 +9,13 @@ class StandardButton extends StatelessWidget {
     @required this.text,
     this.height,
     this.width,
+    this.onPressed,
   }) : super(key: key);
 
   final String text;
   final double height;
   final double width;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class StandardButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             color: ColorUtil.primaryButtonColor,
-            onPressed: () {},
+            onPressed: onPressed,
             child: Text(
               text ?? 'No Text',
               style: TextStyle(
