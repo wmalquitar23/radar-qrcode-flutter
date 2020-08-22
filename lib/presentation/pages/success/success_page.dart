@@ -17,7 +17,7 @@ class _SuccessPageState extends State<SuccessPage> {
   }
 
   void onboard() async {
-    Navigator.pushNamed(context, HOME_PAGE_ROUTE);
+    Navigator.pushNamed(context, INDIVIDUAL_HOME_ROUTE);
   }
 
   @override

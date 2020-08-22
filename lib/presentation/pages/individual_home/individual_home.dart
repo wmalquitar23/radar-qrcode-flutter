@@ -2,6 +2,8 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/images/circle_image_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
@@ -98,26 +100,13 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
   }
 
   Widget _buildAppBar() {
-    return Container(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.menu,
-              color: ColorUtil.primaryBackgroundColor,
-            ),
-            Container(
-              child: ExtendedImage.asset(
-                'assets/images/app/logo-white.png',
-                width: 80,
-              ),
-            )
-          ],
-        ),
-      ),
+    return CustomAppBar(
+      icon: Icons.menu,
+      iconColor: ColorUtil.primaryBackgroundColor,
+      onTap: () {
+        showNavigation(context, onMyProfile: () => Navigator.pop(context));
+      },
+      imageAsset: 'assets/images/app/logo-white.png',
     );
   }
 
