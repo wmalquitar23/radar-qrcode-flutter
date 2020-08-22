@@ -5,7 +5,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/router_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
-import 'package:radar_qrcode_flutter/presentation/pages/basic_information/basic_information.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/basic_information/individual_basic_information.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_info/establishment_info_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_home/establishment_home_page.dart';
@@ -34,7 +34,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case BASIC_INFORMATION_ROUTE:
       return pushNamed(
-          page: BasicInformation(),
+          page: IndividualBasicInformation(),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;

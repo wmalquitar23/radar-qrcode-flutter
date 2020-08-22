@@ -7,12 +7,12 @@ import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_ma
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
-class BasicInformation extends StatefulWidget {
+class IndividualBasicInformation extends StatefulWidget {
   @override
-  _BasicInformationState createState() => _BasicInformationState();
+  _IndividualBasicInformationState createState() => _IndividualBasicInformationState();
 }
 
-class _BasicInformationState extends State<BasicInformation> {
+class _IndividualBasicInformationState extends State<IndividualBasicInformation> {
   final double textFieldMargin = 10.0;
   @override
   Widget build(BuildContext context) {
