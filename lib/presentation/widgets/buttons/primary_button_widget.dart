@@ -10,6 +10,7 @@ class PrimaryButton extends StatelessWidget {
     this.fontSize,
     this.radius,
     this.onPressed,
+    this.color,
   }) : super(key: key);
 
   final String text;
@@ -18,6 +19,7 @@ class PrimaryButton extends StatelessWidget {
   final double fontSize;
   final double radius;
   final VoidCallback onPressed;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class PrimaryButton extends StatelessWidget {
         onPressed: onPressed ?? () {},
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(this.radius ?? 25)),
-        color: ColorUtil.primaryColor,
+        color: color ?? ColorUtil.primaryColor,
         child: Text(
           text,
           style: TextStyle(
