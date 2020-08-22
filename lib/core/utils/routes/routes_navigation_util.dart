@@ -12,6 +12,7 @@ import 'package:radar_qrcode_flutter/presentation/pages/establishment_home/estab
 import 'package:radar_qrcode_flutter/presentation/pages/individual_home/individual_home.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/onboard/onboard_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/register_as/register_as_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/scan_qrcode/scan_qrcode.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/success/success_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/user_details/user_details.page.dart';
 
@@ -66,6 +67,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case USER_DETAILS_ROUTE:
       return pushNamed(
           page: UserDetailsPage(),
+          settings: settings,
+          pageTransitionType: PageTransitionType.rightToLeftWithFade);
+      break;
+    case SCAN_QRCODE_ROUTE:
+      return pushNamed(
+          page: ScanQrcodePage(),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;

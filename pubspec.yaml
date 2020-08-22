@@ -45,6 +45,7 @@ dependencies:
   flutter_svg: 0.17.4
   auto_size_text: 2.1.0
   extended_image: 1.1.0
+  qr_code_scanner: ^0.0.13
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +86,6 @@ flutter:
         - asset: assets/fonts/Montserrat-Bold.ttf
         - asset: assets/fonts/Montserrat-ExtraBold.ttf
         - asset: assets/fonts/Montserrat-Black.ttf
-  #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
