@@ -5,11 +5,12 @@ class TextFieldTheme {
   static InputDecoration textfieldInputDecoration({String hintText}) {
     return InputDecoration(
       filled: true,
-      contentPadding: EdgeInsets.only(left: 10.0),
+      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       hintText: hintText ?? "",
-      fillColor: Colors.white,
+      hintStyle: TextStyle(color: ColorUtil.primarySubTextColor),
+      fillColor: ColorUtil.primaryBackgroundColor,
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: ColorUtil.primarySubTextColor, width: 1),
+        borderSide: BorderSide(color: Colors.transparent, width: 1),
         borderRadius: new BorderRadius.circular(15.0),
       ),
       focusedBorder: OutlineInputBorder(

@@ -5,6 +5,7 @@ import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.d
 import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
@@ -32,6 +33,9 @@ class DataInstantiator extends RadarDataInstantiator {
     GetIt.I.registerSingleton<SplashBloc>(SplashBloc());
     sl.registerFactory<RegisterAsBloc>(
       () => RegisterAsBloc(),
+    );
+    sl.registerFactory<SuccessBloc>(
+      () => SuccessBloc(),
     );
   }
 

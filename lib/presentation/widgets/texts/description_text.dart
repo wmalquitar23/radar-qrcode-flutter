@@ -23,7 +23,7 @@ class DescriptionText extends StatelessWidget {
         height: 1.0,
         fontSize: fontSize,
         color: color ?? ColorUtil.primarySubTextColor,
-        fontWeight: fontWeight ?? FontWeight.w300,
+        fontWeight: fontWeight ?? FontWeight.w600,
       ),
       textAlign: textAlign ?? TextAlign.left,
     );

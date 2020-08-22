@@ -1,6 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
 
-class SuccessPage extends StatelessWidget {
+import '../../../dependency_instantiator.dart';
+
+class SuccessPage extends StatefulWidget {
+  @override
+  _SuccessPageState createState() => _SuccessPageState();
+}
+
+class _SuccessPageState extends State<SuccessPage> {
+  @override
+  void didChangeDependencies() {
+    sl<SuccessBloc>().load(onboard);
+    super.didChangeDependencies();
+  }
+
+  void onboard() async {
+    Navigator.pushNamed(context, HOME_PAGE_ROUTE);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

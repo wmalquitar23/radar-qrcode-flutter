@@ -22,7 +22,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: this.height ?? 60.0,
+      height: this.height ?? 55.0,
       width: this.width ?? double.infinity,
       child: FlatButton(
         onPressed: onPressed ?? () {},
@@ -32,9 +32,9 @@ class PrimaryButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            color: Colors.white,
-            fontSize: 16 ?? this.fontSize,
-          ),
+              color: Colors.white,
+              fontSize: 14 ?? this.fontSize,
+              fontWeight: FontWeight.w600),
         ),
       ),
     );
