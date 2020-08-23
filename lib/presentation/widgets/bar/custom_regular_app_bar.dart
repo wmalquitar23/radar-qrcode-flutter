@@ -5,9 +5,10 @@ class CustomRegularAppBar extends StatelessWidget {
   final String title;
   final Widget body;
   final Color backgroundColor;
+  final VoidCallback onBackTap;
 
   const CustomRegularAppBar(
-      {Key key, this.title, this.body, this.backgroundColor})
+      {Key key, this.title, this.body, this.backgroundColor, this.onBackTap})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -17,9 +18,10 @@ class CustomRegularAppBar extends StatelessWidget {
         centerTitle: true,
         elevation: 0.0,
         leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
+          onTap: onBackTap ??
+              () {
+                Navigator.pop(context);
+              },
           child: Icon(
             Icons.arrow_back,
             color: ColorUtil.primaryTextColor,

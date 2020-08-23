@@ -487,11 +487,13 @@ class _IndividualBasicInformationPageState
   Widget _buildAddressTextField() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
-      child: TextFormField(
-        obscureText: true,
-        style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-        decoration:
-            TextFieldTheme.textfieldInputDecoration(hintText: "Address"),
+      child: ShadowWidget(
+        child: TextFormField(
+          obscureText: true,
+          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+          decoration:
+              TextFieldTheme.textfieldInputDecoration(hintText: "Address"),
+        ),
       ),
     );
   }

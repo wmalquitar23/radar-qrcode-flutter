@@ -86,11 +86,10 @@ class NavigationPage extends StatelessWidget {
                           NavigationItem(
                             iconAsset: "logout.png",
                             title: 'Logout',
-                            onPressed: onMyProfile ??
-                                () {
-                                  Navigator.pushNamed(
-                                      context, INDIVIDUAL_HOME_ROUTE);
-                                },
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, ONBOARD_ROUTE);
+                            },
                           ),
                           SizedBox(height: sy(14)),
                         ],

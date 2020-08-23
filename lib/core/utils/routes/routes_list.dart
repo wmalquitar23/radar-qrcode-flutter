@@ -11,3 +11,4 @@ const String SCAN_QRCODE_ROUTE = '/scan-qrcode';
 const String MY_PROFILE_ROUTE = '/my-profile-route';
 const String CHANGE_PIN_ROUTE = '/change-pin';
 const String CONTACT_US_ROUTE = '/contact-us';
+const String SIGN_IN_ROUTE = '/sign-in';

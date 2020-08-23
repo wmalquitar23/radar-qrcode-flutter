@@ -58,13 +58,18 @@ class OnboardPage extends StatelessWidget {
                     LightText(
                         text: 'Already have an account?',
                         horizontalPadding: sy(4)),
-                    Text(
-                      'Sign In',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: sy(10),
-                        fontWeight: FontWeight.w400,
-                        letterSpacing: 1,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, SIGN_IN_ROUTE);
+                      },
+                      child: Text(
+                        'Sign In',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: sy(10),
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 1,
+                        ),
                       ),
                     ),
                   ],
