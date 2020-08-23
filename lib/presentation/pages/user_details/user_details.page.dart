@@ -13,6 +13,15 @@ class UserDetailsPage extends StatelessWidget {
         elevation: 0.0,
         centerTitle: true,
         backgroundColor: Colors.white,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back,
+            color: ColorUtil.primaryTextColor,
+          ),
+        ),
         title: Text(
           'User Details',
           style: TextStyle(

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/router_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
