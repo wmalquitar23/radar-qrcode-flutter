@@ -31,6 +31,7 @@ class _ChangePINPageState extends State<ChangePINPage> {
                   _buildRetypePINTextField()
                 ],
               ),
+              SizedBox(height: 70,),
               PrimaryButton(
                 text: "SAVE NEW PIN",
               )
@@ -46,6 +47,7 @@ class _ChangePINPageState extends State<ChangePINPage> {
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: ShadowWidget(
         child: TextField(
+          obscureText: true,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "Old PIN"),
@@ -59,6 +61,7 @@ class _ChangePINPageState extends State<ChangePINPage> {
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: ShadowWidget(
         child: TextField(
+          obscureText: true,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "New PIN"),
@@ -72,6 +75,7 @@ class _ChangePINPageState extends State<ChangePINPage> {
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: ShadowWidget(
         child: TextField(
+          obscureText: true,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration: TextFieldTheme.textfieldInputDecoration(
               hintText: "Re-type new PIN to confirm"),

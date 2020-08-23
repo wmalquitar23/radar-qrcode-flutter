@@ -5,11 +5,11 @@ import 'package:page_transition/page_transition.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/router_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/basic_information/establishment_basic_information.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/individual_basic_information_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/change_pin/change_pin_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/contact_us/contact_us_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
-import 'package:radar_qrcode_flutter/presentation/pages/establishment_info/establishment_info_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_home/establishment_home_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/individual_home/individual_home.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/onboard/onboard_page.dart';
@@ -52,7 +52,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case ESTABLISHMENT_INFO_ROUTE:
       return pushNamed(
-          page: EstablishmentInfoPage(),
+          page: EstablishmentBasicInformationPage(),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;

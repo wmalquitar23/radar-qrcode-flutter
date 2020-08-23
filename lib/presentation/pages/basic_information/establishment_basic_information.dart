@@ -8,14 +8,14 @@ import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_ma
 import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
-class IndividualBasicInformationPage extends StatefulWidget {
+class EstablishmentBasicInformationPage extends StatefulWidget {
   @override
-  _IndividualBasicInformationPageState createState() =>
-      _IndividualBasicInformationPageState();
+  _EstablishmentBasicInformationPageState createState() =>
+      _EstablishmentBasicInformationPageState();
 }
 
-class _IndividualBasicInformationPageState
-    extends State<IndividualBasicInformationPage> {
+class _EstablishmentBasicInformationPageState
+    extends State<EstablishmentBasicInformationPage> {
   final double textFieldMargin = 10.0;
 
   PageController _topPageController;
@@ -46,7 +46,6 @@ class _IndividualBasicInformationPageState
           controller: _topPageController,
           children: [
             _basicInformationPage1(),
-            _basicInformationPage2(),
             _verificationCodePage3(),
           ],
           onPageChanged: (int index) {},
@@ -62,42 +61,6 @@ class _IndividualBasicInformationPageState
         _goToPage(_pageControllerIndex - 1);
       },
       body: VerificationPage(),
-    );
-  }
-
-  Widget _basicInformationPage2() {
-    return CustomRegularAppBar(
-      backgroundColor: Colors.transparent,
-      onBackTap: () {
-        _goToPage(_pageControllerIndex - 1);
-      },
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 15.0),
-                  child: HeaderText(
-                    title: "Enter Basic Information",
-                    fontSize: 24,
-                    color: ColorUtil.primaryColor,
-                  ),
-                ),
-                _buildCreatePINTextField(),
-                _buildConfirmPINTextField(),
-                _buildContactNumberTextField(),
-                _buildAddressTextField()
-              ],
-            ),
-            SizedBox(height: 30),
-            _buildContinuePage2Button()
-          ],
-        ),
-      ),
     );
   }
 
@@ -120,16 +83,29 @@ class _IndividualBasicInformationPageState
                     color: ColorUtil.primaryColor,
                   ),
                 ),
-                _buildFirstNameTextField(),
-                _buildMiddleNameTextField(),
-                _buildLastNameTextField(),
-                _buildBirthdateTextField(),
-                _buildGenderNameTextField()
+                _buildEstablishmentNameTextField(),
+                _buildCreatePINTextField(),
+                _buildConfirmPINTextField(),
+                _buildContactNumberTextField(),
+                _buildAddressTextField()
               ],
             ),
             SizedBox(height: 30),
             _buildContinuePage1Button()
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEstablishmentNameTextField() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
+      child: ShadowWidget(
+        child: TextField(
+          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+          decoration:
+              TextFieldTheme.textfieldInputDecoration(hintText: "Establishment Name"),
         ),
       ),
     );
@@ -189,85 +165,7 @@ class _IndividualBasicInformationPageState
     );
   }
 
-  Widget _buildGenderNameTextField() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
-      child: ShadowWidget(
-        child: TextField(
-          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Gender"),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFirstNameTextField() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
-      child: ShadowWidget(
-        child: TextField(
-          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "First Name"),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMiddleNameTextField() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
-      child: ShadowWidget(
-        child: TextFormField(
-          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Middle Name"),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLastNameTextField() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
-      child: ShadowWidget(
-        child: TextFormField(
-          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Last Name"),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBirthdateTextField() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
-      child: ShadowWidget(
-        child: TextFormField(
-          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Birth Date"),
-        ),
-      ),
-    );
-  }
-
   Widget _buildContinuePage1Button() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
-      child: PrimaryButton(
-        text: "CONTINUE",
-        fontSize: 14,
-        onPressed: () {
-          _goToPage(_pageControllerIndex + 1);
-        },
-      ),
-    );
-  }
-
-  Widget _buildContinuePage2Button() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: PrimaryButton(

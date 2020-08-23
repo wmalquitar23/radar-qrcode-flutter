@@ -32,7 +32,10 @@ class CustomRegularAppBar extends StatelessWidget {
           style: TextStyle(color: ColorUtil.primaryTextColor),
         ),
       ),
-      body: body,
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: body,
+      ),
     );
   }
 }
