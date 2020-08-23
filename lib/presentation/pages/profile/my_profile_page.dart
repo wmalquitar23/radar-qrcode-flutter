@@ -8,12 +8,12 @@ import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_ma
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
-class MyProfile extends StatefulWidget {
+class MyProfilePage extends StatefulWidget {
   @override
-  _MyProfileState createState() => _MyProfileState();
+  _MyProfilePageState createState() => _MyProfilePageState();
 }
 
-class _MyProfileState extends State<MyProfile> {
+class _MyProfilePageState extends State<MyProfilePage> {
   TextEditingController _addressController = TextEditingController();
   TextEditingController _dateBirthController = TextEditingController();
   TextEditingController _genderController = TextEditingController();

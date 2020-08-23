@@ -8,14 +8,14 @@ import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widg
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
-class IndividualBasicInformation extends StatefulWidget {
+class IndividualBasicInformationPage extends StatefulWidget {
   @override
-  _IndividualBasicInformationState createState() =>
-      _IndividualBasicInformationState();
+  _IndividualBasicInformationPageState createState() =>
+      _IndividualBasicInformationPageState();
 }
 
-class _IndividualBasicInformationState
-    extends State<IndividualBasicInformation> {
+class _IndividualBasicInformationPageState
+    extends State<IndividualBasicInformationPage> {
   final double textFieldMargin = 10.0;
 
   PageController _topPageController;
