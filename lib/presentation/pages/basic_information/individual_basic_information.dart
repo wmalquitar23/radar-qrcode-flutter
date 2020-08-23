@@ -334,6 +334,7 @@ class _IndividualBasicInformationState
     return digit != null
         ? _otpField(digit)
         : ShadowWidget(
+            isSmall: true,
             child: _otpField(digit),
           );
   }
@@ -444,11 +445,13 @@ class _IndividualBasicInformationState
   Widget _buildCreatePINTextField() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
-      child: TextFormField(
-        obscureText: true,
-        style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-        decoration:
-            TextFieldTheme.textfieldInputDecoration(hintText: "Create PIN"),
+      child: ShadowWidget(
+        child: TextFormField(
+          obscureText: true,
+          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+          decoration:
+              TextFieldTheme.textfieldInputDecoration(hintText: "Create PIN"),
+        ),
       ),
     );
   }
@@ -456,11 +459,13 @@ class _IndividualBasicInformationState
   Widget _buildConfirmPINTextField() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
-      child: TextFormField(
-        obscureText: true,
-        style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-        decoration:
-            TextFieldTheme.textfieldInputDecoration(hintText: "Confirm PIN"),
+      child: ShadowWidget(
+        child: TextFormField(
+          obscureText: true,
+          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+          decoration:
+              TextFieldTheme.textfieldInputDecoration(hintText: "Confirm PIN"),
+        ),
       ),
     );
   }
@@ -468,11 +473,13 @@ class _IndividualBasicInformationState
   Widget _buildContactNumberTextField() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
-      child: TextFormField(
-        obscureText: true,
-        style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-        decoration:
-            TextFieldTheme.textfieldInputDecoration(hintText: "Contact Number"),
+      child: ShadowWidget(
+        child: TextFormField(
+          obscureText: true,
+          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+          decoration: TextFieldTheme.textfieldInputDecoration(
+              hintText: "Contact Number"),
+        ),
       ),
     );
   }

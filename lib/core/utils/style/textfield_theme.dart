@@ -36,4 +36,36 @@ class TextFieldTheme {
       ),
     );
   }
+
+  static ThemeData get primaryTextFieldStyle {
+    return ThemeData(
+        errorColor: Colors.red,
+        hintColor: ColorUtil.primarySubTextColor,
+        textTheme: TextTheme(
+          subtitle1: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: ColorUtil.primaryTextColor,
+          ),
+        ),
+        cursorColor: Colors.white70,
+        inputDecorationTheme: InputDecorationTheme(
+          contentPadding: EdgeInsets.symmetric(vertical: 15),
+          errorBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white54),
+          ),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: ColorUtil.primaryTextColor,
+              style: BorderStyle.solid,
+            ),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: ColorUtil.primaryTextColor,
+              style: BorderStyle.solid,
+            ),
+          ),
+        ));
+  }
 }

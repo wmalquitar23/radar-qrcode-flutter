@@ -11,10 +11,17 @@ void showNavigation(
   showGeneralDialog(
     context: context,
     // ignore: missing_return
-    pageBuilder: (_, __, ___) {},
-    barrierDismissible: false,
-    barrierColor: Colors.black.withOpacity(0.85),
-    barrierLabel: '',
+    pageBuilder: (context, _, __) {
+      return NavigationPage(
+        onMyProfile: onMyProfile,
+        onChangePIN: onChangePIN,
+        onContactUs: onContactUs,
+        onLogout: onLogout,
+      );
+    },
+    barrierDismissible: true,
+    barrierColor: Colors.black.withOpacity(0.5),
+    barrierLabel: MaterialLocalizations.of(context).dialogLabel,
     transitionDuration: Duration(milliseconds: 300),
     transitionBuilder: (context, animation, secondaryAnimation, child) {
       return SlideTransition(
@@ -24,17 +31,18 @@ void showNavigation(
           end: Offset.zero,
         ).animate(animation),
         child: new SlideTransition(
-          position: new Tween<Offset>(
-            begin: Offset.zero,
-            end: const Offset(0.0, 1.0),
-          ).animate(secondaryAnimation),
-          child: NavigationPage(
-            onMyProfile: onMyProfile,
-            onChangePIN: onChangePIN,
-            onContactUs: onContactUs,
-            onLogout: onLogout,
-          ),
-        ),
+            position: new Tween<Offset>(
+              begin: Offset.zero,
+              end: const Offset(0.0, 1.0),
+            ).animate(secondaryAnimation),
+            child: child
+            // child: NavigationPage(
+            //   onMyProfile: onMyProfile,
+            //   onChangePIN: onChangePIN,
+            //   onContactUs: onContactUs,
+            //   onLogout: onLogout,
+            // ),
+            ),
       );
     },
   );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
 
@@ -36,7 +37,7 @@ class _SuccessPageState extends State<SuccessPage> {
               'Success!',
               style: Theme.of(context).textTheme.headline6.copyWith(
                     fontSize: 26,
-                    color: Theme.of(context).primaryColor,
+                    color: ColorUtil.primaryColor,
                   ),
             ),
             SizedBox(

@@ -61,11 +61,10 @@ class NavigationPage extends StatelessWidget {
                         NavigationItem(
                           iconAsset: "profile.png",
                           title: 'My Profile',
-                          onPressed: onMyProfile ??
-                              () {
-                                Navigator.pushNamed(
-                                    context, INDIVIDUAL_HOME_ROUTE);
-                              },
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, MY_PROFILE_ROUTE);
+                          },
                         ),
                         SizedBox(height: sy(14)),
                         NavigationItem(

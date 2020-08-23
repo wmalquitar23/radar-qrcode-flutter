@@ -8,3 +8,4 @@ const String ESTABLISHMENT_HOME_ROUTE = '/establishment-home';
 const String SUCCESS_ROUTE = '/success';
 const String USER_DETAILS_ROUTE = '/user-details';
 const String SCAN_QRCODE_ROUTE = '/scan-qrcode';
+const String MY_PROFILE_ROUTE = '/my-profile-route';

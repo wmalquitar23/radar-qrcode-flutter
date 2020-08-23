@@ -13,6 +13,13 @@ class RadarApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        primaryTextTheme: TextTheme(
+          headline6: TextStyle(
+            fontFamily: "Montserrat",
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
+        ),
         textTheme: TextTheme(
           headline6: TextStyle(
             fontFamily: "Montserrat",

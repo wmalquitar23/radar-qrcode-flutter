@@ -14,15 +14,15 @@ class ShadowWidget extends StatelessWidget {
         boxShadow: [
           isSmall
               ? BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 2,
-                  blurRadius: 7,
-                  offset: Offset(0, 4), // changes position of shadow
-                )
-              : BoxShadow(
                   color: Colors.grey.withOpacity(0.05),
                   spreadRadius: 0.2,
                   blurRadius: 5,
+                  offset: Offset(0, 4), // changes position of shadow
+                )
+              : BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 2,
+                  blurRadius: 7,
                   offset: Offset(0, 4), // changes position of shadow
                 ),
         ],
