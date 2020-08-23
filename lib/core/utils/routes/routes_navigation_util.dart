@@ -11,6 +11,10 @@ import 'package:radar_qrcode_flutter/presentation/pages/change_pin/change_pin_pa
 import 'package:radar_qrcode_flutter/presentation/pages/contact_us/contact_us_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_home/establishment_home_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/dummy_camera_view.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/identity_verification_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/upload_id_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/upload_result_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/individual_home/individual_home.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/onboard/onboard_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/profile/my_profile_page.dart';
@@ -21,7 +25,8 @@ import 'package:radar_qrcode_flutter/presentation/pages/success/success_page.dar
 import 'package:radar_qrcode_flutter/presentation/pages/user_details/user_details.page.dart';
 
 import '../../../dependency_instantiator.dart';
-import 'routes_list.dart';
+import 'router_util.dart';
+
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   // final args = settings.arguments;
@@ -103,6 +108,31 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           page: SignInPage(),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);
+      break;
+    case IDENTITY_VERIFICATION_ROUTE:
+      return pushNamed(
+          page: IdentityVerificationPage(),
+          settings: settings,
+          pageTransitionType: PageTransitionType.fade);
+      break;
+    case UPLOAD_ID_ROUTE:
+      return pushNamed(
+          page: UploadIDPage(),
+          settings: settings,
+          pageTransitionType: PageTransitionType.fade);
+      break;
+    case UPLOAD_ID_RESULT_ROUTE:
+      return pushNamed(
+        page: UploadResultPage(),
+        settings: settings,
+        pageTransitionType: PageTransitionType.fade,
+      );
+    case DUMMY_CAMERA_VIEW_ROUTE:
+      return pushNamed(
+        page: DummyCameraViewPage(),
+        settings: settings,
+        pageTransitionType: PageTransitionType.fade,
+      );
       break;
     default:
       return _errorRoute(settings);

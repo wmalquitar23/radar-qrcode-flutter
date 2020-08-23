@@ -10,6 +10,8 @@ import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_ma
 import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
 
+import '../../../core/utils/routes/routes_list.dart';
+
 class IndividualHomePage extends StatefulWidget {
   @override
   _IndividualHomePageState createState() => _IndividualHomePageState();
@@ -53,6 +55,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
       child: PrimaryButton(
         text: "Verify Identity",
+        onPressed: () => Navigator.of(context).pushNamed(IDENTITY_VERIFICATION_ROUTE),
       ),
     );
   }

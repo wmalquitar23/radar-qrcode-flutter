@@ -12,3 +12,8 @@ const String MY_PROFILE_ROUTE = '/my-profile-route';
 const String CHANGE_PIN_ROUTE = '/change-pin';
 const String CONTACT_US_ROUTE = '/contact-us';
 const String SIGN_IN_ROUTE = '/sign-in';
+const String IDENTITY_VERIFICATION_ROUTE = '/identity-verification';
+const String UPLOAD_ID_ROUTE = '/identity-verification/upload-id';
+const String UPLOAD_ID_RESULT_ROUTE = '/identity-verification/upload-id-result';
+const String DUMMY_CAMERA_VIEW_ROUTE = '/identity-verification/dummy-camera-view';
+
