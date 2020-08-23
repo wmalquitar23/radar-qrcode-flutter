@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_with_icon_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
@@ -18,66 +20,78 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
     return MobileStatusMarginTop(
       child: Scaffold(
         backgroundColor: Color(0xFFF8F8F8),
-        appBar: _buildAppBar(context),
+        // appBar: _buildAppBar(context),
         body: _buildBody(),
       ),
     );
   }
 
-  Stack _buildBody() {
-    return Stack(
-      children: [
-        LayoutBuilder(
-          builder: (_, constraints) => Container(
-            height: constraints.maxHeight * 0.50,
+  Widget _buildBody() {
+    final Size screenSize = MediaQuery.of(context).size;
+    return SingleChildScrollView(
+      child: Stack(
+        children: [
+          Container(
+            height: screenSize.height * 0.66,
             decoration: BoxDecoration(
               color: ColorUtil.primaryColor,
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(50),
-                bottomRight: Radius.circular(50),
+                  bottomLeft: Radius.circular(34.0),
+                  bottomRight: Radius.circular(34.0)),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildAppBar(),
+              _buildEstablishmentDetails(),
+              Text(
+                "Please scan a QR Code to retrieve user's information.",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline5,
               ),
-            ),
-          ),
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildEstablishmentDetails(),
-            Text(
-              "Please scan a QR Code to retrieve user's information.",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            _buildScanQRCodeButton(),
-          ],
-        )
-      ],
-    );
-  }
-
-  AppBar _buildAppBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: ColorUtil.primaryColor,
-      centerTitle: true,
-      elevation: 0.0,
-      actions: [
-        Container(
-          margin: EdgeInsets.only(right: 20),
-          child: Image.asset(
-            'assets/images/app/logo-white.png',
-            scale: 4,
-            alignment: Alignment.centerRight,
-          ),
-        ),
-      ],
-      leading: GestureDetector(
-        onTap: () {
-          mainBottomSheet(context);
-        },
-        child: Icon(Icons.menu),
+              _buildScanQRCodeButton(),
+            ],
+          )
+        ],
       ),
     );
   }
+
+  Widget _buildAppBar() {
+    return CustomAppBar(
+      icon: Icons.menu,
+      iconColor: ColorUtil.primaryBackgroundColor,
+      onTap: () {
+        showNavigation(context);
+      },
+      imageAsset: 'assets/images/app/logo-white.png',
+    );
+  }
+
+  // AppBar _buildAppBar(BuildContext context) {
+  //   return AppBar(
+  //     backgroundColor: ColorUtil.primaryColor,
+  //     centerTitle: true,
+  //     elevation: 0.0,
+  //     actions: [
+  //       Container(
+  //         margin: EdgeInsets.only(right: 20),
+  //         child: Image.asset(
+  //           'assets/images/app/logo-white.png',
+  //           scale: 4,
+  //           alignment: Alignment.centerRight,
+  //         ),
+  //       ),
+  //     ],
+  //     leading: GestureDetector(
+  //       onTap: () {
+  //         mainBottomSheet(context);
+  //       },
+  //       child: Icon(Icons.menu),
+  //     ),
+  //   );
+  // }
 
   Container _buildEstablishmentDetails() {
     return Container(

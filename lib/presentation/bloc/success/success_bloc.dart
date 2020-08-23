@@ -13,7 +13,10 @@ class SuccessBloc extends Bloc<SuccessEvent, SuccessState> {
   @override
   Stream<SuccessState> mapEventToState(
     SuccessEvent event,
-  ) async* {}
+  ) async* {
+
+    
+  }
 
   void load(VoidCallback onboardCallback) async {
     await Future.delayed(Duration(milliseconds: 3000));

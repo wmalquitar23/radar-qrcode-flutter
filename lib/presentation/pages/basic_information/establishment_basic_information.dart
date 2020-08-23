@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/style/textfield_theme.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/verification/verification_page.dart';
@@ -60,7 +61,9 @@ class _EstablishmentBasicInformationPageState
       onBackTap: () {
         _goToPage(_pageControllerIndex - 1);
       },
-      body: VerificationPage(),
+      body: VerificationPage(
+        type: SelectedRegistrationType.Establishment,
+      ),
     );
   }
 
@@ -104,8 +107,8 @@ class _EstablishmentBasicInformationPageState
       child: ShadowWidget(
         child: TextField(
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Establishment Name"),
+          decoration: TextFieldTheme.textfieldInputDecoration(
+              hintText: "Establishment Name"),
         ),
       ),
     );

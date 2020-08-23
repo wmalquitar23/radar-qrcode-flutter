@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/style/textfield_theme.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/verification/verification_page.dart';
@@ -61,7 +62,9 @@ class _IndividualBasicInformationPageState
       onBackTap: () {
         _goToPage(_pageControllerIndex - 1);
       },
-      body: VerificationPage(),
+      body: VerificationPage(
+        type: SelectedRegistrationType.Individual,
+      ),
     );
   }
 
@@ -83,7 +86,7 @@ class _IndividualBasicInformationPageState
                   margin: EdgeInsets.symmetric(vertical: 15.0),
                   child: HeaderText(
                     title: "Enter Basic Information",
-                    fontSize: 24,
+                    fontSize: 22,
                     color: ColorUtil.primaryColor,
                   ),
                 ),

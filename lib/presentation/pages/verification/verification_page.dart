@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
@@ -7,13 +8,14 @@ import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
 class VerificationPage extends StatefulWidget {
+  final SelectedRegistrationType type;
+
+  const VerificationPage({Key key, this.type}) : super(key: key);
   @override
-  _VerificationPageState createState() =>
-      _VerificationPageState();
+  _VerificationPageState createState() => _VerificationPageState();
 }
 
-class _VerificationPageState
-    extends State<VerificationPage> {
+class _VerificationPageState extends State<VerificationPage> {
   @override
   Widget build(BuildContext context) {
     var mediaQD = MediaQuery.of(context);
@@ -53,8 +55,8 @@ class _VerificationPageState
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.80),
+          constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.80),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -100,7 +102,11 @@ class _VerificationPageState
                     PrimaryButton(
                       text: "CONTINUE",
                       onPressed: () {
-                        Navigator.pushNamed(context, SUCCESS_ROUTE);
+                        Navigator.pushNamed(
+                          context,
+                          SUCCESS_ROUTE,
+                          arguments: widget.type,
+                        );
                       },
                     ),
                     SizedBox(
