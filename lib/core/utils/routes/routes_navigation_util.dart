@@ -6,6 +6,7 @@ import 'package:radar_qrcode_flutter/core/utils/routes/router_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/individual_basic_information_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/change_pin/change_pin_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_info/establishment_info_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_home/establishment_home_page.dart';
@@ -80,6 +81,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case MY_PROFILE_ROUTE:
       return pushNamed(
           page: MyProfilePage(),
+          settings: settings,
+          pageTransitionType: PageTransitionType.fade);
+      break;
+    case CHANGE_PIN_ROUTE:
+      return pushNamed(
+          page: ChangePINPage(),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);
       break;

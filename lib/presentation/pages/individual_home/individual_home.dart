@@ -104,7 +104,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
       icon: Icons.menu,
       iconColor: ColorUtil.primaryBackgroundColor,
       onTap: () {
-        showNavigation(context, onMyProfile: () => Navigator.pop(context));
+        showNavigation(context);
       },
       imageAsset: 'assets/images/app/logo-white.png',
     );

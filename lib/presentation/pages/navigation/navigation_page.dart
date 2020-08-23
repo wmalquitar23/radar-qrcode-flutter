@@ -70,11 +70,10 @@ class NavigationPage extends StatelessWidget {
                         NavigationItem(
                           iconAsset: "change-pin.png",
                           title: 'Change PIN',
-                          onPressed: onMyProfile ??
-                              () {
-                                Navigator.pushNamed(
-                                    context, INDIVIDUAL_HOME_ROUTE);
-                              },
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, CHANGE_PIN_ROUTE);
+                          },
                         ),
                         SizedBox(height: sy(14)),
                         NavigationItem(
