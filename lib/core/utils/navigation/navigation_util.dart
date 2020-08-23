@@ -31,18 +31,12 @@ void showNavigation(
           end: Offset.zero,
         ).animate(animation),
         child: new SlideTransition(
-            position: new Tween<Offset>(
-              begin: Offset.zero,
-              end: const Offset(0.0, 1.0),
-            ).animate(secondaryAnimation),
-            child: child
-            // child: NavigationPage(
-            //   onMyProfile: onMyProfile,
-            //   onChangePIN: onChangePIN,
-            //   onContactUs: onContactUs,
-            //   onLogout: onLogout,
-            // ),
-            ),
+          position: new Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(0.0, 1.0),
+          ).animate(secondaryAnimation),
+          child: child,
+        ),
       );
     },
   );

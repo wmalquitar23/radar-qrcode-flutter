@@ -20,7 +20,7 @@ class DescriptionText extends StatelessWidget {
     return Text(
       title,
       style: TextStyle(
-        height: 1.0,
+        height: 1.5,
         fontSize: fontSize,
         color: color ?? ColorUtil.primarySubTextColor,
         fontWeight: fontWeight ?? FontWeight.w600,

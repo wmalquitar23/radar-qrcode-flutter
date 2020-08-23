@@ -22,7 +22,7 @@ class NavigationItem extends StatelessWidget {
         return FlatButton(
           onPressed: onPressed ?? () {},
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.symmetric(horizontal: sy(12), vertical: sy(10)),
           child: Row(
             children: [
               ExtendedImage.asset(

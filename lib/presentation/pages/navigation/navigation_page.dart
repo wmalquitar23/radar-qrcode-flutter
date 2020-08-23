@@ -47,7 +47,6 @@ class NavigationPage extends StatelessWidget {
                   ),
                   Container(
                     width: width,
-                    padding: EdgeInsets.all(sy(12)),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -55,48 +54,47 @@ class NavigationPage extends StatelessWidget {
                         bottomRight: Radius.circular(10),
                       ),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        NavigationItem(
-                          iconAsset: "profile.png",
-                          title: 'My Profile',
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, MY_PROFILE_ROUTE);
-                          },
-                        ),
-                        SizedBox(height: sy(14)),
-                        NavigationItem(
-                          iconAsset: "change-pin.png",
-                          title: 'Change PIN',
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, CHANGE_PIN_ROUTE);
-                          },
-                        ),
-                        SizedBox(height: sy(14)),
-                        NavigationItem(
-                          iconAsset: "contact-us.png",
-                          title: 'Contact us',
-                          onPressed: onMyProfile ??
-                              () {
-                                Navigator.pushNamed(
-                                    context, INDIVIDUAL_HOME_ROUTE);
-                              },
-                        ),
-                        SizedBox(height: sy(14)),
-                        NavigationItem(
-                          iconAsset: "logout.png",
-                          title: 'Logout',
-                          onPressed: onMyProfile ??
-                              () {
-                                Navigator.pushNamed(
-                                    context, INDIVIDUAL_HOME_ROUTE);
-                              },
-                        ),
-                        SizedBox(height: sy(14)),
-                      ],
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 10.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          NavigationItem(
+                            iconAsset: "profile.png",
+                            title: 'My Profile',
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, MY_PROFILE_ROUTE);
+                            },
+                          ),
+                          NavigationItem(
+                            iconAsset: "change-pin.png",
+                            title: 'Change PIN',
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, CHANGE_PIN_ROUTE);
+                            },
+                          ),
+                          NavigationItem(
+                            iconAsset: "contact-us.png",
+                            title: 'Contact us',
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, CONTACT_US_ROUTE);
+                            },
+                          ),
+                          NavigationItem(
+                            iconAsset: "logout.png",
+                            title: 'Logout',
+                            onPressed: onMyProfile ??
+                                () {
+                                  Navigator.pushNamed(
+                                      context, INDIVIDUAL_HOME_ROUTE);
+                                },
+                          ),
+                          SizedBox(height: sy(14)),
+                        ],
+                      ),
                     ),
                   ),
                 ],
