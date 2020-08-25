@@ -7,54 +7,43 @@ import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
+import '../../widgets/texts/description_text.dart';
+
 class EstablishmentHomePage extends StatefulWidget {
   @override
   _EstablishmentHomePageState createState() => _EstablishmentHomePageState();
 }
 
 class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
-  final double textFieldVerticalMargin = 10.0;
-  final double textFieldHorizontalMargin = 50.0;
-
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
     return MobileStatusMarginTop(
       child: Scaffold(
-        backgroundColor: Color(0xFFF8F8F8),
-        // appBar: _buildAppBar(context),
-        body: _buildBody(),
-      ),
-    );
-  }
-
-  Widget _buildBody() {
-    final Size screenSize = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: Stack(
-        children: [
-          Container(
-            height: screenSize.height * 0.66,
-            decoration: BoxDecoration(
-              color: ColorUtil.primaryColor,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(34.0),
-                  bottomRight: Radius.circular(34.0)),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+        body: SingleChildScrollView(
+          child: Stack(
             children: [
-              _buildAppBar(),
-              _buildEstablishmentDetails(),
-              Text(
-                "Please scan a QR Code to retrieve user's information.",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline5,
+              Container(
+                height: screenSize.height * 0.66,
+                decoration: BoxDecoration(
+                  color: ColorUtil.primaryColor,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(34.0),
+                      bottomRight: Radius.circular(34.0)),
+                ),
               ),
-              _buildScanQRCodeButton(),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildAppBar(),
+                  _buildEstablishmentDetails(),
+                  _buildHint(),
+                  _buildScanQRCodeButton(),
+                ],
+              )
             ],
-          )
-        ],
+          ),
+        ),
       ),
     );
   }
@@ -69,30 +58,6 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
       imageAsset: 'assets/images/app/logo-white.png',
     );
   }
-
-  // AppBar _buildAppBar(BuildContext context) {
-  //   return AppBar(
-  //     backgroundColor: ColorUtil.primaryColor,
-  //     centerTitle: true,
-  //     elevation: 0.0,
-  //     actions: [
-  //       Container(
-  //         margin: EdgeInsets.only(right: 20),
-  //         child: Image.asset(
-  //           'assets/images/app/logo-white.png',
-  //           scale: 4,
-  //           alignment: Alignment.centerRight,
-  //         ),
-  //       ),
-  //     ],
-  //     leading: GestureDetector(
-  //       onTap: () {
-  //         mainBottomSheet(context);
-  //       },
-  //       child: Icon(Icons.menu),
-  //     ),
-  //   );
-  // }
 
   Container _buildEstablishmentDetails() {
     return Container(
@@ -185,12 +150,25 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
     ];
   }
 
+  Widget _buildHint() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+      child: Column(
+        children: [
+          DescriptionText(
+            title: "Please scan a QR Code to retrieve user's information.",
+            color: ColorUtil.primaryTextColor,
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+          )
+        ],
+      ),
+    );
+  }
+
   Widget _buildScanQRCodeButton() {
     return Container(
-      margin: EdgeInsets.symmetric(
-        vertical: textFieldVerticalMargin,
-        horizontal: textFieldHorizontalMargin,
-      ),
+      margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
       child: PrimaryButtonWithIcon(
         onPressed: () {
           Navigator.pushNamed(context, USER_DETAILS_ROUTE);
