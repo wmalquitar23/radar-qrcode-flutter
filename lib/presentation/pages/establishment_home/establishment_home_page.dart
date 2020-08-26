@@ -171,7 +171,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
       child: PrimaryButtonWithIcon(
         onPressed: () {
-          Navigator.pushNamed(context, USER_DETAILS_ROUTE);
+          Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
         },
         text: 'SCAN QR CODE',
       ),

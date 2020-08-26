@@ -1,5 +1,11 @@
+import 'package:ai_barcode/ai_barcode.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../../../core/utils/routes/routes_list.dart';
+import '../../widgets/bar/custom_regular_app_bar_v2.dart';
+import '../../widgets/pages/mobile_status_margin_top.dart';
+import '../../pages/scan_qrcode/scan_qrcode_dummy_validator.dart';
 
 class ScanQrcodePage extends StatefulWidget {
   ScanQrcodePage({Key key}) : super(key: key);
@@ -8,46 +14,339 @@ class ScanQrcodePage extends StatefulWidget {
   _ScanQrcodePageState createState() => _ScanQrcodePageState();
 }
 
-class _ScanQrcodePageState extends State<ScanQrcodePage> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController controller;
+class _ScanQrcodePageState extends State<ScanQrcodePage>
+    with WidgetsBindingObserver {
+  ScannerController _scannerController;
+
+  bool _cameraPermissionGranted = false;
+  bool _fromAppSettings = false;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text(
-          'Scan QR Code',
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: QRView(
-        overlay: QrScannerOverlayShape(
-          borderColor: Colors.white,
-          borderRadius: 10,
-          borderLength: 30,
-          borderWidth: 10,
-          cutOutSize: 300,
-        ),
-        key: qrKey,
-        onQRViewCreated: _onQRViewCreated,
-      ),
+  void initState() {
+    _requestCameraPermission();
+    _scannerController = ScannerController(
+      scannerResult: (result) {
+        _validateQrCode(result);
+      },
+      scannerViewCreated: () => _startScanning(),
     );
+
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {});
-    });
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("App Cycle State Changed: $state");
+
+    if (state == AppLifecycleState.resumed) {
+      if (_fromAppSettings) {
+        _requestCameraPermission();
+        _fromAppSettings = false;
+      }
+      _startCameraPreview();
+    } else if (state == AppLifecycleState.paused) {
+      _stopCameraPreview();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+
+    print("Deactivate");
+    _toggleCameraPreview();
   }
 
   @override
   void dispose() {
-    controller?.dispose();
+    _stopScanning();
+    _scannerController = null;
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  void _requestCameraPermission() async {
+    if (await Permission.camera.request().isGranted) {
+      print("Camera Permission Granted");
+      setState(() => _cameraPermissionGranted = true);
+    } else {
+      print("Camera Permission Denied");
+      setState(() => _cameraPermissionGranted = false);
+    }
+  }
+
+  void _requestCameraPermissionLevel2() async {
+    if (await Permission.camera.request().isGranted) {
+      print("Camera Permission Granted");
+      setState(() => _cameraPermissionGranted = true);
+    } else {
+      print("Camera Permission Denied");
+      setState(() => _cameraPermissionGranted = false);
+
+      if (await Permission.camera.isPermanentlyDenied) {
+        _requestCameraPermissionFromAppSettings();
+      }
+    }
+  }
+
+  void _requestCameraPermissionFromAppSettings() async {
+    _fromAppSettings = false;
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text("Radar needs to access your Camera"),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text(
+                "Please grant camera permission in App Settings.\n",
+              ),
+              Text(
+                "To enable this feature, click App Settings below and enable camera under the Permissions menu.",
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("App Settings"),
+            onPressed: () {
+              openAppSettings();
+              Navigator.of(context).pop();
+              _fromAppSettings = true;
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  void _startScanning() {
+    if (_cameraPermissionGranted) {
+      print("Start Scanning");
+      if (Theme.of(context).platform == TargetPlatform.iOS) {
+        Future.delayed(Duration(seconds: 1), () {
+          _scannerController.startCamera();
+          _scannerController.startCameraPreview();
+        });
+      } else {
+        _scannerController.startCamera();
+        _scannerController.startCameraPreview();
+      }
+    }
+  }
+
+  void _startCameraPreview() {
+    if (_cameraPermissionGranted) {
+      _scannerController.startCameraPreview();
+    }
+  }
+
+  void _stopCameraPreview() {
+    if (_cameraPermissionGranted) {
+      _scannerController.stopCameraPreview();
+    }
+  }
+
+  void _stopCamera() {
+    if (_cameraPermissionGranted) {
+      print("Stop Scanning");
+      _scannerController.stopCamera();
+    }
+  }
+
+  void _stopScanning() {
+    _stopCameraPreview();
+    _stopCamera();
+  }
+
+  bool _isFlashOpen() {
+    if (_cameraPermissionGranted) {
+      return _scannerController.isOpenFlash;
+    } else {
+      return false;
+    }
+  }
+
+  void _toggleFlash() {
+    if (_cameraPermissionGranted) {
+      _scannerController.toggleFlash();
+    }
+  }
+
+  _toggleCameraPreview() {
+    if (_cameraPermissionGranted) {
+      if (_scannerController.isStartCameraPreview) {
+        _scannerController.stopCameraPreview();
+      } else {
+        _scannerController.startCameraPreview();
+      }
+    }
+  }
+
+  void _validateQrCode(String qrData) {
+    dummyQRValidation(qrData).listen(
+      (qrValidationResult) {
+        if (qrValidationResult.isResultAvailable) {
+          if (qrValidationResult.qrData != null) {
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed(
+              USER_DETAILS_ROUTE,
+              arguments: qrValidationResult.qrData,
+            );
+          } else {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return _userNotFoundDialog();
+              },
+            );
+          }
+        } else {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return Container(
+                color: Colors.black38,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            },
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MobileStatusMarginTop(
+      child: CustomRegularAppBarV2(
+        backgroundColor: Colors.transparent,
+        title: "Scan QR Code",
+        body: _buildScannerView(),
+      ),
+    );
+  }
+
+  Container _buildScannerView() {
+    return Container(
+      color: Colors.black,
+      child: _cameraPermissionGranted
+          ? _buildQRCodeScanner()
+          : _buildCamerePermissonDeniedView(),
+    );
+  }
+
+  Widget _buildQRCodeScanner() {
+    return Stack(
+      children: <Widget>[
+        Container(
+          child: PlatformAiBarcodeScannerWidget(
+            platformScannerController: _scannerController,
+            unsupportedDescription: "Uh oh! feature not supported...",
+          ),
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: _buildHintMessage(),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Material(
+            color: Colors.black38,
+            child: _buildFlashButton(),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildHintMessage() {
+    return Padding(
+      padding: const EdgeInsets.all(35),
+      child: Text(
+        "Align the QR Code within the frame to start Scanning.",
+        style: TextStyle(color: Colors.white, fontSize: 14),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget _buildFlashButton() {
+    return IconButton(
+      padding: const EdgeInsets.all(36.0),
+      icon: Icon(_isFlashOpen() ? Icons.flash_on : Icons.flash_off,
+          color: Colors.white),
+      onPressed: () => setState(() => _toggleFlash()),
+    );
+  }
+
+  Widget _buildCamerePermissonDeniedView() {
+    final screenSize = MediaQuery.of(context).size;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: screenSize.width * 0.12),
+          child: Text(
+            "Radar needs to access your camera to scan QR Code.",
+            style: TextStyle(color: Colors.white, fontSize: 14),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        SizedBox(height: 20),
+        Container(
+          child: OutlineButton(
+            onPressed: () {
+              _requestCameraPermissionLevel2();
+            },
+            borderSide: BorderSide(color: Colors.white),
+            child: Text(
+              "Enable Camera Access",
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  AlertDialog _userNotFoundDialog() {
+    return AlertDialog(
+      title: Text("User Not Found"),
+      content: Container(
+        child: Row(
+          children: <Widget>[
+            Icon(
+              Icons.error,
+              color: Colors.red,
+              size: 30,
+            ),
+            SizedBox(width: 10),
+            Text("Sorry, User is not Registered!"),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            _startCameraPreview();
+          },
+          child: Text("Close"),
+        ),
+      ],
+    );
   }
 }
