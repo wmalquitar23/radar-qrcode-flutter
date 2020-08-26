@@ -27,14 +27,14 @@ class NavigationItem extends StatelessWidget {
             children: [
               ExtendedImage.asset(
                 '$navigationImages/$iconAsset',
-                height: sy(36),
-                width: sy(36),
+                height: sy(30),
+                width: sy(30),
               ),
               SizedBox(width: sx(18)),
               Text(
                 title ?? 'Unknown',
                 style: TextStyle(
-                  fontSize: sy(14),
+                  fontSize: sy(10),
                   fontWeight: FontWeight.w500,
                 ),
               ),
