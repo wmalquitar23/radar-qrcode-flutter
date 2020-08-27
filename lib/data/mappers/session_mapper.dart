@@ -10,7 +10,7 @@ class SessionMapper extends RadarMapper<Session> {
     if (map == null) return null;
     return Session(
       user: map.containsKey("user") ? userMapper.fromMap(map['user']) : null,
-      token: map['profile'],
+      token: map['token'],
     );
   }
 

@@ -4,12 +4,18 @@ import 'package:path_provider/path_provider.dart';
 import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.dart';
 import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/otp_verification_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_case.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 
+import 'data/repositories_impl/authentication_repository_impl.dart';
+import 'domain/repositories/authentication_repository.dart';
 import 'presentation/bloc/splash/splash_bloc.dart';
 
 final sl = GetIt.instance;
@@ -25,6 +31,11 @@ class DataInstantiator extends RadarDataInstantiator {
 
     var restClient = RestClient(dio);
 
+    //implementations
+    AuthenticationRepository authenticationRepository =
+        AuthenticationRepositoryImpl(database, restClient);
+
+    //core
     GetIt.I.registerSingleton<RestClient>(restClient);
     GetIt.I.registerSingleton<Dio>(dio);
     GetIt.I.registerSingleton<Database>(database);
@@ -37,6 +48,28 @@ class DataInstantiator extends RadarDataInstantiator {
     sl.registerFactory<SuccessBloc>(
       () => SuccessBloc(),
     );
+    sl.registerFactory<IndividualBasicInformationBloc>(
+      () => IndividualBasicInformationBloc(
+        registerIndividualUseCase:
+            RegisterIndividualUseCase(authenticationRepository),
+      ),
+    );
+    sl.registerFactory<VerificationBloc>(
+      () => VerificationBloc(
+        otpVerificationUseCase:
+            OtpVerificationUseCase(authenticationRepository),
+      ),
+    );
+
+    //usecases
+    GetIt.I.registerLazySingleton<RegisterIndividualUseCase>(
+        () => RegisterIndividualUseCase(authenticationRepository));
+    GetIt.I.registerLazySingleton<OtpVerificationUseCase>(
+        () => OtpVerificationUseCase(authenticationRepository));
+
+    //repositories
+    GetIt.I
+        .registerSingleton<AuthenticationRepository>(authenticationRepository);
   }
 
   Future<Database> getDatabase(Map<String, String> env) async {

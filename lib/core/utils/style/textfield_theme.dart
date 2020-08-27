@@ -2,13 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 
 class TextFieldTheme {
-  static InputDecoration textfieldInputDecoration({String hintText}) {
+  static InputDecoration textfieldInputDecoration(
+      {String hintText, String prefix}) {
     return InputDecoration(
       filled: true,
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       hintText: hintText ?? "",
       hintStyle: TextStyle(color: ColorUtil.primarySubTextColor),
+      prefixIcon: prefix != null
+          ? Padding(
+              padding: EdgeInsets.only(left: 20, top: 20, bottom: 20),
+              child: Text(
+                '$prefix ',
+                style: TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.w700,
+                  color: ColorUtil.primarySubTextColor
+                ),
+              ),
+            )
+          : null,
       fillColor: ColorUtil.primaryBackgroundColor,
+      floatingLabelBehavior: FloatingLabelBehavior.never,
+      counterText: '',
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.transparent, width: 1),
         borderRadius: new BorderRadius.circular(15.0),

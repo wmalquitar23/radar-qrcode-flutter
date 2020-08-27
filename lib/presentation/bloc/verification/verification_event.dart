@@ -6,3 +6,9 @@ abstract class VerificationEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class OnContinueButtonPressed extends VerificationEvent {
+  final String otp;
+
+  OnContinueButtonPressed({this.otp});
+}

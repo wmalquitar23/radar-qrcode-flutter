@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
@@ -16,112 +21,152 @@ class VerificationPage extends StatefulWidget {
 }
 
 class _VerificationPageState extends State<VerificationPage> {
+  bool radiusBorder = false;
+
+  int _currentDigit,
+      _firstDigit,
+      _secondDigit,
+      _thirdDigit,
+      _fourthDigit,
+      _fifthDigit,
+      _sixthDigit;
+
   @override
   Widget build(BuildContext context) {
     var mediaQD = MediaQuery.of(context);
     var maxWidth = mediaQD.size.width;
-    return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10.0),
-              child: HeaderText(
-                title: "Verification",
-                fontSize: 24,
-                color: ColorUtil.primaryColor,
+    return CustomRegularAppBar(
+      backgroundColor: Colors.transparent,
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10.0),
+                child: HeaderText(
+                  title: "Verification",
+                  fontSize: 24,
+                  color: ColorUtil.primaryColor,
+                ),
               ),
-            ),
-            Container(
-              child: DescriptionText(
-                title: "4 digit code was sent to 09451096905",
-                color: ColorUtil.secondaryTextColor,
-                fontWeight: FontWeight.w600,
+              Container(
+                child: DescriptionText(
+                  title: "4 digit code was sent to 09451096905",
+                  color: ColorUtil.secondaryTextColor,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            _buildCode(maxWidth),
-          ],
+              SizedBox(
+                height: 30,
+              ),
+              _buildCode(maxWidth),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildCode(maxWidth) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.80),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  children: <Widget>[
-                    _buildNumberContainer(),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        DescriptionText(
-                          title: "I didn\'t receive the code. ",
-                          color: ColorUtil.primaryTextColor,
-                        ),
-                        DescriptionText(
-                          title: "Resend",
-                          color: ColorUtil.primaryColor,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        DescriptionText(
-                          title: "I entered a wrong mobile number. ",
-                          color: ColorUtil.primaryTextColor,
-                        ),
-                        DescriptionText(
-                          title: "Change",
-                          color: ColorUtil.primaryColor,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    PrimaryButton(
-                      text: "CONTINUE",
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          SUCCESS_ROUTE,
-                          arguments: widget.type,
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(
-                        thickness: 0.5, color: ColorUtil.primarySubTextColor),
-                    _buildOtpKeyboard(maxWidth)
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+  void _onContinuePressed() async {
+    BlocProvider.of<VerificationBloc>(context).add(
+      OnContinueButtonPressed(
+        otp: _firstDigit.toString() +
+            _secondDigit.toString() +
+            _thirdDigit.toString() +
+            _fourthDigit.toString() +
+            _fifthDigit.toString() +
+            _sixthDigit.toString(),
       ),
+    );
+  }
+
+  Widget _buildCode(maxWidth) {
+    return BlocBuilder<VerificationBloc, VerificationState>(
+      builder: (context, state) {
+        if (state is VerificationSuccess) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            Navigator.of(context).pushReplacementNamed(
+              SUCCESS_ROUTE,
+              arguments: widget.type,
+            );
+          });
+        }
+        if (state is VerificationFailure) {
+          ToastUtil.showToast(context, state.error);
+        }
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 30),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.80),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      _buildNumberContainer(),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          DescriptionText(
+                            title: "I didn\'t receive the code. ",
+                            color: ColorUtil.primaryTextColor,
+                          ),
+                          DescriptionText(
+                            title: "Resend",
+                            color: ColorUtil.primaryColor,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          DescriptionText(
+                            title: "I entered a wrong mobile number. ",
+                            color: ColorUtil.primaryTextColor,
+                          ),
+                          DescriptionText(
+                            title: "Change",
+                            color: ColorUtil.primaryColor,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      PrimaryButton(
+                        text: "CONTINUE",
+                        onPressed: () {
+                          _onContinuePressed();
+                          // Navigator.pushNamed(
+                          //   context,
+                          //   SUCCESS_ROUTE,
+                          //   arguments: widget.type,
+                          // );
+                        },
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Divider(
+                          thickness: 0.5, color: ColorUtil.primarySubTextColor),
+                      _buildOtpKeyboard(maxWidth)
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -162,6 +207,10 @@ class _VerificationPageState extends State<VerificationPage> {
         _thirdDigit = _currentDigit;
       } else if (_fourthDigit == null) {
         _fourthDigit = _currentDigit;
+      } else if (_fifthDigit == null) {
+        _fifthDigit = _currentDigit;
+      } else if (_sixthDigit == null) {
+        _sixthDigit = _currentDigit;
       }
     });
   }
@@ -291,10 +340,6 @@ class _VerificationPageState extends State<VerificationPage> {
     );
   }
 
-  bool radiusBorder = false;
-
-  int _currentDigit, _firstDigit, _secondDigit, _thirdDigit, _fourthDigit;
-
   Widget _buildOtpTextField(int digit) {
     return digit != null
         ? _otpField(digit)
@@ -307,8 +352,8 @@ class _VerificationPageState extends State<VerificationPage> {
   Widget _otpField(int digit) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5),
-      height: 55,
-      width: 55,
+      height: 45,
+      width: 40,
       decoration: BoxDecoration(
           color: digit == null ? Colors.white : ColorUtil.primaryColor,
           borderRadius: BorderRadius.circular(20.0)),
@@ -336,6 +381,8 @@ class _VerificationPageState extends State<VerificationPage> {
             _buildOtpTextField(_secondDigit),
             _buildOtpTextField(_thirdDigit),
             _buildOtpTextField(_fourthDigit),
+            _buildOtpTextField(_fifthDigit),
+            _buildOtpTextField(_sixthDigit),
           ],
         ),
       ],

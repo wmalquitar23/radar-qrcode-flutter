@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/router_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/establishment_basic_information.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/individual_basic_information_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/change_pin/change_pin_page.dart';
@@ -24,6 +26,7 @@ import 'package:radar_qrcode_flutter/presentation/pages/signin/sign_in_page.dart
 import 'package:radar_qrcode_flutter/presentation/pages/signin/sign_in_verification.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/success/success_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/user_details/user_details.page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/verification/verification_page.dart';
 
 import '../../../dependency_instantiator.dart';
 import 'router_util.dart';
@@ -45,7 +48,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case BASIC_INFORMATION_ROUTE:
       return pushNamed(
-          page: IndividualBasicInformationPage(),
+          page: BlocProvider(
+            create: (_) => sl<IndividualBasicInformationBloc>(),
+            child: IndividualBasicInformationPage(),
+          ),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
@@ -90,6 +96,17 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case MY_PROFILE_ROUTE:
       return pushNamed(
           page: MyProfilePage(),
+          settings: settings,
+          pageTransitionType: PageTransitionType.fade);
+      break;
+    case VERIFICATION_CODE_ROUTE:
+      return pushNamed(
+          page: BlocProvider(
+            create: (_) => sl<VerificationBloc>(),
+            child: VerificationPage(
+              type: args,
+            ),
+          ),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);
       break;
