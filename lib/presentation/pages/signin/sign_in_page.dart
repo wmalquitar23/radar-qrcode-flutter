@@ -19,7 +19,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return MobileStatusMarginTop(
       child: CustomRegularAppBar(
-        onBackTap: (){
+        onBackTap: () {
           Navigator.pushNamed(context, ONBOARD_ROUTE);
         },
         backgroundColor: Colors.transparent,
@@ -44,6 +44,8 @@ class _SignInPageState extends State<SignInPage> {
               ),
               PrimaryButton(
                 text: "SIGN IN",
+                onPressed: () =>
+                    Navigator.pushNamed(context, SIGN_IN_VERIFICATION_ROUTE),
               ),
               SizedBox(
                 height: 20.0,

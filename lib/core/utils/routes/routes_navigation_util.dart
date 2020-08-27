@@ -21,12 +21,12 @@ import 'package:radar_qrcode_flutter/presentation/pages/profile/my_profile_page.
 import 'package:radar_qrcode_flutter/presentation/pages/register_as/register_as_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/scan_qrcode/scan_qrcode.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/signin/sign_in_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/signin/sign_in_verification.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/success/success_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/user_details/user_details.page.dart';
 
 import '../../../dependency_instantiator.dart';
 import 'router_util.dart';
-
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   final args = settings.arguments;
@@ -108,6 +108,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case SIGN_IN_ROUTE:
       return pushNamed(
           page: SignInPage(),
+          settings: settings,
+          pageTransitionType: PageTransitionType.fade);
+      break;
+    case SIGN_IN_VERIFICATION_ROUTE:
+      return pushNamed(
+          page: SignInVerificationPage(),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);
       break;
