@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:meta/meta.dart';
+import 'package:radar_qrcode_flutter/core/utils/strings/error_handler.dart';
 import 'package:radar_qrcode_flutter/core/utils/strings/errors.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_case.dart';
 
@@ -31,27 +32,15 @@ class IndividualBasicInformationBloc extends Bloc<
           event.lastName,
           event.middleName,
           event.pin,
-          "0"+event.contactNumber,
+          "0" + event.contactNumber,
           event.address,
           event.birthDate,
           event.gender,
         );
         yield RegisterDone();
       } on DioError catch (e) {
-        switch (e.type) {
-          case DioErrorType.CONNECT_TIMEOUT:
-            logger.e(e.message);
-            yield RegisterFailure(error: e.message);
-            break;
-          case DioErrorType.RESPONSE:
-            logger.e(e.message);
-            yield RegisterFailure(error: e.message);
-            break;
-          default:
-            logger.e(e.message);
-            yield RegisterFailure(error: unknownError(e.message));
-            break;
-        }
+        String errorhandler = ErrorHandler().dioErrorHandler(e);
+        yield RegisterFailure(error: errorhandler);
       } catch (e) {
         logger.e(e);
         yield RegisterFailure(error: e);

@@ -1,4 +1,4 @@
 
-enum SelectedRegistrationType { Individual, Establishment }
+enum UserType { individual, establishment }
 
 enum Gender { female, male }

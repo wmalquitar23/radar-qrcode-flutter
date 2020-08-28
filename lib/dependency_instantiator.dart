@@ -4,9 +4,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.dart';
 import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/otp_verification_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_case.dart';
-import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_basic_information_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
@@ -14,6 +15,8 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 
+import 'data/local_db/session_db.dart';
+import 'data/models/session_model.dart';
 import 'data/repositories_impl/authentication_repository_impl.dart';
 import 'domain/repositories/authentication_repository.dart';
 import 'presentation/bloc/splash/splash_bloc.dart';
@@ -46,7 +49,9 @@ class DataInstantiator extends RadarDataInstantiator {
       () => RegisterAsBloc(),
     );
     sl.registerFactory<SuccessBloc>(
-      () => SuccessBloc(),
+      () => SuccessBloc(
+        getSessionUseCase: GetSessionUseCase(authenticationRepository),
+      ),
     );
     sl.registerFactory<IndividualBasicInformationBloc>(
       () => IndividualBasicInformationBloc(
@@ -66,6 +71,8 @@ class DataInstantiator extends RadarDataInstantiator {
         () => RegisterIndividualUseCase(authenticationRepository));
     GetIt.I.registerLazySingleton<OtpVerificationUseCase>(
         () => OtpVerificationUseCase(authenticationRepository));
+    GetIt.I.registerLazySingleton<GetSessionUseCase>(
+        () => GetSessionUseCase(authenticationRepository));
 
     //repositories
     GetIt.I
@@ -92,6 +99,23 @@ class DataInstantiator extends RadarDataInstantiator {
     );
 
     Dio dio = Dio(options);
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (Options options) async {
+          SessionDb sessionDb = SessionDb(database);
+          dio.interceptors.requestLock.lock();
+          Session currentSession = await sessionDb.getCurrentSession();
+          if (currentSession?.token != null)
+            options.headers.addAll(
+              {
+                "Authorization": "Bearer ${currentSession.token}",
+              },
+            );
+          dio.interceptors.requestLock.unlock();
+          return options; //continue
+        },
+      ),
+    );
 
     return dio;
   }

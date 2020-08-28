@@ -75,9 +75,8 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         await restClient.registerIndividual(registrationData);
 
     await sessionDb.save({
-      "user": userInfoResponse.data['individual'],
+      "user": userInfoResponse.data['user'],
       "token": userInfoResponse.data['token']
     });
-    return await sessionDb.getCurrentSession();
   }
 }

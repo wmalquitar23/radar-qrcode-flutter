@@ -8,7 +8,7 @@ abstract class RegisterAsEvent extends Equatable {
 }
 
 class OnSelectRegistrationType extends RegisterAsEvent{
-  final SelectedRegistrationType selectedRegistrationType;
+  final UserType selectedRegistrationType;
 
   OnSelectRegistrationType({this.selectedRegistrationType});
 }

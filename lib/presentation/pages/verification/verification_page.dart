@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
@@ -13,9 +12,7 @@ import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
 class VerificationPage extends StatefulWidget {
-  final SelectedRegistrationType type;
-
-  const VerificationPage({Key key, this.type}) : super(key: key);
+  const VerificationPage({Key key}) : super(key: key);
   @override
   _VerificationPageState createState() => _VerificationPageState();
 }
@@ -88,7 +85,6 @@ class _VerificationPageState extends State<VerificationPage> {
           SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.of(context).pushReplacementNamed(
               SUCCESS_ROUTE,
-              arguments: widget.type,
             );
           });
         }
@@ -144,13 +140,9 @@ class _VerificationPageState extends State<VerificationPage> {
                       ),
                       PrimaryButton(
                         text: "CONTINUE",
+                        isLoading: state is VerificationProgress ? true : false,
                         onPressed: () {
                           _onContinuePressed();
-                          // Navigator.pushNamed(
-                          //   context,
-                          //   SUCCESS_ROUTE,
-                          //   arguments: widget.type,
-                          // );
                         },
                       ),
                       SizedBox(
@@ -305,7 +297,11 @@ class _VerificationPageState extends State<VerificationPage> {
                       ),
                       onPressed: () {
                         setState(() {
-                          if (_fourthDigit != null) {
+                          if (_sixthDigit != null) {
+                            _sixthDigit = null;
+                          } else if (_fifthDigit != null) {
+                            _fifthDigit = null;
+                          } else if (_fourthDigit != null) {
                             _fourthDigit = null;
                           } else if (_thirdDigit != null) {
                             _thirdDigit = null;

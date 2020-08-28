@@ -16,7 +16,7 @@ class RegisterAsBloc extends Bloc<RegisterAsEvent, RegisterAsState> {
   ) async* {
     if (event is OnSelectRegistrationType) {
       if (event.selectedRegistrationType ==
-          SelectedRegistrationType.Individual) {
+          UserType.individual) {
         yield SelectIndividual();
       } else {
         yield SelectEstablishment();

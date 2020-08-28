@@ -51,8 +51,8 @@ class _RegisterAsPageState extends State<RegisterAsPage> {
                                       "assets/images/undraw/individual.png",
                                   fromNetwork: false,
                                   onClick: () =>
-                                      _toggleSelectedRegistrationType(context,
-                                          SelectedRegistrationType.Individual),
+                                      _toggleSelectedRegistrationType(
+                                          context, UserType.individual),
                                 ),
                                 selected:
                                     state is SelectIndividual ? true : false,
@@ -81,9 +81,7 @@ class _RegisterAsPageState extends State<RegisterAsPage> {
                                   fromNetwork: false,
                                   onClick: () =>
                                       _toggleSelectedRegistrationType(
-                                          context,
-                                          SelectedRegistrationType
-                                              .Establishment),
+                                          context, UserType.establishment),
                                 ),
                                 selected:
                                     state is SelectEstablishment ? true : false,
@@ -175,7 +173,7 @@ class _RegisterAsPageState extends State<RegisterAsPage> {
   }
 
   void _toggleSelectedRegistrationType(
-      BuildContext context, SelectedRegistrationType type) async {
+      BuildContext context, UserType type) async {
     BlocProvider.of<RegisterAsBloc>(context)
         .add(OnSelectRegistrationType(selectedRegistrationType: type));
   }

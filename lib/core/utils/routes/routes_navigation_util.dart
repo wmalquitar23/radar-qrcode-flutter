@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/router_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
-import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_basic_information_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/establishment_basic_information.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/individual_basic_information_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/change_pin/change_pin_page.dart';
@@ -32,7 +34,7 @@ import '../../../dependency_instantiator.dart';
 import 'router_util.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
-  final args = settings.arguments;
+  // final args = settings.arguments;
   switch (settings.name) {
     case ONBOARD_ROUTE:
       return pushNamed(page: OnboardPage(), settings: settings);
@@ -57,7 +59,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case INDIVIDUAL_HOME_ROUTE:
       return pushNamed(
-          page: IndividualHomePage(),
+          page: BlocProvider(
+            create: (_) => sl<IndividualBloc>(),
+            child: IndividualHomePage(),
+          ),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);
       break;
@@ -75,8 +80,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case SUCCESS_ROUTE:
       return pushNamed(
-          page: SuccessPage(
-            type: args,
+          page: BlocProvider(
+            create: (_) => sl<SuccessBloc>(),
+            child: SuccessPage(),
           ),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
@@ -103,9 +109,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return pushNamed(
           page: BlocProvider(
             create: (_) => sl<VerificationBloc>(),
-            child: VerificationPage(
-              type: args,
-            ),
+            child: VerificationPage(),
           ),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);

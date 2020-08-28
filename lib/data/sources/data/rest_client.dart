@@ -6,6 +6,7 @@ import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
 
 class RestClient {
   Dio _dio;
+  Logger logger = Logger();
 
   RestClient(this._dio);
 
@@ -30,21 +31,20 @@ class RestClient {
     return StandardResponse.fromJson(response.data);
   }
 
-  Future<StandardResponse> registerEstablishment(RegisterEstablishmentRequest registerEstablishmentRequest) async {
-    Response response = await _dio.post("/register/establishment", data: registerEstablishmentRequest);
+  Future<StandardResponse> registerEstablishment(
+      RegisterEstablishmentRequest registerEstablishmentRequest) async {
+    Response response = await _dio.post("/register/establishment",
+        data: registerEstablishmentRequest);
 
     return StandardResponse.fromJson(response.data);
   }
 
-
-  Future<StandardResponse> checkin(String individualId, String establishmentId) async {
-    Response response = await _dio.post(
-      "/checkin",
-      data: {
-        "individualId": individualId,
-        "establishmentId": establishmentId
-      }
-    );
+  Future<StandardResponse> checkin(
+      String individualId, String establishmentId) async {
+    Response response = await _dio.post("/checkin", data: {
+      "individualId": individualId,
+      "establishmentId": establishmentId
+    });
 
     return StandardResponse.fromJson(response.data);
   }
@@ -55,7 +55,6 @@ class RestClient {
     return StandardResponse.fromJson(response.data);
   }
 
-
   Future<StandardResponse> getAllEstablishments() async {
     Response response = await _dio.get("/establishments");
 
@@ -63,13 +62,15 @@ class RestClient {
   }
 
   Future<StandardResponse> login(String contactNumber, String pin) async {
-    Response response = await _dio.post("/login", data: { "contactNumber": contactNumber, "pin": pin });
+    Response response = await _dio
+        .post("/login", data: {"contactNumber": contactNumber, "pin": pin});
 
     return StandardResponse.fromJson(response.data);
   }
 
   Future<StandardResponse> verifyMobileNumber(String token) async {
-    Response response = await _dio.post("/verify/mobile-number", data: { "token": token });
+    Response response =
+        await _dio.post("/verify/mobile-number", data: {"token": token});
 
     return StandardResponse.fromJson(response.data);
   }
@@ -98,6 +99,8 @@ class RestClient {
     Response response = await _dio.post("/verify/mobile-number", data: {
       "code": otp,
     });
+    print(response);
+    logger.i(response);
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }

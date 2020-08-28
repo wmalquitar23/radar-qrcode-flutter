@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/style/textfield_theme.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/verification/verification_page.dart';
@@ -61,9 +60,7 @@ class _EstablishmentBasicInformationPageState
       onBackTap: () {
         _goToPage(_pageControllerIndex - 1);
       },
-      body: VerificationPage(
-        type: SelectedRegistrationType.Establishment,
-      ),
+      body: VerificationPage(),
     );
   }
 

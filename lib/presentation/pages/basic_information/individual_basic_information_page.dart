@@ -9,7 +9,7 @@ import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/core/utils/string_utils.dart';
 import 'package:radar_qrcode_flutter/core/utils/style/textfield_theme.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
-import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_basic_information_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/dialogs/gender_dialog.dart';
@@ -185,6 +185,10 @@ class _IndividualBasicInformationPageState
         child: TextFormField(
           controller: _pinController,
           maxLength: 4,
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            WhitelistingTextInputFormatter.digitsOnly
+          ],
           obscureText: true,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:

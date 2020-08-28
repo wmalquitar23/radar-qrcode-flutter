@@ -8,6 +8,7 @@ class UserMapper extends RadarMapper<User> {
   User fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
     return User(
+      id: map['_id'],
       firstName: map['first_name'],
       lastName: map['last_name'],
       middleName: map['middle_name'] != null ? map['middle_name'] : null,
@@ -17,6 +18,8 @@ class UserMapper extends RadarMapper<User> {
       gender: map['gender'],
       contactNumber: map['contactNumber'],
       address: map['address']['name'],
+      role: map['role'],
+      isVerified: map['isVerified'],
     );
   }
 
@@ -24,12 +27,12 @@ class UserMapper extends RadarMapper<User> {
   Map<String, dynamic> toMap(object) {
     return {
       "firstname": object.firstName,
-      "lastname": object.firstName,
-      "pin": object.firstName,
-      "birthDate": object.firstName,
-      "gender": object.firstName,
-      "contactNumber": object.firstName,
-      "address": object.firstName,
+      "lastname": object.lastName,
+      "pin": object.pin,
+      "birthDate": object.birthDate.toIso8601String(),
+      "gender": object.gender,
+      "contactNumber": object.contactNumber,
+      "address": {"name": object.address},
     };
   }
 }
