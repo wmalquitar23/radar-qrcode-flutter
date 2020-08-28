@@ -27,7 +27,7 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
         yield VerificationSuccess();
       } catch (e) {
         logger.e(e);
-        yield VerificationFailure();
+        yield VerificationFailure(error: e);
       }
     }
   }
