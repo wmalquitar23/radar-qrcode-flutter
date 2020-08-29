@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
 import './core/utils/routes/routes_navigation_util.dart' as routes;
 import 'core/utils/color_util.dart';
-import 'presentation/pages/splash/splash_page.dart';
+import 'presentation/pages/splash/splash.dart';
 
 class RadarApp extends StatelessWidget {
   @override
@@ -65,7 +65,7 @@ class RadarApp extends StatelessWidget {
           ),
         ),
       ),
-      home: SplashPage(),
+      home: Splash(),
       onGenerateRoute: routes.generateRoute,
       onUnknownRoute: (settings) => MaterialPageRoute(
           builder: (context) => NotFoundPage(name: settings.name)),

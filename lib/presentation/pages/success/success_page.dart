@@ -25,7 +25,8 @@ class _SuccessPageState extends State<SuccessPage> {
         child: BlocConsumer<SuccessBloc, SuccessState>(
           listener: (context, state) {
             if (state is GoToRouteState) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
+              WidgetsBinding.instance.addPostFrameCallback((_) async {
+                await Future.delayed(Duration(seconds: 2));
                 Navigator.of(context).pushReplacementNamed(state.route);
               });
             }

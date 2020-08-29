@@ -9,9 +9,9 @@ class UserMapper extends RadarMapper<User> {
     if (map == null) return null;
     return User(
       id: map['_id'],
-      firstName: map['first_name'],
-      lastName: map['last_name'],
-      middleName: map['middle_name'] != null ? map['middle_name'] : null,
+      firstName: map['firstname'],
+      lastName: map['lastname'],
+      middleName: map['middlename'] != null ? map['middlename'] : null,
       birthDate: map['birthDate'] != null
           ? birthDateFormatter.parse(map['birthDate'])
           : null,
@@ -20,6 +20,7 @@ class UserMapper extends RadarMapper<User> {
       address: map['address']['name'],
       role: map['role'],
       isVerified: map['isVerified'],
+      profileImageUrl: map['profileImageUrl'],
     );
   }
 

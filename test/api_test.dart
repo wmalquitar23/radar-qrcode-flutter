@@ -68,7 +68,7 @@ void main() {
 
   test('OTP Mobile number', () async {
     //GIVEN THAT
-    var contactNumber = "09532110774";
+    var contactNumber = "9532110774";
 
     //WHEN
     StandardResponse response = await restClient.otpMobileNumber(contactNumber);
@@ -138,19 +138,6 @@ void main() {
 
     //WHEN
     StandardResponse response = await restClient.login(contactNumber, pin);
-
-    //THEN SHOULD EXPECT
-    print(response.data);
-    expect(response, isNotNull);
-    expect(response.data, isNotNull);
-  });
-
-  test('VERIFICATION verifiyMobileNumber', () async {
-    //GIVEN THAT;
-    var token = "7254";
-
-    //WHEN
-    StandardResponse response = await restClient.verifyMobileNumber(token);
 
     //THEN SHOULD EXPECT
     print(response.data);

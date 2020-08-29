@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
@@ -100,18 +99,17 @@ class _IndividualBasicInformationPageState
       onBackTap: () {
         _goToPage(_pageControllerIndex - 1);
       },
-      body: BlocBuilder<IndividualBasicInformationBloc,
+      body: BlocConsumer<IndividualBasicInformationBloc,
           IndividualBasicInformationState>(
-        builder: (context, state) {
+        listener: (context, state) {
           if (state is RegisterDone) {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushNamed(context, VERIFICATION_CODE_ROUTE);
-            });
+            Navigator.pushNamed(context, VERIFICATION_CODE_ROUTE);
           }
           if (state is RegisterFailure) {
             ToastUtil.showToast(context, state.error);
           }
-
+        },
+        builder: (context, state) {
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(

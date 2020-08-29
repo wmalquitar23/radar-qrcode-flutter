@@ -5,8 +5,10 @@ import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.d
 import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/otp_verification_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_case.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
@@ -44,7 +46,11 @@ class DataInstantiator extends RadarDataInstantiator {
     GetIt.I.registerSingleton<Database>(database);
 
     //bloc
-    GetIt.I.registerSingleton<SplashBloc>(SplashBloc());
+    sl.registerFactory<SplashBloc>(
+      () => SplashBloc(
+        getSessionUseCase: GetSessionUseCase(authenticationRepository),
+      ),
+    );
     sl.registerFactory<RegisterAsBloc>(
       () => RegisterAsBloc(),
     );
@@ -65,6 +71,12 @@ class DataInstantiator extends RadarDataInstantiator {
             OtpVerificationUseCase(authenticationRepository),
       ),
     );
+    sl.registerFactory<IndividualBloc>(
+      () => IndividualBloc(
+        listenForSessionUseCase:
+            ListenForSessionUseCase(authenticationRepository),
+      ),
+    );
 
     //usecases
     GetIt.I.registerLazySingleton<RegisterIndividualUseCase>(
@@ -73,6 +85,8 @@ class DataInstantiator extends RadarDataInstantiator {
         () => OtpVerificationUseCase(authenticationRepository));
     GetIt.I.registerLazySingleton<GetSessionUseCase>(
         () => GetSessionUseCase(authenticationRepository));
+    GetIt.I.registerLazySingleton<ListenForSessionUseCase>(
+        () => ListenForSessionUseCase(authenticationRepository));
 
     //repositories
     GetIt.I

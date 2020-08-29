@@ -1,13 +1,16 @@
-import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/images/circle_image_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widget.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/status/status_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
 
 import '../../../core/utils/routes/routes_list.dart';
@@ -18,33 +21,55 @@ class IndividualHomePage extends StatefulWidget {
 }
 
 class _IndividualHomePageState extends State<IndividualHomePage> {
+  void _onLoad() async {
+    BlocProvider.of<IndividualBloc>(context).add(
+      IndividualOnLoad(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return MobileStatusMarginTop(
         child: Scaffold(
       body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Container(
-              height: screenSize.height * 0.66,
-              decoration: BoxDecoration(
-                color: ColorUtil.primaryColor,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(34.0),
-                    bottomRight: Radius.circular(34.0)),
-              ),
-            ),
-            Column(
+        child: BlocConsumer<IndividualBloc, IndividualState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            if (state is IndividualInitial) {
+              _onLoad();
+            }
+            return Stack(
               children: [
-                _buildAppBar(),
-                _buildPersonInfo(),
-                _buildQRInfo(screenSize),
-                _buildHint(),
-                _buildVerifyIdentityButton()
+                Container(
+                  height: screenSize.height * 0.66,
+                  decoration: BoxDecoration(
+                    color: ColorUtil.primaryColor,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(34.0),
+                        bottomRight: Radius.circular(34.0)),
+                  ),
+                ),
+                Column(
+                  children: [
+                    _buildAppBar(),
+                    state is IndividualGetUserSuccess
+                        ? _buildPersonInfo(state)
+                        : CupertinoActivityIndicator(),
+                    state is IndividualGetUserSuccess
+                        ? _buildQRInfo(screenSize, state)
+                        : CupertinoActivityIndicator(),
+                    state is IndividualGetUserSuccess
+                        ? _buildHint()
+                        : CupertinoActivityIndicator(),
+                    state is IndividualGetUserSuccess
+                        ? _buildVerifyIdentityButton()
+                        : CupertinoActivityIndicator(),
+                  ],
+                ),
               ],
-            ),
-          ],
+            );
+          },
         ),
       ),
     ));
@@ -55,14 +80,15 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
       child: PrimaryButton(
         text: "Verify Identity",
-        onPressed: () => Navigator.of(context).pushNamed(IDENTITY_VERIFICATION_ROUTE),
+        onPressed: () =>
+            Navigator.of(context).pushNamed(IDENTITY_VERIFICATION_ROUTE),
       ),
     );
   }
 
-  Widget _generateQrCOde(Size screenSize) {
+  Widget _generateQrCOde(Size screenSize, IndividualGetUserSuccess state) {
     return QrImage(
-      data: "Jonel Dominic Tapang",
+      data: state?.user?.id,
       foregroundColor: Colors.black,
       version: QrVersions.auto,
       size: screenSize.width * 0.55,
@@ -113,7 +139,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
     );
   }
 
-  Widget _buildPersonInfo() {
+  Widget _buildPersonInfo(IndividualGetUserSuccess state) {
     return Container(
       child: Container(
         margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
@@ -128,29 +154,42 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DescriptionText(
-                      title: "Lalisa Manoban",
-                      color: ColorUtil.primaryColor,
-                      fontSize: 16,
-                    ),
-                    SizedBox(height: 3),
-                    DescriptionText(
-                      title: "Maniki, Kapalong, Davao del Norte",
-                      color: ColorUtil.primarySubTextColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DescriptionText(
+                        title: state?.user?.fullName,
+                        color: ColorUtil.primaryColor,
+                        fontSize: 16,
+                      ),
+                      SizedBox(height: 3),
+                      Text(
+                        state?.user?.address,
+                        style: TextStyle(
+                          height: 1.5,
+                          fontSize: 10.0,
+                          color: ColorUtil.primarySubTextColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 6.0,
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 10.0),
-                  child: CircleImage(
-                    imageUrl: "assets/images/profile/lalisa.jpeg",
-                    size: 50.0,
-                    fromNetwork: false,
+                  width: 50.0,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 10.0),
+                    child: CircleImage(
+                      imageUrl: state?.user?.profileImageUrl,
+                      size: 50.0,
+                      fromNetwork: true,
+                    ),
                   ),
                 ),
               ],
@@ -161,7 +200,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
     );
   }
 
-  Widget _buildQRInfo(Size screenSize) {
+  Widget _buildQRInfo(Size screenSize, IndividualGetUserSuccess state) {
     return ShadowWidget(
       child: Container(
         child: Container(
@@ -189,31 +228,15 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                         height: 3,
                       ),
                       DescriptionText(
-                        title: "#SDFS3424323GH",
+                        title: '#${state?.user?.id}',
                         color: ColorUtil.primarySubTextColor,
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        child: ExtendedImage.asset(
-                          'assets/images/undraw/info.png',
-                          width: 15,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      DescriptionText(
-                        title: "UNVERIFIED",
-                        color: ColorUtil.primaryTextColor,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ],
+                  StatusWidget(
+                    isVerified: state.user.isVerified,
                   )
                 ],
               ),
@@ -224,7 +247,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
               SizedBox(
                 height: 10.0,
               ),
-              _generateQrCOde(screenSize)
+              _generateQrCOde(screenSize, state)
             ],
           ),
         ),

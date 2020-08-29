@@ -6,6 +6,8 @@ abstract class AuthenticationRepository {
 
   Future<Session> getCurrentSession();
 
+  Stream<Session> listenForSession();
+
   Future<void> registerIndividual(
     String firstName,
     String lastName,

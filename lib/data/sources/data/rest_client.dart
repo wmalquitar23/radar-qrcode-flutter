@@ -24,7 +24,7 @@ class RestClient {
   }
 
   Future<StandardResponse> otpMobileNumber(String otp) async {
-    Response response = await _dio.post("/otp/mobile-number", data: {
+    Response response = await _dio.post("/register/otp/", data: {
       "contactNumber": otp,
     });
     Logger().i(response);
@@ -68,13 +68,6 @@ class RestClient {
     return StandardResponse.fromJson(response.data);
   }
 
-  Future<StandardResponse> verifyMobileNumber(String token) async {
-    Response response =
-        await _dio.post("/verify/mobile-number", data: {"token": token});
-
-    return StandardResponse.fromJson(response.data);
-  }
-
   Future<StandardResponse> fileUpload(File file) async {
     final fileName = file.path.split('/').last;
 
@@ -96,7 +89,7 @@ class RestClient {
   }
 
   Future<StandardResponse> verifyOtp(String otp) async {
-    Response response = await _dio.post("/verify/mobile-number", data: {
+    Response response = await _dio.post("/verify/otp", data: {
       "code": otp,
     });
     print(response);

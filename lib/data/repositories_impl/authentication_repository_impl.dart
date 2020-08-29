@@ -40,6 +40,11 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
+  Stream<Session> listenForSession() {
+    return sessionDb.listenForSession();
+  }
+
+  @override
   Future<void> registerIndividual(
       String firstName,
       String lastName,
