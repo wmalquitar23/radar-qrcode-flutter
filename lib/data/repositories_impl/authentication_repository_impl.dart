@@ -84,4 +84,12 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       "token": userInfoResponse.data['token']
     });
   }
+
+  @override
+  Future<StandardResponse> signIn(String contactNumber, String pin) async {
+    StandardResponse response = await restClient.login(contactNumber, pin);
+    await sessionDb
+        .save({"user": response.data['user'], "token": response.data['token']});
+    return response;
+  }
 }

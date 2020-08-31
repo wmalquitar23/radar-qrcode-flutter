@@ -134,7 +134,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case SIGN_IN_VERIFICATION_ROUTE:
       return pushNamed(
-          page: SignInVerificationPage(),
+          page: SignInVerificationPage(contactNumber: settings.arguments),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);
       break;

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_service.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/core/utils/style/textfield_theme.dart';
+import 'package:radar_qrcode_flutter/dependency_instantiator.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
@@ -15,6 +17,10 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final NavigatorService _navigatorService = sl.get<NavigatorService>();
+  final TextEditingController _contactNumberController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return MobileStatusMarginTop(
@@ -43,10 +49,10 @@ class _SignInPageState extends State<SignInPage> {
                 height: 40.0,
               ),
               PrimaryButton(
-                text: "SIGN IN",
-                onPressed: () =>
-                    Navigator.pushNamed(context, SIGN_IN_VERIFICATION_ROUTE),
-              ),
+                  text: "SIGN IN",
+                  onPressed: () => _navigatorService.pushNamed(
+                      SIGN_IN_VERIFICATION_ROUTE,
+                      arguments: _contactNumberController.text)),
               SizedBox(
                 height: 20.0,
               ),
@@ -76,11 +82,18 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
+  @override
+  void dispose() {
+    _contactNumberController.dispose();
+    super.dispose();
+  }
+
   Widget _buildContactNumberTextField() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.0),
       child: ShadowWidget(
         child: TextFormField(
+          controller: _contactNumberController,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration: TextFieldTheme.textfieldInputDecoration(
               hintText: "Contact Number"),

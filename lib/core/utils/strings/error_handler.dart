@@ -11,7 +11,8 @@ class ErrorHandler {
         return error.message;
         break;
       case DioErrorType.RESPONSE:
-        StandardResponse errorResponse = StandardResponse.fromJson(error.response.data);
+        StandardResponse errorResponse =
+            StandardResponse.fromJson(error.response.data);
         logger.e(errorResponse.message);
         return errorResponse.message;
         break;

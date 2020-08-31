@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_service.dart';
+import 'package:radar_qrcode_flutter/dependency_instantiator.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
 import './core/utils/routes/routes_navigation_util.dart' as routes;
 import 'core/utils/color_util.dart';
 import 'presentation/pages/splash/splash.dart';
 
 class RadarApp extends StatelessWidget {
+  final NavigatorService _navigatorService = sl.get<NavigatorService>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -66,6 +70,7 @@ class RadarApp extends StatelessWidget {
         ),
       ),
       home: Splash(),
+      navigatorKey: _navigatorService.navigatorKey,
       onGenerateRoute: routes.generateRoute,
       onUnknownRoute: (settings) => MaterialPageRoute(
           builder: (context) => NotFoundPage(name: settings.name)),

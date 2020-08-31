@@ -3,12 +3,14 @@ import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.dart';
 import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_service.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/otp_verification_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_case.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/sign_in_use_case.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
@@ -87,10 +89,17 @@ class DataInstantiator extends RadarDataInstantiator {
         () => GetSessionUseCase(authenticationRepository));
     GetIt.I.registerLazySingleton<ListenForSessionUseCase>(
         () => ListenForSessionUseCase(authenticationRepository));
+    GetIt.I.registerLazySingleton<SignInUseCase>(
+        () => SignInUseCase(authenticationRepository));
+    GetIt.I.registerLazySingleton<ListenForSessionUseCase>(
+        () => ListenForSessionUseCase(authenticationRepository));
 
     //repositories
     GetIt.I
         .registerSingleton<AuthenticationRepository>(authenticationRepository);
+
+    //navigator service
+    GetIt.I.registerLazySingleton<NavigatorService>(() => NavigatorService());
   }
 
   Future<Database> getDatabase(Map<String, String> env) async {

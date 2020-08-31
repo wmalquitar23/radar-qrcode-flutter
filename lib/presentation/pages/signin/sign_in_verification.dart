@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/sign_in_verification/sign_in_verification_bloc.dart';
 
 import '../../widgets/bar/custom_regular_app_bar.dart';
 import '../../widgets/pages/mobile_status_margin_top.dart';
@@ -6,16 +8,26 @@ import '../../../core/utils/color_util.dart';
 import '../../widgets/texts/header_text.dart';
 import '../../widgets/texts/description_text.dart';
 import '../../widgets/buttons/primary_button_widget.dart';
-import '../../../core/utils/routes/routes_list.dart';
 import '../../widgets/properties/shadow_widget.dart';
 
 class SignInVerificationPage extends StatefulWidget {
-  const SignInVerificationPage({Key key}) : super(key: key);
+  const SignInVerificationPage({Key key, this.contactNumber}) : super(key: key);
+
+  final String contactNumber;
+
   @override
   _SignInVerificationPageState createState() => _SignInVerificationPageState();
 }
 
 class _SignInVerificationPageState extends State<SignInVerificationPage> {
+  SignInVerificationBloc _bloc;
+
+  @override
+  void initState() {
+    _bloc = SignInVerificationBloc();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var mediaQD = MediaQuery.of(context);
@@ -55,42 +67,59 @@ class _SignInVerificationPageState extends State<SignInVerificationPage> {
     );
   }
 
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
   Widget _buildCode(maxWidth) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.80),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  children: <Widget>[
-                    _buildNumberContainer(),
-                    SizedBox(
-                      height: 70,
+    return BlocBuilder<SignInVerificationBloc, SignInVerificationState>(
+      cubit: _bloc,
+      builder: (BuildContext context, SignInVerificationState state) {
+        return SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.80),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        _buildNumberContainer(),
+                        SizedBox(
+                          height: 70,
+                        ),
+                        PrimaryButton(
+                            isLoading: state is ButtonLoading,
+                            text: "CONTINUE",
+                            onPressed: () {
+                              if (_fourthDigit == null) {
+                                return;
+                              }
+
+                              _bloc.onSignIn(widget.contactNumber,
+                                  "$_firstDigit$_secondDigit$_thirdDigit$_fourthDigit");
+                            }),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Divider(
+                            thickness: 0.5,
+                            color: ColorUtil.primarySubTextColor),
+                        _buildOtpKeyboard(maxWidth)
+                      ],
                     ),
-                    PrimaryButton(
-                      text: "CONTINUE",
-                      onPressed: () {
-                        Navigator.pushNamed(context, INDIVIDUAL_HOME_ROUTE);
-                      },
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(
-                        thickness: 0.5, color: ColorUtil.primarySubTextColor),
-                    _buildOtpKeyboard(maxWidth)
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -304,7 +333,7 @@ class _SignInVerificationPageState extends State<SignInVerificationPage> {
             _buildOtpTextField(_firstDigit),
             _buildOtpTextField(_secondDigit),
             _buildOtpTextField(_thirdDigit),
-            _buildOtpTextField(_fourthDigit),
+            _buildOtpTextField(_fourthDigit)
           ],
         ),
       ],

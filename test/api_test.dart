@@ -133,7 +133,7 @@ void main() {
 
   test('AUTHORIZATION login', () async {
     //GIVEN THAT
-    var contactNumber = "+6396652341765";
+    var contactNumber = "09451096905";
     var pin = "1234";
 
     //WHEN
