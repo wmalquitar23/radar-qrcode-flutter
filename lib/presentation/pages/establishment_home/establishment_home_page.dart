@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_with_icon_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
@@ -15,33 +18,55 @@ class EstablishmentHomePage extends StatefulWidget {
 }
 
 class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
+  void _onLoad() async {
+    BlocProvider.of<EstablishmentBloc>(context).add(
+      EstablishmentOnLoad(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     return MobileStatusMarginTop(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Container(
-                height: screenSize.height * 0.66,
-                decoration: BoxDecoration(
-                  color: ColorUtil.primaryColor,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(34.0),
-                      bottomRight: Radius.circular(34.0)),
-                ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: BlocConsumer<EstablishmentBloc, EstablishmentState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              if (state is EstablishmentInitial) {
+                _onLoad();
+              }
+              return Stack(
                 children: [
-                  _buildAppBar(),
-                  _buildEstablishmentDetails(),
-                  _buildHint(),
-                  _buildScanQRCodeButton(),
+                  Container(
+                    height: screenSize.height * 0.66,
+                    decoration: BoxDecoration(
+                      color: ColorUtil.primaryColor,
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(34.0),
+                          bottomRight: Radius.circular(34.0)),
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      state is EstablishmentGetUserSuccess
+                          ? _buildAppBar()
+                          : CupertinoActivityIndicator(),
+                      state is EstablishmentGetUserSuccess
+                          ? _buildEstablishmentDetails(state)
+                          : CupertinoActivityIndicator(),
+                      state is EstablishmentGetUserSuccess
+                          ? _buildHint()
+                          : CupertinoActivityIndicator(),
+                      state is EstablishmentGetUserSuccess
+                          ? _buildScanQRCodeButton()
+                          : CupertinoActivityIndicator(),
+                    ],
+                  )
                 ],
-              )
-            ],
+              );
+            },
           ),
         ),
       ),
@@ -59,7 +84,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
     );
   }
 
-  Container _buildEstablishmentDetails() {
+  Container _buildEstablishmentDetails(EstablishmentGetUserSuccess state) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0),
       padding: EdgeInsets.symmetric(vertical: 60.0, horizontal: 20.0),
@@ -106,7 +131,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
               Align(
                 alignment: Alignment.center,
                 child: HeaderText(
-                  title: "Lorem Company",
+                  title: state.user.fullName,
                   color: ColorUtil.primaryColor,
                 ),
               ),
@@ -119,12 +144,12 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ..._buildTitleAndContentWithDivider(
-                  'Address', 'Purok 123, Brgy 4, Bacolod Negros Occ.'),
+                  'Address', state.user.address),
               SizedBox(
                 height: 10,
               ),
               ..._buildTitleAndContentWithDivider(
-                  'Contact Number', '092112345678'),
+                  'Contact Number', state.user.contactNumber),
             ],
           )
         ],

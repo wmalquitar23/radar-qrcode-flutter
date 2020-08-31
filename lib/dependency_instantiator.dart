@@ -9,6 +9,7 @@ import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/otp_verification_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_case.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/sign_in_use_case.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
@@ -79,6 +80,12 @@ class DataInstantiator extends RadarDataInstantiator {
             ListenForSessionUseCase(authenticationRepository),
       ),
     );
+    sl.registerFactory<EstablishmentBloc>(
+      () => EstablishmentBloc(
+        listenForSessionUseCase:
+            ListenForSessionUseCase(authenticationRepository),
+      ),
+    );
 
     //usecases
     GetIt.I.registerLazySingleton<RegisterIndividualUseCase>(
@@ -91,8 +98,6 @@ class DataInstantiator extends RadarDataInstantiator {
         () => ListenForSessionUseCase(authenticationRepository));
     GetIt.I.registerLazySingleton<SignInUseCase>(
         () => SignInUseCase(authenticationRepository));
-    GetIt.I.registerLazySingleton<ListenForSessionUseCase>(
-        () => ListenForSessionUseCase(authenticationRepository));
 
     //repositories
     GetIt.I
