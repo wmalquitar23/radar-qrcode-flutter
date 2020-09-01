@@ -3,7 +3,7 @@ import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 
 class TextFieldTheme {
   static InputDecoration textfieldInputDecoration(
-      {String hintText, String prefix}) {
+      {String hintText, String prefix, Widget suffix, String errorText}) {
     return InputDecoration(
       filled: true,
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -15,13 +15,14 @@ class TextFieldTheme {
               child: Text(
                 '$prefix ',
                 style: TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w700,
-                  color: ColorUtil.primarySubTextColor
-                ),
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w700,
+                    color: ColorUtil.primarySubTextColor),
               ),
             )
           : null,
+      suffixIcon: suffix,
+      errorText: errorText,
       fillColor: ColorUtil.primaryBackgroundColor,
       floatingLabelBehavior: FloatingLabelBehavior.never,
       counterText: '',

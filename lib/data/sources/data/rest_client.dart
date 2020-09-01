@@ -97,4 +97,12 @@ class RestClient {
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
+
+  Future<StandardResponse> verifyMobileNumber(String mobileNumber) async {
+    Response response = await _dio.get("/identity/$mobileNumber");
+    print(response);
+    logger.i(response);
+    
+    return apiCatcher(StandardResponse.fromJson(response.data));
+  }
 }

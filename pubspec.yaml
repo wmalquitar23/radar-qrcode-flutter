@@ -46,7 +46,6 @@ dependencies:
   auto_size_text: 2.1.0
   extended_image: 1.1.0
   qr_code_scanner: ^0.0.13
-  cached_network_image: ^2.3.1
 
   ai_barcode: ^1.0.4
   permission_handler: ^5.0.1+1

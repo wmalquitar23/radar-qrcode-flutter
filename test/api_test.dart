@@ -170,4 +170,34 @@ void main() {
     expect(response, isNotNull);
     expect(response.data, isNotNull);
   });
+
+  group("VERIFICATION identify mobile number", () {
+    test('Mobile number is already used', () async {
+      //GIVEN THAT mobileNumber is alerady used
+      final mobileNumber = "9452092915";
+
+      //WHEN
+      StandardResponse response =
+          await restClient.verifyMobileNumber(mobileNumber);
+
+      //THEN SHOULD EXPECT
+      print(response.data);
+      expect(response, isNotNull);
+      expect(response.data, true);
+    });
+
+    test('Mobile number is not yet used', () async {
+      //GIVEN THAT mobileNumber is not yet used
+      final mobileNumber = "9664191171";
+
+      //WHEN
+      StandardResponse response =
+          await restClient.verifyMobileNumber(mobileNumber);
+
+      //THEN SHOULD EXPECT
+      print(response.data);
+      expect(response, isNotNull);
+      expect(response.data, false);
+    });
+  });
 }

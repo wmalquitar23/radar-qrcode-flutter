@@ -73,6 +73,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     return await registerQueueDb.getRegistrationData();
   }
 
+  @override
   Future<void> verifyOtp(String otp) async {
     await restClient.verifyOtp(otp);
     dynamic registrationData = await getRegisterQueueData();
@@ -91,5 +92,11 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     await sessionDb
         .save({"user": response.data['user'], "token": response.data['token']});
     return response;
+  }
+
+  Future<bool> verifyMobileNumber(String mobileNumber) async {
+    final verificationResult =
+        await restClient.verifyMobileNumber(mobileNumber);
+    return verificationResult.data;
   }
 }

@@ -28,3 +28,9 @@ class RegisterPressed extends IndividualBasicInformationEvent {
     this.address,
   });
 }
+
+class ValidateContactNumber extends IndividualBasicInformationEvent {
+  final String contactNumber;
+
+  ValidateContactNumber({@required this.contactNumber});
+}

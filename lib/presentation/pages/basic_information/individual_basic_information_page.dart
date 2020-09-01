@@ -43,8 +43,12 @@ class _IndividualBasicInformationPageState
   Gender _genderValue;
 
   DateTime _datepicked;
-
   DateTime _date = DateTime.now();
+
+  bool _basicInfo1IsValid = false;
+  bool _basicInfo2IsValid = false;
+  bool _pinMatched = true;
+  bool _contactNumberIsValid = false;
 
   @override
   initState() {
@@ -76,6 +80,72 @@ class _IndividualBasicInformationPageState
     );
   }
 
+  bool _checkValidityBasicInfo1() {
+    int changeCount = 0;
+
+    changeCount += _firstNameController.text.isNotEmpty ? 1 : 0;
+    changeCount += _lastNameController.text.isNotEmpty ? 1 : 0;
+    changeCount += _birthDateController.text.isNotEmpty ? 1 : 0;
+    changeCount += _genderController.text.isNotEmpty ? 1 : 0;
+
+    return changeCount == 4 ? true : false;
+  }
+
+  void _validatePIN() {
+    final pinMatched = _pinController.text == _confirmPinController.text;
+    if (_pinMatched != pinMatched) {
+      setState(() {
+        _pinMatched = pinMatched;
+      });
+    }
+  }
+
+  bool _checkValidityBasicInfo2() {
+    bool fieldsNotEmpty = false;
+    bool isPinConfirmed = false;
+
+    int changeCount = 0;
+    changeCount += _pinController.text.isNotEmpty ? 1 : 0;
+    changeCount += _confirmPinController.text.isNotEmpty ? 1 : 0;
+    changeCount += _addressController.text.isNotEmpty ? 1 : 0;
+
+    if (changeCount == 3) {
+      fieldsNotEmpty = true;
+    }
+
+    if (_pinController.text == _confirmPinController.text) {
+      isPinConfirmed = true;
+    }
+
+    return (fieldsNotEmpty && isPinConfirmed && _contactNumberIsValid);
+  }
+
+  void _onChangeValidityBasicInfo1() {
+    final bool isValid = _checkValidityBasicInfo1();
+    if (_basicInfo1IsValid != isValid) {
+      setState(() {
+        _basicInfo1IsValid = isValid;
+      });
+    }
+  }
+
+  void _onChangeValidityBasicInfo2() {
+    final bool isValid = _checkValidityBasicInfo2();
+    if (_basicInfo2IsValid != isValid) {
+      setState(() {
+        _basicInfo2IsValid = isValid;
+      });
+    }
+  }
+
+  void _validateContactNumber() {
+    BlocProvider.of<IndividualBasicInformationBloc>(context).add(
+      ValidateContactNumber(
+        contactNumber: _contactNumberController.text,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MobileStatusMarginTop(
@@ -97,6 +167,7 @@ class _IndividualBasicInformationPageState
     return CustomRegularAppBar(
       backgroundColor: Colors.transparent,
       onBackTap: () {
+        _onChangeValidityBasicInfo1();
         _goToPage(_pageControllerIndex - 1);
       },
       body: BlocConsumer<IndividualBasicInformationBloc,
@@ -191,6 +262,10 @@ class _IndividualBasicInformationPageState
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "Create PIN"),
+          onChanged: (value) {
+            _validatePIN();
+            _onChangeValidityBasicInfo2();
+          },
         ),
       ),
     );
@@ -211,7 +286,12 @@ class _IndividualBasicInformationPageState
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration: TextFieldTheme.textfieldInputDecoration(
             hintText: "Confirm PIN",
+            errorText: _pinMatched ? null : "PIN does not match.",
           ),
+          onChanged: (value) {
+            _validatePIN();
+            _onChangeValidityBasicInfo2();
+          },
         ),
       ),
     );
@@ -221,20 +301,88 @@ class _IndividualBasicInformationPageState
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: ShadowWidget(
-        child: TextFormField(
-          controller: _contactNumberController,
-          maxLength: 10,
-          keyboardType: TextInputType.number,
-          inputFormatters: <TextInputFormatter>[
-            WhitelistingTextInputFormatter.digitsOnly
-          ],
-          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration: TextFieldTheme.textfieldInputDecoration(
-            hintText: "Contact Number",
-            prefix: "+63",
-          ),
+        child: BlocConsumer<IndividualBasicInformationBloc,
+            IndividualBasicInformationState>(
+          listenWhen: (previousState, currentState) =>
+              currentState is ContactNumberState,
+          listener: (context, state) {
+            if (state is ContactNumberValidationFailure) {
+              ToastUtil.showToast(context, state.error);
+            }
+
+            _contactNumberIsValid =
+                state is ContactNumberIsValid ? true : false;
+            _onChangeValidityBasicInfo2();
+          },
+          buildWhen: (previousState, currentState) =>
+              currentState is ContactNumberState &&
+              previousState != currentState,
+          builder: (context, state) {
+            Widget suffixIcon;
+
+            if (state is ContactNumberValidationInProgress) {
+              suffixIcon = _buildValidationInProgressSufficIcon();
+            } else if (state is ContactNumberIsValid) {
+              suffixIcon = _buildvalidSuffixIcon();
+            } else if (state is ContactNumberIsInvalid &&
+                state.invalidType == 1) {
+              suffixIcon = _buildInvalidSuffixIcon();
+            }
+
+            return TextFormField(
+              controller: _contactNumberController,
+              maxLength: 10,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+              decoration: TextFieldTheme.textfieldInputDecoration(
+                hintText: "Contact Number",
+                prefix: "+63",
+                suffix: suffixIcon,
+              ),
+              autovalidate: true,
+              validator: (value) {
+                if (state is ContactNumberIsInvalid && value.isNotEmpty) {
+                  return state.message;
+                }
+                return null;
+              },
+              onChanged: (value) {
+                _validateContactNumber();
+              },
+            );
+          },
         ),
       ),
+    );
+  }
+
+  Widget _buildInvalidSuffixIcon() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Icon(
+        Icons.info_outline,
+        color: Colors.red,
+      ),
+    );
+  }
+
+  Widget _buildvalidSuffixIcon() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Icon(
+        Icons.check_circle_outline,
+        color: Colors.green,
+      ),
+    );
+  }
+
+  Widget _buildValidationInProgressSufficIcon() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: CupertinoActivityIndicator(),
     );
   }
 
@@ -247,6 +395,7 @@ class _IndividualBasicInformationPageState
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "Address"),
+          onChanged: (value) => _onChangeValidityBasicInfo2(),
         ),
       ),
     );
@@ -279,6 +428,7 @@ class _IndividualBasicInformationPageState
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "First Name"),
+          onChanged: (text) => _onChangeValidityBasicInfo1(),
         ),
       ),
     );
@@ -307,6 +457,7 @@ class _IndividualBasicInformationPageState
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "Last Name"),
+          onChanged: (text) => _onChangeValidityBasicInfo1(),
         ),
       ),
     );
@@ -336,9 +487,14 @@ class _IndividualBasicInformationPageState
       child: PrimaryButton(
         text: "CONTINUE",
         fontSize: 14,
-        onPressed: () {
-          _goToPage(_pageControllerIndex + 1);
-        },
+        onPressed: _basicInfo1IsValid
+            ? () {
+                _goToPage(_pageControllerIndex + 1);
+                _validateContactNumber();
+                _onChangeValidityBasicInfo2();
+              }
+            : null,
+        color: _basicInfo1IsValid ? ColorUtil.primaryColor : Colors.grey,
       ),
     );
   }
@@ -350,9 +506,8 @@ class _IndividualBasicInformationPageState
         text: "CONTINUE",
         isLoading: state is RegisterProgress ? true : false,
         fontSize: 14,
-        onPressed: () {
-          _onRegisterPressed();
-        },
+        onPressed: _basicInfo2IsValid ? () => _onRegisterPressed() : null,
+        color: _basicInfo2IsValid ? ColorUtil.primaryColor : Colors.grey,
       ),
     );
   }
@@ -366,9 +521,9 @@ class _IndividualBasicInformationPageState
       (value) {
         setState(
           () {
-            gender = value;
-            _genderController.text = value;
-            switch (value.toLowerCase()) {
+            gender = value ?? gender;
+            _genderController.text = gender;
+            switch (gender.toLowerCase()) {
               case 'male':
                 _genderValue = Gender.male;
                 break;
@@ -379,6 +534,7 @@ class _IndividualBasicInformationPageState
             }
           },
         );
+        _onChangeValidityBasicInfo1();
       },
     );
   }
@@ -398,5 +554,6 @@ class _IndividualBasicInformationPageState
                 "${_datepicked.month}/${_datepicked.day}/${_datepicked.year}");
       });
     }
+    _onChangeValidityBasicInfo1();
   }
 }

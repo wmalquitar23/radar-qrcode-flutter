@@ -98,4 +98,32 @@ void main() {
     expect(session, isNotNull);
     expect(session.user, isNotNull);
   });
+
+  group("verifyMobileNumer", () {
+    test('Mobile number is already used', () async {
+      //GIVEN THAT mobileNumber is alerady used
+      final mobileNumber = "9452092915";
+
+      //WHEN
+      final vericationResult =
+          await authenticationRepositoryImpl.verifyMobileNumber(mobileNumber);
+
+      //THEN SHOULD EXPECT
+      expect(vericationResult, isNotNull);
+      expect(vericationResult, true);
+    });
+
+    test('Mobile number is not yet used', () async {
+      //GIVEN THAT mobileNumber is not yet used
+      final mobileNumber = "9664191171";
+
+      //WHEN
+      final vericationResult =
+          await authenticationRepositoryImpl.verifyMobileNumber(mobileNumber);
+
+      //THEN SHOULD EXPECT
+      expect(vericationResult, isNotNull);
+      expect(vericationResult, false);
+    });
+  });
 }
