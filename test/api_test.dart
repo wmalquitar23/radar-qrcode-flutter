@@ -2,7 +2,9 @@ import 'dart:io' as io;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.dart';
+import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
 import 'package:radar_qrcode_flutter/data/mappers/user_mapper.dart';
 import 'package:radar_qrcode_flutter/data/models/request/register_establishment_request.dart';
 import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
@@ -10,17 +12,45 @@ import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
 
 import 'package:intl/intl.dart';
+import 'package:sembast/sembast.dart';
 import 'test_data_instantiator.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   io.HttpOverrides.global = null;
   RestClient restClient;
+  Database database;
+  SessionDb sessionDb;
+  Logger logger = Logger();
+
+  Future<void> login() async {
+    //GIVEN THAT
+    var contactNumber = "9216274643";
+    var pin = "1234";
+
+    try {
+      StandardResponse userInfoResponse =
+          await restClient.login(contactNumber, pin);
+      expect(userInfoResponse, isNotNull);
+      expect(userInfoResponse.data, isNotNull);
+
+      await sessionDb.save({
+        "token": userInfoResponse.data['token'],
+      });
+    } catch (e) {
+      logger.i(e);
+    }
+  }
 
   setUp(() async {
     RadarDataInstantiator dataInstantiator = TestDataInstantiator();
     await dataInstantiator.init();
     restClient = GetIt.I.get<RestClient>();
+    database = GetIt.I.get<Database>();
+    sessionDb = SessionDb(database);
+
+    if (restClient.hasToken()) return;
+    await login();
   });
 
   tearDown(() {
@@ -198,6 +228,17 @@ void main() {
       print(response.data);
       expect(response, isNotNull);
       expect(response.data, false);
+    });
+  });
+
+  group("Profile", () {
+    test('Get Profile', () async {
+      //WHEN
+      StandardResponse response = await restClient.getProfileInfo();
+
+      //THEN SHOULD EXPECT
+      print(response.data);
+      expect(response.data, isNotNull);
     });
   });
 }

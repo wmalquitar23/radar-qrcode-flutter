@@ -81,6 +81,9 @@ class _VerificationPageState extends State<VerificationPage> {
   Widget _buildCode(maxWidth) {
     return BlocBuilder<VerificationBloc, VerificationState>(
       builder: (context, state) {
+        if (state is VerificationFailure) {
+          ToastUtil.showToast(context, state.error);
+        }
         if (state is VerificationSuccess) {
           SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.of(context).pushReplacementNamed(

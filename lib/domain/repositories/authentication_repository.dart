@@ -25,6 +25,6 @@ abstract class AuthenticationRepository {
   Future<void> verifyOtp(String otp);
 
   Future<StandardResponse> signIn(String contactNumber, String pin);
-  
+
   Future<bool> verifyMobileNumber(String mobileNumber);
 }

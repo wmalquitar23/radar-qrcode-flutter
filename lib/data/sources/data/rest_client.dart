@@ -10,6 +10,10 @@ class RestClient {
 
   RestClient(this._dio);
 
+  bool hasToken() {
+    return _dio.options.headers.containsKey("Authorization");
+  }
+
   StandardResponse apiCatcher(StandardResponse standardResponse) {
     if (standardResponse.code != 200 && standardResponse.code != 201) {
       throw Exception(standardResponse.code);
@@ -69,16 +73,13 @@ class RestClient {
   }
 
   Future<StandardResponse> fileUpload(File file) async {
-    final fileName = file.path.split('/').last;
-
-    FormData data = FormData.fromMap({
-      "file": await MultipartFile.fromFile(
+    var data = FormData.fromMap({
+      "image": await MultipartFile.fromFile(
         file.path,
-        filename: fileName,
-      ),
+      )
     });
     Response response = await _dio.post("/file/upload", data: data);
-
+    logger.i(response);
     return StandardResponse.fromJson(response.data);
   }
 
@@ -92,17 +93,19 @@ class RestClient {
     Response response = await _dio.post("/verify/otp", data: {
       "code": otp,
     });
-    print(response);
-    logger.i(response);
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
   Future<StandardResponse> verifyMobileNumber(String mobileNumber) async {
     Response response = await _dio.get("/identity/$mobileNumber");
-    print(response);
-    logger.i(response);
-    
+
+    return apiCatcher(StandardResponse.fromJson(response.data));
+  }
+
+  Future<StandardResponse> getProfileInfo() async {
+    Response response = await _dio.get("/profile");
+
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 }

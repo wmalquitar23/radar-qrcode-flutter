@@ -10,3 +10,12 @@ abstract class SignInVerificationState extends Equatable {
 class SignInVerificationInitial extends SignInVerificationState {}
 
 class ButtonLoading extends SignInVerificationState {}
+
+class SignInFailure extends SignInVerificationState {
+  final String error;
+
+  const SignInFailure({this.error});
+
+  @override
+  List<Object> get props => [error];
+}

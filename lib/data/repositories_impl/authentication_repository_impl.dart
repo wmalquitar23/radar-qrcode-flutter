@@ -1,10 +1,8 @@
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/data/local_db/queue/register_queue_db.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
-import 'package:radar_qrcode_flutter/data/mappers/user_mapper.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
-// import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/authentication_repository.dart';
 import 'package:sembast/sembast.dart';
@@ -16,7 +14,6 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   RestClient restClient;
   SessionDb sessionDb;
   RegisterQueueDb registerQueueDb;
-  UserMapper userMapper;
 
   DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
 
@@ -24,8 +21,6 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     restClient = this.restClient;
     sessionDb = SessionDb(db);
     registerQueueDb = RegisterQueueDb(db);
-
-    userMapper = UserMapper();
   }
 
   @override

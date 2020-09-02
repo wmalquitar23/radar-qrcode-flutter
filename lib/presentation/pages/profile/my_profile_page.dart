@@ -1,12 +1,19 @@
-import 'package:extended_image/extended_image.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/image/image.utils.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/profile/profile_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/fields/custom_textfield.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/images/circle_image_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
-import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/status/status_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
+
+import 'package:intl/intl.dart';
 
 class MyProfilePage extends StatefulWidget {
   @override
@@ -19,13 +26,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
   TextEditingController _genderController = TextEditingController();
   TextEditingController _contactNumberController = TextEditingController();
 
-  @override
-  void initState() {
-    _addressController.text = "Purok 123, Brgy 4, Bacolod Negros Occ.";
-    _dateBirthController.text = "December 25, 1975";
-    _genderController.text = "Female";
-    _contactNumberController.text = "09451096905";
-    super.initState();
+  void _onLoad() async {
+    BlocProvider.of<ProfileBloc>(context).add(
+      ProfileOnLoad(),
+    );
   }
 
   @override
@@ -35,62 +39,103 @@ class _MyProfilePageState extends State<MyProfilePage> {
         backgroundColor: Colors.transparent,
         title: "My Profile",
         body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 25.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildImage(),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Container(
-                  child: HeaderText(
-                    title: "Lalisa Manoban",
-                    fontSize: 18,
-                    color: ColorUtil.primaryColor,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: ExtendedImage.asset(
-                        'assets/images/undraw/success.png',
-                        width: 15,
+            physics: BouncingScrollPhysics(),
+            child: BlocConsumer<ProfileBloc, ProfileState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                if (state is ProfileInitial) {
+                  _onLoad();
+                }
+
+                if (state is ProfileGetDataSuccess) {
+                  DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
+                  _addressController.text = state?.user?.address;
+                  _dateBirthController.text =
+                      birthdayFormatter.format(state?.user?.birthDate);
+                  _genderController.text = state?.user?.gender;
+                  _contactNumberController.text = state?.user?.contactNumber;
+                }
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      state is ProfileGetDataSuccess
+                          ? _buildImage(state)
+                          : Container(),
+                      SizedBox(
+                        height: 10.0,
                       ),
-                    ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    DescriptionText(
-                      title: "VERIFIED",
-                      color: ColorUtil.primaryTextColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                _buildAddressTextField(),
-                _buildDateOfBirthTextField(),
-                _buildGenderTextField(),
-                _buildContactNumberTextField()
-              ],
-            ),
-          ),
-        ),
+                      Container(
+                        child: HeaderText(
+                          title: state is ProfileGetDataSuccess
+                              ? state?.user?.fullName
+                              : "",
+                          fontSize: 18,
+                          color: ColorUtil.primaryColor,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      state is ProfileGetDataSuccess
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                StatusWidget(
+                                  isVerified: state.user.isVerified,
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      _buildAddressTextField(),
+                      _buildDateOfBirthTextField(),
+                      _buildGenderTextField(),
+                      _buildContactNumberTextField()
+                    ],
+                  ),
+                );
+              },
+            )),
       ),
     );
   }
 
-  Widget _buildImage() {
+  void changeImage() {
+    ImageUtils.pickImage(
+      context,
+      (File file) async {
+        File croppedFile = await ImageCropper.cropImage(
+            sourcePath: file.path,
+            cropStyle: CropStyle.circle,
+            aspectRatioPresets: [CropAspectRatioPreset.square],
+            androidUiSettings: AndroidUiSettings(
+                toolbarTitle: "Change Profile Image",
+                hideBottomControls: true,
+                showCropGrid: true,
+                toolbarColor: ColorUtil.primaryColor,
+                toolbarWidgetColor: Colors.white,
+                initAspectRatio: CropAspectRatioPreset.square,
+                lockAspectRatio: true),
+            iosUiSettings: IOSUiSettings(
+                minimumAspectRatio: 1.0,
+                aspectRatioLockEnabled: true,
+                aspectRatioPickerButtonHidden: true,
+                title: "Profile Image"));
+
+        BlocProvider.of<ProfileBloc>(context).add(
+          ProfileImageOnUpload(croppedFile),
+        );
+      },
+      maxWidth: 1024,
+      maxHeight: 512,
+    );
+  }
+
+  Widget _buildImage(ProfileGetDataSuccess state) {
     return Center(
       child: Container(
         width: 120.0,
@@ -99,9 +144,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 10.0),
               child: CircleImage(
-                imageUrl: "assets/images/profile/lalisa.jpeg",
+                imageUrl: state is ProfileGetDataSuccess
+                    ? state?.user?.profileImageUrl
+                    : "",
                 size: 120.0,
-                fromNetwork: false,
+                fromNetwork: true,
               ),
             ),
             Positioned(
@@ -111,15 +158,20 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 decoration: BoxDecoration(
                     color: ColorUtil.primaryBackgroundColor,
                     shape: BoxShape.circle),
-                child: Container(
-                  margin: EdgeInsets.all(5),
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      color: Colors.black, shape: BoxShape.circle),
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                    size: 15,
+                child: GestureDetector(
+                  onTap: () {
+                    changeImage();
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(5),
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Colors.black, shape: BoxShape.circle),
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                      size: 15,
+                    ),
                   ),
                 ),
               ),
@@ -136,12 +188,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
         child: TextFormField(
           controller: _addressController,
           readOnly: true,
-          validator: (value) {
-            if (value.isEmpty) {
-              return "Empty field";
-            }
-            return null;
-          },
           textInputAction: TextInputAction.next,
           onFieldSubmitted: (v) => FocusScope.of(context).nextFocus(),
         ));
