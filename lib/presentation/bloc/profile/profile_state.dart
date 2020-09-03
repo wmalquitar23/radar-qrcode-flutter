@@ -26,4 +26,14 @@ class ProfileUploadingImageLoading extends ProfileState {}
 
 class ProfileUploadingImageSuccess extends ProfileState {}
 
-class ProfileUploadingImageFailure extends ProfileState {}
+class ProfileUploadingImageFailure extends ProfileState {
+  final String error;
+
+  const ProfileUploadingImageFailure({this.error});
+
+  @override
+  List<Object> get props => [error];
+
+  @override
+  String toString() => '{ $error }';
+}

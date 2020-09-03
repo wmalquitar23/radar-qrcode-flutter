@@ -31,7 +31,6 @@ class RestClient {
     Response response = await _dio.post("/register/otp/", data: {
       "contactNumber": otp,
     });
-    Logger().i(response);
     return StandardResponse.fromJson(response.data);
   }
 
@@ -73,19 +72,24 @@ class RestClient {
   }
 
   Future<StandardResponse> fileUpload(File file) async {
+    
     var data = FormData.fromMap({
-      "image": await MultipartFile.fromFile(
+      "file": await MultipartFile.fromFile(
         file.path,
       )
     });
     Response response = await _dio.post("/file/upload", data: data);
-    logger.i(response);
     return StandardResponse.fromJson(response.data);
   }
 
   Future<StandardResponse> downloadfile(String file) async {
     Response response = await _dio.get("/file/$file");
 
+    return apiCatcher(StandardResponse.fromJson(response.data));
+  }
+
+  Future<StandardResponse> updateUser(dynamic data, String id) async {
+    Response response = await _dio.patch("/user/$id", data: data);
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 

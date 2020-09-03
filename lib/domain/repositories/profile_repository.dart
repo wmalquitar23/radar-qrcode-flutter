@@ -8,4 +8,6 @@ abstract class ProfileRepository {
   Future<Session> fetchUserInfo();
 
   Future<Session> getCurrentSession();
+
+  Future<void> updateUser(dynamic data);
 }

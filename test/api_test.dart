@@ -181,6 +181,7 @@ void main() {
 
     //WHEN
     StandardResponse response = await restClient.fileUpload(file);
+    print(response.data['url']);
 
     //THEN SHOULD EXPECT
     print(response.data);

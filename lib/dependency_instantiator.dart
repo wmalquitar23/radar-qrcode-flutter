@@ -100,8 +100,9 @@ class DataInstantiator extends RadarDataInstantiator {
       () => ProfileBloc(
         listenForSessionUseCase:
             ListenForSessionUseCase(authenticationRepository),
-        uploadProfileImageUseCase:
-            UploadProfileImageUseCase(profileRepository),
+        uploadProfileImageUseCase: UploadProfileImageUseCase(profileRepository),
+        getProfileInformationUseCase:
+            GetProfileInformationUseCase(profileRepository),
       ),
     );
 

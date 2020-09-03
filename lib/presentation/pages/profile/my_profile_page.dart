@@ -26,6 +26,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
   TextEditingController _genderController = TextEditingController();
   TextEditingController _contactNumberController = TextEditingController();
 
+  String _imageUrl;
+
   void _onLoad() async {
     BlocProvider.of<ProfileBloc>(context).add(
       ProfileOnLoad(),
@@ -54,15 +56,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       birthdayFormatter.format(state?.user?.birthDate);
                   _genderController.text = state?.user?.gender;
                   _contactNumberController.text = state?.user?.contactNumber;
+                  _imageUrl = state?.user?.profileImageUrl;
                 }
                 return Container(
                   margin: EdgeInsets.symmetric(horizontal: 25.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      state is ProfileGetDataSuccess
-                          ? _buildImage(state)
-                          : Container(),
+                      _buildImage(),
                       SizedBox(
                         height: 10.0,
                       ),
@@ -135,7 +136,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  Widget _buildImage(ProfileGetDataSuccess state) {
+  Widget _buildImage() {
     return Center(
       child: Container(
         width: 120.0,
@@ -144,9 +145,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 10.0),
               child: CircleImage(
-                imageUrl: state is ProfileGetDataSuccess
-                    ? state?.user?.profileImageUrl
-                    : "",
+                imageUrl: _imageUrl ?? "",
                 size: 120.0,
                 fromNetwork: true,
               ),

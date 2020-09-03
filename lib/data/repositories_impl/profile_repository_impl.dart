@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
@@ -22,7 +23,10 @@ class ProfileRepositoryImpl extends ProfileRepository {
 
   @override
   Future<void> uploadProfileImage(File file) async {
-    await restClient.fileUpload(file);
+    Map<String, String> env = await loadEnvFile();
+    StandardResponse response = await restClient.fileUpload(file);
+    await updateUser(
+        {"profileImageUrl": env['API_URL'] + response.data['url']});
   }
 
   @override
@@ -37,5 +41,10 @@ class ProfileRepositoryImpl extends ProfileRepository {
   @override
   Future<Session> getCurrentSession() async {
     return sessionDb.getCurrentSession();
+  }
+
+  Future<void> updateUser(dynamic data) async {
+    Session session = await getCurrentSession();
+    await restClient.updateUser(data, session.user.id);
   }
 }
