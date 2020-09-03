@@ -6,6 +6,7 @@ import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_service.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/profile_repository.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/otp_verification_use_case.dart';
@@ -27,7 +28,7 @@ import 'package:path/path.dart';
 import 'data/local_db/session_db.dart';
 import 'data/models/session_model.dart';
 import 'data/repositories_impl/authentication_repository_impl.dart';
-import 'data/repositories_impl/profile_repository.dart';
+import 'data/repositories_impl/profile_repository_impl.dart';
 import 'domain/repositories/authentication_repository.dart';
 import 'presentation/bloc/splash/splash_bloc.dart';
 
@@ -117,6 +118,8 @@ class DataInstantiator extends RadarDataInstantiator {
         () => SignInUseCase(authenticationRepository));
     GetIt.I.registerLazySingleton<UploadProfileImageUseCase>(
         () => UploadProfileImageUseCase(profileRepository));
+    GetIt.I.registerLazySingleton<GetProfileInformationUseCase>(
+        () => GetProfileInformationUseCase(profileRepository));
 
     //repositories
     GetIt.I

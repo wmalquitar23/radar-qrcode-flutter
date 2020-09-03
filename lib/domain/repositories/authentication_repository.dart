@@ -1,6 +1,5 @@
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
-import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
 
 abstract class AuthenticationRepository {
   Future<void> logout();
@@ -24,7 +23,7 @@ abstract class AuthenticationRepository {
 
   Future<void> verifyOtp(String otp);
 
-  Future<StandardResponse> signIn(String contactNumber, String pin);
+  Future<void> signIn(String contactNumber, String pin);
 
   Future<bool> verifyMobileNumber(String mobileNumber);
 }

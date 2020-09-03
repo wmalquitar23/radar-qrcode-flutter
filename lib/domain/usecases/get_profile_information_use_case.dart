@@ -1,4 +1,5 @@
-import 'dart:io';
+
+import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/profile_repository.dart';
 
 class GetProfileInformationUseCase {
@@ -6,7 +7,7 @@ class GetProfileInformationUseCase {
 
   GetProfileInformationUseCase(this.repository);
 
-  Future<void> execute(File file) async {
-    return await repository.uploadProfileImage(file);
+  Future<Session> execute() async {
+    return await repository.fetchUserInfo();
   }
 }

@@ -6,8 +6,9 @@ import 'package:equatable/equatable.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_service.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/core/utils/strings/error_handler.dart';
-import 'package:radar_qrcode_flutter/data/models/user_model.dart';
+import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/dependency_instantiator.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/sign_in_use_case.dart';
 
 part 'sign_in_verification_event.dart';
@@ -19,6 +20,7 @@ class SignInVerificationBloc
 
   final SignInUseCase _signInUseCase = sl.get<SignInUseCase>();
   final NavigatorService _navigatorService = sl.get<NavigatorService>();
+  final GetProfileInformationUseCase _profileInformationUseCase = sl.get<GetProfileInformationUseCase>();
 
   @override
   Stream<SignInVerificationState> mapEventToState(
@@ -33,10 +35,10 @@ class SignInVerificationBloc
     yield ButtonLoading();
 
     try {
-      final User user =
-          await _signInUseCase.execute(event.contactNumber, event.pin);
+      await _signInUseCase.execute(event.contactNumber, event.pin);
+      Session session = await _profileInformationUseCase.execute();
 
-      _navigatorService.pushNamedAndRemoveUntil(user.role == "individual"
+      _navigatorService.pushNamedAndRemoveUntil(session.user.role == "individual"
           ? INDIVIDUAL_HOME_ROUTE
           : ESTABLISHMENT_HOME_ROUTE);
     } on DioError catch (e) {

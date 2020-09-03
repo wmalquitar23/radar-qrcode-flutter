@@ -26,11 +26,12 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }
 
   @override
-  Future<void> fetchUserInfo() async {
+  Future<Session> fetchUserInfo() async {
     StandardResponse userInfoResponse = await restClient.getProfileInfo();
     Session session = await getCurrentSession();
     await sessionDb
         .save({"token": session.token, "user": userInfoResponse.data});
+    return await getCurrentSession();
   }
 
   @override
