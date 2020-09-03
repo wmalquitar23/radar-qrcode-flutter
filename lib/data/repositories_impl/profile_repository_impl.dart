@@ -43,8 +43,14 @@ class ProfileRepositoryImpl extends ProfileRepository {
     return sessionDb.getCurrentSession();
   }
 
+  @override
   Future<void> updateUser(dynamic data) async {
     Session session = await getCurrentSession();
     await restClient.updateUser(data, session.user.id);
+  }
+
+  Future<void> changePin(String oldPin, String newPin) async {
+    Session session = await getCurrentSession();
+    await restClient.changePin(oldPin, newPin, session.user.id);
   }
 }

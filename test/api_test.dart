@@ -25,8 +25,8 @@ void main() {
 
   Future<void> login() async {
     //GIVEN THAT
-    var contactNumber = "9216274643";
-    var pin = "1234";
+    var contactNumber = "9451096905";
+    var pin = "4321";
 
     try {
       StandardResponse userInfoResponse =
@@ -236,6 +236,18 @@ void main() {
     test('Get Profile', () async {
       //WHEN
       StandardResponse response = await restClient.getProfileInfo();
+
+      //THEN SHOULD EXPECT
+      print(response.data);
+      expect(response.data, isNotNull);
+    });
+    test('Change PIN', () async {
+      var oldPin = "1234";
+      var newPin = "4321";
+      var id = "5f5077c9ee967f6732725035";
+      //WHEN
+      StandardResponse response =
+          await restClient.changePin(oldPin, newPin, id);
 
       //THEN SHOULD EXPECT
       print(response.data);

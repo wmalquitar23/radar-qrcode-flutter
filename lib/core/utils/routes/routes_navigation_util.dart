@@ -11,6 +11,7 @@ import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/profile/profile_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/change_pin/change_pin_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/establishment_basic_information.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/individual_basic_information_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/change_pin/change_pin_page.dart';
@@ -124,7 +125,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case CHANGE_PIN_ROUTE:
       return pushNamed(
-          page: ChangePINPage(),
+          page: BlocProvider(
+            create: (_) => sl<ChangePinBloc>(),
+            child: ChangePINPage(),
+          ),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);
       break;

@@ -72,7 +72,6 @@ class RestClient {
   }
 
   Future<StandardResponse> fileUpload(File file) async {
-    
     var data = FormData.fromMap({
       "file": await MultipartFile.fromFile(
         file.path,
@@ -109,6 +108,13 @@ class RestClient {
 
   Future<StandardResponse> getProfileInfo() async {
     Response response = await _dio.get("/profile");
+
+    return apiCatcher(StandardResponse.fromJson(response.data));
+  }
+
+  Future<StandardResponse> changePin(String oldPin, String newPin, String id) async {
+    Response response = await _dio
+        .patch("/user/$id/pin", data: {"oldPin": oldPin, "newPin": newPin});
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }

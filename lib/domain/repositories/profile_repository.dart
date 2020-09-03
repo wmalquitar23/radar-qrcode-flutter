@@ -10,4 +10,6 @@ abstract class ProfileRepository {
   Future<Session> getCurrentSession();
 
   Future<void> updateUser(dynamic data);
+
+  Future<void> changePin(String oldPin, String newPin);
 }
