@@ -21,6 +21,7 @@ class UserMapper extends RadarMapper<User> {
       role: map['role'],
       isVerified: map['isVerified'],
       profileImageUrl: map['profileImageUrl'],
+      displayId: map['displayId'],
     );
   }
 

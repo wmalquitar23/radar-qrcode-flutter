@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/aes.dart';
+import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/encrypt.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
@@ -21,11 +23,15 @@ class IndividualHomePage extends StatefulWidget {
 }
 
 class _IndividualHomePageState extends State<IndividualHomePage> {
+
+  
   void _onLoad() async {
     BlocProvider.of<IndividualBloc>(context).add(
       IndividualOnLoad(),
     );
   }
+
+  var _encryptedQr;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +40,12 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
         child: Scaffold(
       body: SingleChildScrollView(
         child: BlocConsumer<IndividualBloc, IndividualState>(
-          listener: (context, state) {},
+          listener: (context, state) async {
+            if(state is IndividualGetUserSuccess){
+              _encryptedQr = qrCodeObject(state?.user?.displayId, await encryptAESCryptoJS(state?.user?.displayId));
+              print(_encryptedQr);
+            }
+          },
           builder: (context, state) {
             if (state is IndividualInitial) {
               _onLoad();
@@ -88,7 +99,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
 
   Widget _generateQrCOde(Size screenSize, IndividualGetUserSuccess state) {
     return QrImage(
-      data: state?.user?.id,
+      data: _encryptedQr.toString(),
       foregroundColor: Colors.black,
       version: QrVersions.auto,
       size: screenSize.width * 0.55,
@@ -228,7 +239,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                         height: 3,
                       ),
                       DescriptionText(
-                        title: '#${state?.user?.id}',
+                        title: '#${state?.user?.displayId}',
                         color: ColorUtil.primarySubTextColor,
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
