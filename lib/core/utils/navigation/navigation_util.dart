@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/navigation/navigation_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/navigation/navigation_page.dart';
+
+import '../../../dependency_instantiator.dart';
 
 void showNavigation(
   BuildContext context, {
@@ -12,11 +16,14 @@ void showNavigation(
     context: context,
     // ignore: missing_return
     pageBuilder: (context, _, __) {
-      return NavigationPage(
-        onMyProfile: onMyProfile,
-        onChangePIN: onChangePIN,
-        onContactUs: onContactUs,
-        onLogout: onLogout,
+      return BlocProvider(
+        create: (_) => sl<NavigationBloc>(),
+        child: NavigationPage(
+          onMyProfile: onMyProfile,
+          onChangePIN: onChangePIN,
+          onContactUs: onContactUs,
+          onLogout: onLogout,
+        ),
       );
     },
     barrierDismissible: true,

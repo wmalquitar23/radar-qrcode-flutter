@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/aes.dart';
+import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/encrypt.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
@@ -27,7 +29,9 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
         add(GetUserData(user: session.user));
       });
     } else if (event is GetUserData) {
-      yield IndividualGetUserSuccess(user: event.user);
+      String result = qrCodeObject(event?.user?.displayId,
+          await encryptAESCryptoJS(event?.user?.displayId));
+      yield IndividualGetUserSuccess(user: event.user, jsonQrCode: result);
     }
   }
 }

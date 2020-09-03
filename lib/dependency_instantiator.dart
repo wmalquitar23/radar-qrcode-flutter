@@ -9,6 +9,7 @@ import 'package:radar_qrcode_flutter/domain/repositories/profile_repository.dart
 import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/logout_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/otp_verification_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/update_pin_use_case%20copy.dart';
@@ -23,6 +24,7 @@ import 'package:radar_qrcode_flutter/presentation/bloc/profile/profile_bloc.dart
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/navigation/navigation_bloc.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
@@ -111,6 +113,10 @@ class DataInstantiator extends RadarDataInstantiator {
       () =>
           ChangePinBloc(updatePINUseCase: UpdatePINUseCase(profileRepository)),
     );
+    sl.registerFactory<NavigationBloc>(
+      () => NavigationBloc(
+          logoutUseCase: LogoutUseCase(authenticationRepository)),
+    );
 
     //usecases
     GetIt.I.registerLazySingleton<RegisterIndividualUseCase>(
@@ -129,6 +135,8 @@ class DataInstantiator extends RadarDataInstantiator {
         () => GetProfileInformationUseCase(profileRepository));
     GetIt.I.registerLazySingleton<UpdatePINUseCase>(
         () => UpdatePINUseCase(profileRepository));
+    GetIt.I.registerLazySingleton<LogoutUseCase>(
+        () => LogoutUseCase(authenticationRepository));
 
     //repositories
     GetIt.I

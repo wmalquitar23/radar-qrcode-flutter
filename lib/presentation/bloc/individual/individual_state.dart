@@ -13,8 +13,9 @@ class IndividualProgress extends IndividualState {}
 
 class IndividualGetUserSuccess extends IndividualState {
   final User user;
+  final String jsonQrCode;
 
-  const IndividualGetUserSuccess({this.user});
+  const IndividualGetUserSuccess({this.user, this.jsonQrCode});
 
   @override
   List<Object> get props => [user];

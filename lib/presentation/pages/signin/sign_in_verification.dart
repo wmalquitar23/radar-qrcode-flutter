@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/sign_in_verification/sign_in_verification_bloc.dart';
 
 import '../../widgets/bar/custom_regular_app_bar.dart';
@@ -74,7 +75,12 @@ class _SignInVerificationPageState extends State<SignInVerificationPage> {
   }
 
   Widget _buildCode(maxWidth) {
-    return BlocBuilder<SignInVerificationBloc, SignInVerificationState>(
+    return BlocConsumer<SignInVerificationBloc, SignInVerificationState>(
+      listener: (context, state) {
+        if (state is SignInFailure) {
+          ToastUtil.showToast(context, state.error);
+        }
+      },
       cubit: _bloc,
       builder: (BuildContext context, SignInVerificationState state) {
         return SingleChildScrollView(

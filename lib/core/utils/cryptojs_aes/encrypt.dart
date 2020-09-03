@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-Map<String, dynamic> qrCodeObject(String userId, String encryptedData) {
-  return {
+String qrCodeObject(String userId, String encryptedData) {
+  return jsonEncode({
     jsonEncode("key"): jsonEncode(encryptedData),
     jsonEncode("id"): jsonEncode(userId),
-  };
+  });
 }

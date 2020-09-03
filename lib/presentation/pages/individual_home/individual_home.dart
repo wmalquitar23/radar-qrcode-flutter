@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
-import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/aes.dart';
-import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/encrypt.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
@@ -23,8 +21,6 @@ class IndividualHomePage extends StatefulWidget {
 }
 
 class _IndividualHomePageState extends State<IndividualHomePage> {
-
-  
   void _onLoad() async {
     BlocProvider.of<IndividualBloc>(context).add(
       IndividualOnLoad(),
@@ -41,9 +37,8 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
       body: SingleChildScrollView(
         child: BlocConsumer<IndividualBloc, IndividualState>(
           listener: (context, state) async {
-            if(state is IndividualGetUserSuccess){
-              _encryptedQr = qrCodeObject(state?.user?.displayId, await encryptAESCryptoJS(state?.user?.displayId));
-              print(_encryptedQr);
+            if (state is IndividualGetUserSuccess) {
+              _encryptedQr = state.jsonQrCode;
             }
           },
           builder: (context, state) {
@@ -99,7 +94,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
 
   Widget _generateQrCOde(Size screenSize, IndividualGetUserSuccess state) {
     return QrImage(
-      data: _encryptedQr.toString(),
+      data: _encryptedQr.toString() ?? "",
       foregroundColor: Colors.black,
       version: QrVersions.auto,
       size: screenSize.width * 0.55,
@@ -114,29 +109,6 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
         );
       },
     );
-  }
-
-  mainBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-        backgroundColor: Colors.grey[200],
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            margin: EdgeInsets.all(15),
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.phone),
-                  title: Text('Contact Us'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.label_important),
-                  title: Text('Logout'),
-                ),
-              ],
-            ),
-          );
-        });
   }
 
   Widget _buildAppBar() {
