@@ -14,6 +14,7 @@ class User extends RadarModel {
   final bool isVerified;
   final String profileImageUrl;
   final String displayId;
+  final String establishmentName;
 
   User({
     this.id,
@@ -28,7 +29,8 @@ class User extends RadarModel {
     this.role,
     this.isVerified,
     this.profileImageUrl,
-    this.displayId
+    this.displayId,
+    this.establishmentName,
   });
 
   String get fullName => "$firstName $lastName";

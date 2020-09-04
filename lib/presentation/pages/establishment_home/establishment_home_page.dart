@@ -131,7 +131,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
               Align(
                 alignment: Alignment.center,
                 child: HeaderText(
-                  title: state.user.fullName,
+                  title: state.user.establishmentName,
                   color: ColorUtil.primaryColor,
                 ),
               ),

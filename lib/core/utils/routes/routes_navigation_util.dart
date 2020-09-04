@@ -5,6 +5,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/router_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
@@ -71,7 +72,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case ESTABLISHMENT_INFO_ROUTE:
       return pushNamed(
-          page: EstablishmentBasicInformationPage(),
+          page: BlocProvider(
+              create: (_) => sl<EstablishmentBasicInformationBloc>(),
+              child: EstablishmentBasicInformationPage()),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;

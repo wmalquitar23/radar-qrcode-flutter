@@ -57,6 +57,33 @@ void main() {
     expect(session.token, isNotNull);
   });
 
+  test('SIGNUP establishment', () async {
+    //GIVEN THAT
+    var formatter = DateFormat('yyyyMMddmmss');
+    var establishmentName = "Establishment${formatter.format(DateTime.now())}";
+    var pin = "1234";
+    var contactNumber = "9122226789"; // Assuming number is not yet registered
+    var address = "Maniki, Kapalong, Davao del Norte";
+
+    //WHEN
+    await authenticationRepositoryImpl.registerEstablishment(
+      establishmentName,
+      pin,
+      contactNumber,
+      address,
+    );
+
+    await authenticationRepositoryImpl.verifyOtp("123456"); // Assuming OTP is Correct
+
+    session = await authenticationRepositoryImpl.getCurrentSession();
+
+    //THEN SHOULD EXPECT
+    print(session);
+    print(session.user);
+    expect(session, isNotNull);
+    expect(session.token, isNotNull);
+  });
+
   test('Register Queue', () async {
     //GIVEN THAT
     var formatter = DateFormat('yyyyMMddmmss');

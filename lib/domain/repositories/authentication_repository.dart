@@ -19,6 +19,13 @@ abstract class AuthenticationRepository {
     Gender gender,
   );
 
+  Future<void> registerEstablishment(
+    String establishmentName,
+    String pin,
+    String contactNumber,
+    String address,
+  );
+
   Future<dynamic> getRegisterQueueData();
 
   Future<void> verifyOtp(String otp);

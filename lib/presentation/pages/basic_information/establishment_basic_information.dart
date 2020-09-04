@@ -1,6 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/core/utils/style/textfield_theme.dart';
+import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/verification/verification_page.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
@@ -22,6 +28,17 @@ class _EstablishmentBasicInformationPageState
 
   int _pageControllerIndex;
 
+  TextEditingController _establishmentNameController = TextEditingController();
+  TextEditingController _pinController = TextEditingController();
+  TextEditingController _confirmPinController = TextEditingController();
+  TextEditingController _contactNumberController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
+
+  bool _pinMatched = true;
+  bool _contactNumberIsValid = false;
+  bool _basicInfoIsValid = false;
+  bool _agreementCheckBox = false;
+
   @override
   initState() {
     super.initState();
@@ -35,6 +52,68 @@ class _EstablishmentBasicInformationPageState
       _topPageController.animateToPage(page,
           duration: Duration(milliseconds: 150), curve: Curves.decelerate);
     });
+  }
+
+  void _validatePIN() {
+    final pinMatched = _pinController.text == _confirmPinController.text;
+    if (_pinMatched != pinMatched) {
+      setState(() {
+        _pinMatched = pinMatched;
+      });
+    }
+  }
+
+  bool _checkValidityBasicInfo() {
+    bool fieldsNotEmpty = false;
+    bool isPinConfirmed = false;
+
+    int changeCount = 0;
+    changeCount += _establishmentNameController.text.isNotEmpty ? 1 : 0;
+    changeCount += _pinController.text.isNotEmpty ? 1 : 0;
+    changeCount += _confirmPinController.text.isNotEmpty ? 1 : 0;
+    changeCount += _contactNumberController.text.isNotEmpty ? 1 : 0;
+    changeCount += _addressController.text.isNotEmpty ? 1 : 0;
+
+    if (changeCount == 5) {
+      fieldsNotEmpty = true;
+    }
+
+    if (_pinController.text == _confirmPinController.text) {
+      isPinConfirmed = true;
+    }
+
+    return (fieldsNotEmpty &&
+        isPinConfirmed &&
+        _contactNumberIsValid &&
+        _agreementCheckBox);
+  }
+
+  void _onChangeValidityBasicInfo() {
+    final bool isValid = _checkValidityBasicInfo();
+    if (_basicInfoIsValid != isValid) {
+      setState(() {
+        _basicInfoIsValid = isValid;
+      });
+    }
+  }
+
+  void _validateContactNumber() {
+    BlocProvider.of<EstablishmentBasicInformationBloc>(context).add(
+      ValidateContactNumber(
+        contactNumber: _contactNumberController.text,
+      ),
+    );
+  }
+
+  void _onRegisterPressed() async {
+    BlocProvider.of<EstablishmentBasicInformationBloc>(context).add(
+      RegisterPressed(
+        establishmentName: _establishmentNameController.text,
+        pin: _pinController.text,
+        contactNumber: _contactNumberController.text,
+        address: _addressController.text,
+      ),
+    );
   }
 
   @override
@@ -67,33 +146,47 @@ class _EstablishmentBasicInformationPageState
   Widget _basicInformationPage1() {
     return CustomRegularAppBar(
       backgroundColor: Colors.transparent,
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 15.0),
-                  child: HeaderText(
-                    title: "Enter Basic Information",
-                    fontSize: 22,
-                    color: ColorUtil.primaryColor,
-                  ),
+      body: BlocConsumer<EstablishmentBasicInformationBloc,
+          EstablishmentBasicInformationState>(
+        listener: (context, state) {
+          if (state is RegisterDone) {
+            Navigator.pushNamed(context, VERIFICATION_CODE_ROUTE);
+          }
+          if (state is RegisterFailure) {
+            ToastUtil.showToast(context, state.error);
+          }
+        },
+        builder: (context, state) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 15.0),
+                      child: HeaderText(
+                        title: "Enter Basic Information",
+                        fontSize: 22,
+                        color: ColorUtil.primaryColor,
+                      ),
+                    ),
+                    _buildEstablishmentNameTextField(),
+                    _buildCreatePINTextField(),
+                    _buildConfirmPINTextField(),
+                    _buildContactNumberTextField(),
+                    _buildAddressTextField(),
+                    _buildAgreementLabel(),
+                  ],
                 ),
-                _buildEstablishmentNameTextField(),
-                _buildCreatePINTextField(),
-                _buildConfirmPINTextField(),
-                _buildContactNumberTextField(),
-                _buildAddressTextField()
+                SizedBox(height: 30),
+                _buildContinuePage1Button(state)
               ],
             ),
-            SizedBox(height: 30),
-            _buildContinuePage1Button()
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -106,6 +199,10 @@ class _EstablishmentBasicInformationPageState
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration: TextFieldTheme.textfieldInputDecoration(
               hintText: "Establishment Name"),
+          controller: _establishmentNameController,
+          onChanged: (value) {
+            _onChangeValidityBasicInfo();
+          },
         ),
       ),
     );
@@ -116,10 +213,20 @@ class _EstablishmentBasicInformationPageState
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: ShadowWidget(
         child: TextFormField(
+          maxLength: 4,
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            WhitelistingTextInputFormatter.digitsOnly
+          ],
           obscureText: true,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "Create PIN"),
+          controller: _pinController,
+          onChanged: (value) {
+            _validatePIN();
+            _onChangeValidityBasicInfo();
+          },
         ),
       ),
     );
@@ -130,10 +237,22 @@ class _EstablishmentBasicInformationPageState
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: ShadowWidget(
         child: TextFormField(
+          maxLength: 4,
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            WhitelistingTextInputFormatter.digitsOnly
+          ],
           obscureText: true,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Confirm PIN"),
+          decoration: TextFieldTheme.textfieldInputDecoration(
+            hintText: "Confirm PIN",
+            errorText: _pinMatched ? null : "PIN does not match.",
+          ),
+          controller: _confirmPinController,
+          onChanged: (value) {
+            _validatePIN();
+            _onChangeValidityBasicInfo();
+          },
         ),
       ),
     );
@@ -143,12 +262,88 @@ class _EstablishmentBasicInformationPageState
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: ShadowWidget(
-        child: TextFormField(
-          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration: TextFieldTheme.textfieldInputDecoration(
-              hintText: "Contact Number"),
+        child: BlocConsumer<EstablishmentBasicInformationBloc,
+            EstablishmentBasicInformationState>(
+          listenWhen: (previousState, currentState) =>
+              currentState is ContactNumberState,
+          listener: (context, state) {
+            if (state is ContactNumberValidationFailure) {
+              ToastUtil.showToast(context, state.error);
+            }
+
+            _contactNumberIsValid =
+                state is ContactNumberIsValid ? true : false;
+            _onChangeValidityBasicInfo();
+          },
+          buildWhen: (previousState, currentState) =>
+              currentState is ContactNumberState &&
+              previousState != currentState,
+          builder: (context, state) {
+            Widget suffixIcon;
+
+            if (state is ContactNumberValidationInProgress) {
+              suffixIcon = _buildValidationInProgressSufficIcon();
+            } else if (state is ContactNumberIsValid) {
+              suffixIcon = _buildvalidSuffixIcon();
+            } else if (state is ContactNumberIsInvalid &&
+                state.invalidType == 1) {
+              suffixIcon = _buildInvalidSuffixIcon();
+            }
+
+            return TextFormField(
+              maxLength: 10,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ],
+              style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+              decoration: TextFieldTheme.textfieldInputDecoration(
+                hintText: "Contact Number",
+                prefix: "+63",
+                suffix: suffixIcon,
+              ),
+              controller: _contactNumberController,
+              autovalidate: true,
+              validator: (value) {
+                if (state is ContactNumberIsInvalid && value.isNotEmpty) {
+                  return state.message;
+                }
+                return null;
+              },
+              onChanged: (value) {
+                _validateContactNumber();
+              },
+            );
+          },
         ),
       ),
+    );
+  }
+
+  Widget _buildInvalidSuffixIcon() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Icon(
+        Icons.info_outline,
+        color: Colors.red,
+      ),
+    );
+  }
+
+  Widget _buildvalidSuffixIcon() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Icon(
+        Icons.check_circle_outline,
+        color: Colors.green,
+      ),
+    );
+  }
+
+  Widget _buildValidationInProgressSufficIcon() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: CupertinoActivityIndicator(),
     );
   }
 
@@ -160,20 +355,67 @@ class _EstablishmentBasicInformationPageState
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "Address"),
+          controller: _addressController,
+          onChanged: (value) {
+            _onChangeValidityBasicInfo();
+          },
         ),
       ),
     );
   }
 
-  Widget _buildContinuePage1Button() {
+  Widget _buildAgreementLabel() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
+      child: Row(
+        children: <Widget>[
+          Checkbox(
+            value: _agreementCheckBox,
+            onChanged: (value) {
+              setState(() {
+                _agreementCheckBox = value;
+              });
+              _onChangeValidityBasicInfo();
+            },
+          ),
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Text(
+                  "I have read and agree to the ",
+                  style: TextStyle(fontSize: 11),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print("Go to Terms & Conditions Section");
+                  },
+                  child: Text(
+                    "Terms & Conditions",
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Color(0xff0367B2),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildContinuePage1Button(state) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: PrimaryButton(
         text: "CONTINUE",
         fontSize: 14,
-        onPressed: () {
-          _goToPage(_pageControllerIndex + 1);
-        },
+        isLoading: state is RegisterProgress ? true : false,
+        color: _basicInfoIsValid ? ColorUtil.primaryColor : Colors.grey,
+        onPressed: _basicInfoIsValid ? () => _onRegisterPressed() : null,
       ),
     );
   }

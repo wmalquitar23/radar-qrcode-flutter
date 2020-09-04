@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:radar_qrcode_flutter/core/utils/strings/error_handler.dart';
-import 'package:radar_qrcode_flutter/domain/usecases/update_pin_use_case%20copy.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/update_pin_use_case.dart';
 
 part 'change_pin_event.dart';
 part 'change_pin_state.dart';

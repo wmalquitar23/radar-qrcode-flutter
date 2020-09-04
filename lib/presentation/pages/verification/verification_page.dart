@@ -49,7 +49,7 @@ class _VerificationPageState extends State<VerificationPage> {
               ),
               Container(
                 child: DescriptionText(
-                  title: "4 digit code was sent to 09451096905",
+                  title: "6 digit code was sent to 09451096905",
                   color: ColorUtil.secondaryTextColor,
                   fontWeight: FontWeight.w600,
                 ),

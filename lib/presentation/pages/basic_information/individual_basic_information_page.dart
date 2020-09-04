@@ -523,7 +523,7 @@ class _IndividualBasicInformationPageState
           () {
             gender = value ?? gender;
             _genderController.text = gender;
-            switch (gender.toLowerCase()) {
+            switch (gender?.toLowerCase()) {
               case 'male':
                 _genderValue = Gender.male;
                 break;

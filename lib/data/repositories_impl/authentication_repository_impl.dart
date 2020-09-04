@@ -1,6 +1,7 @@
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/data/local_db/queue/register_queue_db.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
+import 'package:radar_qrcode_flutter/data/models/request/register_establishment_request.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
@@ -64,16 +65,43 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
+  Future<void> registerEstablishment(
+    String establishmentName,
+    String pin,
+    String contactNumber,
+    String address,
+  ) async {
+    registerQueueDb.save(
+      {
+        "name": establishmentName,
+        "pin": pin,
+        "contactNumber": contactNumber,
+        "address": {"name": address},
+      },
+    );
+    await restClient.otpMobileNumber(contactNumber);
+  }
+
+  @override
   Future<dynamic> getRegisterQueueData() async {
     return await registerQueueDb.getRegistrationData();
   }
 
   @override
   Future<void> verifyOtp(String otp) async {
+    StandardResponse userInfoResponse;
+
     await restClient.verifyOtp(otp);
-    dynamic registrationData = await getRegisterQueueData();
-    StandardResponse userInfoResponse =
-        await restClient.registerIndividual(registrationData);
+
+    Map<dynamic, dynamic> registrationData = await getRegisterQueueData();
+
+    if (registrationData.length == 7) {
+      userInfoResponse = await restClient.registerIndividual(registrationData);
+    } else if (registrationData.length == 4) {
+      userInfoResponse = await restClient.registerEstablishment(
+        RegisterEstablishmentRequest.fromJson(registrationData),
+      );
+    }
 
     await sessionDb.save({
       "user": userInfoResponse.data['user'],

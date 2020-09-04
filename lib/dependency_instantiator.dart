@@ -11,12 +11,14 @@ import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/logout_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/otp_verification_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/register_establishment_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_case.dart';
-import 'package:radar_qrcode_flutter/domain/usecases/update_pin_use_case%20copy.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/update_pin_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/upload_profile_image_use_case.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/change_pin/change_pin_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/verify_existing_mobile_number_use_case.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/sign_in_use_case.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
@@ -111,7 +113,14 @@ class DataInstantiator extends RadarDataInstantiator {
     );
     sl.registerFactory<ChangePinBloc>(
       () =>
-          ChangePinBloc(updatePINUseCase: UpdatePINUseCase(profileRepository)),
+          ChangePinBloc(updatePINUseCase: UpdatePINUseCase(profileRepository)),);
+    sl.registerFactory<EstablishmentBasicInformationBloc>(
+      () => EstablishmentBasicInformationBloc(
+        registerEstablishmentUseCase:
+            RegisterEstablishmentUseCase(authenticationRepository),
+        verifyExistingMobileNumberUseCase:
+            VerifyExistingMobileNumberUseCase(authenticationRepository),
+      ),
     );
     sl.registerFactory<NavigationBloc>(
       () => NavigationBloc(
