@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_service.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
@@ -94,9 +95,17 @@ class _SignInPageState extends State<SignInPage> {
       child: ShadowWidget(
         child: TextFormField(
           controller: _contactNumberController,
+          maxLength: 10,
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            WhitelistingTextInputFormatter.digitsOnly
+          ],
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration: TextFieldTheme.textfieldInputDecoration(
-              hintText: "Contact Number"),
+            hintText: "Contact Number",
+            prefix: "+63",
+          ),
+          autovalidate: true,
         ),
       ),
     );
