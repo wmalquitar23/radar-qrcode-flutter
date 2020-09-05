@@ -88,7 +88,7 @@ class RestClient {
   }
 
   Future<StandardResponse> updateUser(dynamic data, String id) async {
-    Response response = await _dio.patch("/user/$id", data: data);
+    Response response = await _dio.patch("/users/$id", data: data);
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
@@ -114,7 +114,7 @@ class RestClient {
 
   Future<StandardResponse> changePin(String oldPin, String newPin, String id) async {
     Response response = await _dio
-        .patch("/user/$id/pin", data: {"oldPin": oldPin, "newPin": newPin});
+        .patch("/users/$id/pin", data: {"oldPin": oldPin, "newPin": newPin});
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
