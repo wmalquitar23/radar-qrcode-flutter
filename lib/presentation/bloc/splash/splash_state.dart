@@ -12,7 +12,11 @@ class SplashInitial extends SplashState {}
 
 class SplashProgress extends SplashState {}
 
-class AppHasSession extends SplashState {}
+class AppHasSession extends SplashState {
+  final String route;
+
+  AppHasSession(this.route);
+}
 
 class AppHasNoSession extends SplashState {}
 

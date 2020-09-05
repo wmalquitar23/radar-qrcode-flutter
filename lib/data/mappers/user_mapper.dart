@@ -22,7 +22,7 @@ class UserMapper extends RadarMapper<User> {
       isVerified: map['isVerified'],
       profileImageUrl: map['profileImageUrl'],
       displayId: map['displayId'],
-      establishmentName: map['name'],
+      establishmentName: map['firstname'],
     );
   }
 

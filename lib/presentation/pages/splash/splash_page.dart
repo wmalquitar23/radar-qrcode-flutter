@@ -30,8 +30,7 @@ class _SplashPageState extends State<SplashPage> {
           listener: (context, state) {
             if (state is AppHasSession) {
               SchedulerBinding.instance.addPostFrameCallback((_) {
-                Navigator.of(context)
-                    .pushReplacementNamed(INDIVIDUAL_HOME_ROUTE);
+                Navigator.of(context).pushReplacementNamed(state.route);
               });
             }
             if (state is AppHasNoSession) {

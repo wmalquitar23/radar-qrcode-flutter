@@ -17,3 +17,12 @@ class GetUserData extends EstablishmentEvent {
 }
 
 class EstablishmentOnLoad extends EstablishmentEvent {}
+
+class ProfileImageOnUpload extends EstablishmentEvent {
+  final File image;
+
+  ProfileImageOnUpload(this.image);
+
+  @override
+  List<Object> get props => [image];
+}

@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/image/image.utils.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_with_icon_widget.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/images/circle_image_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
@@ -18,6 +23,7 @@ class EstablishmentHomePage extends StatefulWidget {
 }
 
 class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
+  String _imageUrl;
   void _onLoad() async {
     BlocProvider.of<EstablishmentBloc>(context).add(
       EstablishmentOnLoad(),
@@ -35,6 +41,9 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
             builder: (context, state) {
               if (state is EstablishmentInitial) {
                 _onLoad();
+              }
+              if (state is EstablishmentGetUserSuccess) {
+                _imageUrl = state?.user?.profileImageUrl;
               }
               return Stack(
                 children: [
@@ -100,28 +109,36 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
               Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  ClipRRect(
-                    child: Image.asset(
-                      'assets/images/undraw/establishment.png',
-                      scale: 2.5,
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10.0),
+                    child: CircleImage(
+                      imageUrl: _imageUrl ?? "",
+                      size: 120.0,
+                      fromNetwork: true,
                     ),
                   ),
                   Positioned(
                     bottom: 0,
-                    right: 7,
+                    right: 0,
                     child: Container(
-                      padding: EdgeInsets.all(2.5),
                       decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(50),
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 2.5,
+                          color: ColorUtil.primaryBackgroundColor,
+                          shape: BoxShape.circle),
+                      child: GestureDetector(
+                        onTap: () {
+                          changeImage();
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(5),
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: Colors.black, shape: BoxShape.circle),
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                            size: 15,
+                          ),
                         ),
-                      ),
-                      child: Icon(
-                        Icons.edit,
-                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -154,6 +171,37 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
           )
         ],
       ),
+    );
+  }
+
+  void changeImage() {
+    ImageUtils.pickImage(
+      context,
+      (File file) async {
+        File croppedFile = await ImageCropper.cropImage(
+            sourcePath: file.path,
+            cropStyle: CropStyle.circle,
+            aspectRatioPresets: [CropAspectRatioPreset.square],
+            androidUiSettings: AndroidUiSettings(
+                toolbarTitle: "Change Profile Image",
+                hideBottomControls: true,
+                showCropGrid: true,
+                toolbarColor: ColorUtil.primaryColor,
+                toolbarWidgetColor: Colors.white,
+                initAspectRatio: CropAspectRatioPreset.square,
+                lockAspectRatio: true),
+            iosUiSettings: IOSUiSettings(
+                minimumAspectRatio: 1.0,
+                aspectRatioLockEnabled: true,
+                aspectRatioPickerButtonHidden: true,
+                title: "Profile Image"));
+
+        BlocProvider.of<EstablishmentBloc>(context).add(
+          ProfileImageOnUpload(croppedFile),
+        );
+      },
+      maxWidth: 1024,
+      maxHeight: 512,
     );
   }
 

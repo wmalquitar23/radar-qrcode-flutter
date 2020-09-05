@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 
@@ -21,7 +22,11 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       yield SplashProgress();
       Session session = await getSessionUseCase.execute();
       if (session != null) {
-        yield AppHasSession();
+        if (session.user.role == "individual") {
+          yield AppHasSession(INDIVIDUAL_HOME_ROUTE);
+        } else {
+          yield AppHasSession(ESTABLISHMENT_HOME_ROUTE);
+        }
       } else {
         yield AppHasNoSession();
       }

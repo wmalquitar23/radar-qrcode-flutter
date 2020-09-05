@@ -21,3 +21,22 @@ class EstablishmentGetUserSuccess extends EstablishmentState {
 }
 
 class EstablishmentFailure extends EstablishmentState {}
+
+
+
+class ProfileUploadingImageLoading extends EstablishmentState {}
+
+class ProfileUploadingImageSuccess extends EstablishmentState {}
+
+class ProfileUploadingImageFailure extends EstablishmentState {
+  final String error;
+
+  const ProfileUploadingImageFailure({this.error});
+
+  @override
+  List<Object> get props => [error];
+
+  @override
+  String toString() => '{ $error }';
+}
+

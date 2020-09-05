@@ -100,6 +100,9 @@ class DataInstantiator extends RadarDataInstantiator {
       () => EstablishmentBloc(
         listenForSessionUseCase:
             ListenForSessionUseCase(authenticationRepository),
+        uploadProfileImageUseCase: UploadProfileImageUseCase(profileRepository),
+        getProfileInformationUseCase:
+            GetProfileInformationUseCase(profileRepository),
       ),
     );
     sl.registerFactory<ProfileBloc>(
@@ -113,7 +116,8 @@ class DataInstantiator extends RadarDataInstantiator {
     );
     sl.registerFactory<ChangePinBloc>(
       () =>
-          ChangePinBloc(updatePINUseCase: UpdatePINUseCase(profileRepository)),);
+          ChangePinBloc(updatePINUseCase: UpdatePINUseCase(profileRepository)),
+    );
     sl.registerFactory<EstablishmentBasicInformationBloc>(
       () => EstablishmentBasicInformationBloc(
         registerEstablishmentUseCase:
