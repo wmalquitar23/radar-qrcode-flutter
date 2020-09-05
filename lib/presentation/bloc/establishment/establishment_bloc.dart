@@ -59,4 +59,10 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
       }
     }
   }
+
+  @override
+  Future<void> close() {
+    _sessionSubscription?.cancel();
+    return super.close();
+  }
 }

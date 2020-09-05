@@ -128,7 +128,9 @@ class DataInstantiator extends RadarDataInstantiator {
     );
     sl.registerFactory<NavigationBloc>(
       () => NavigationBloc(
-          logoutUseCase: LogoutUseCase(authenticationRepository)),
+        logoutUseCase: LogoutUseCase(authenticationRepository),
+        getSessionUseCase: GetSessionUseCase(authenticationRepository),
+      ),
     );
 
     //usecases
