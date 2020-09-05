@@ -8,3 +8,5 @@ abstract class NavigationEvent extends Equatable {
 }
 
 class OnLogout extends NavigationEvent {}
+
+class OnNavigationLoad extends NavigationEvent {}

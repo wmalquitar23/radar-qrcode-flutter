@@ -55,6 +55,11 @@ class _NavigationPageState extends State<NavigationPage> {
                     }
                   },
                   builder: (context, state) {
+                    if (state is NavigationInitial) {
+                      BlocProvider.of<NavigationBloc>(context).add(
+                        OnNavigationLoad(),
+                      );
+                    }
                     return Column(
                       children: [
                         CustomAppBar(
@@ -80,15 +85,19 @@ class _NavigationPageState extends State<NavigationPage> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                NavigationItem(
-                                  iconAsset: "profile.png",
-                                  title: 'My Profile',
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.pushNamed(
-                                        context, MY_PROFILE_ROUTE);
-                                  },
-                                ),
+                                state is NavigationCheckUserRole
+                                    ? state.isIndividual
+                                        ? NavigationItem(
+                                            iconAsset: "profile.png",
+                                            title: 'My Profile',
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              Navigator.pushNamed(
+                                                  context, MY_PROFILE_ROUTE);
+                                            },
+                                          )
+                                        : Container()
+                                    : Container(),
                                 NavigationItem(
                                   iconAsset: "change-pin.png",
                                   title: 'Change PIN',
