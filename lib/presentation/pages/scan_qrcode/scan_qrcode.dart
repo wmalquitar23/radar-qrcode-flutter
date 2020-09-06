@@ -319,7 +319,6 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
         FlatButton(
           onPressed: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pop();
             _startCameraPreview();
           },
           child: Text("Close"),
