@@ -127,7 +127,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return pushNamed(
           page: BlocProvider(
             create: (_) => sl<VerificationBloc>(),
-            child: VerificationPage(),
+            child: VerificationPage(contactNumber: args,),
           ),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);

@@ -12,7 +12,8 @@ import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
 class VerificationPage extends StatefulWidget {
-  const VerificationPage({Key key}) : super(key: key);
+  final String contactNumber;
+  const VerificationPage({Key key, this.contactNumber}) : super(key: key);
   @override
   _VerificationPageState createState() => _VerificationPageState();
 }
@@ -49,7 +50,7 @@ class _VerificationPageState extends State<VerificationPage> {
               ),
               Container(
                 child: DescriptionText(
-                  title: "6 digit code was sent to 09451096905",
+                  title: "6 digit code was sent to +63${widget.contactNumber}",
                   color: ColorUtil.secondaryTextColor,
                   fontWeight: FontWeight.w600,
                 ),
