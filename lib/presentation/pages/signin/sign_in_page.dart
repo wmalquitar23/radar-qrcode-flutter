@@ -102,7 +102,7 @@ class _SignInPageState extends State<SignInPage> {
           ],
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration: TextFieldTheme.textfieldInputDecoration(
-            hintText: "Contact Number",
+            hintText: "9XX-XXX-XXXX",
             prefix: "+63",
           ),
           autovalidate: true,
