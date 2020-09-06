@@ -250,28 +250,4 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
       ),
     );
   }
-
-  mainBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      backgroundColor: Colors.grey[200],
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          margin: EdgeInsets.all(15),
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.phone),
-                title: Text('Contact Us'),
-              ),
-              ListTile(
-                leading: Icon(Icons.label_important),
-                title: Text('Logout'),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 }

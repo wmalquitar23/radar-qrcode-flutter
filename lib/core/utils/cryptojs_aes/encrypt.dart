@@ -1,8 +1,15 @@
 import 'dart:convert';
+import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 
-String qrCodeObject(String userId, String encryptedData) {
+String qrCodeObject(User user) {
   return jsonEncode({
-    jsonEncode("key"): jsonEncode(encryptedData),
-    jsonEncode("id"): jsonEncode(userId),
+    "_id": user.id,
+    "displayId": user.displayId,
+    "firstname": user.firstName,
+    "lastname": user.lastName,
+    "isVerified": user.isVerified,
+    "profileImageUrl": user.profileImageUrl,
+    "address": {"name": user.address},
+    "birthDate": user.birthDateToString(user.birthDate),
   });
 }

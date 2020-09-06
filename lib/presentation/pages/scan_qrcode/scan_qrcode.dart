@@ -1,11 +1,13 @@
+import 'dart:convert';
+
 import 'package:ai_barcode/ai_barcode.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/aes.dart';
 
 import '../../../core/utils/routes/routes_list.dart';
 import '../../widgets/bar/custom_regular_app_bar_v2.dart';
 import '../../widgets/pages/mobile_status_margin_top.dart';
-import '../../pages/scan_qrcode/scan_qrcode_dummy_validator.dart';
 
 class ScanQrcodePage extends StatefulWidget {
   ScanQrcodePage({Key key}) : super(key: key);
@@ -37,8 +39,6 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("App Cycle State Changed: $state");
-
     if (state == AppLifecycleState.resumed) {
       if (_fromAppSettings) {
         _requestCameraPermission();
@@ -55,7 +55,6 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
   void deactivate() {
     super.deactivate();
 
-    print("Deactivate");
     _toggleCameraPreview();
   }
 
@@ -69,20 +68,16 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
 
   void _requestCameraPermission() async {
     if (await Permission.camera.request().isGranted) {
-      print("Camera Permission Granted");
       setState(() => _cameraPermissionGranted = true);
     } else {
-      print("Camera Permission Denied");
       setState(() => _cameraPermissionGranted = false);
     }
   }
 
   void _requestCameraPermissionLevel2() async {
     if (await Permission.camera.request().isGranted) {
-      print("Camera Permission Granted");
       setState(() => _cameraPermissionGranted = true);
     } else {
-      print("Camera Permission Denied");
       setState(() => _cameraPermissionGranted = false);
 
       if (await Permission.camera.isPermanentlyDenied) {
@@ -125,7 +120,6 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
 
   void _startScanning() {
     if (_cameraPermissionGranted) {
-      print("Start Scanning");
       if (Theme.of(context).platform == TargetPlatform.iOS) {
         Future.delayed(Duration(seconds: 1), () {
           _scannerController.startCamera();
@@ -152,7 +146,6 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
 
   void _stopCamera() {
     if (_cameraPermissionGranted) {
-      print("Stop Scanning");
       _scannerController.stopCamera();
     }
   }
@@ -186,41 +179,26 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
     }
   }
 
-  void _validateQrCode(String qrData) {
-    dummyQRValidation(qrData).listen(
-      (qrValidationResult) {
-        if (qrValidationResult.isResultAvailable) {
-          if (qrValidationResult.qrData != null) {
-            Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed(
-              USER_DETAILS_ROUTE,
-              arguments: qrValidationResult.qrData,
-            );
-          } else {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return _userNotFoundDialog();
-              },
-            );
-          }
-        } else {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return Container(
-                color: Colors.black38,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            },
-          );
-        }
-      },
-    );
+  void _validateQrCode(String qrData) async {
+    try {
+      dynamic decrypted = await decryptAESCryptoJS(qrData);
+
+      dynamic jsonDecrypt = jsonDecode(decrypted);
+
+      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacementNamed(
+        USER_DETAILS_ROUTE,
+        arguments: jsonDecrypt,
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return _userNotFoundDialog(e.message.toString());
+        },
+      );
+    }
   }
 
   @override
@@ -321,9 +299,9 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
     );
   }
 
-  AlertDialog _userNotFoundDialog() {
+  AlertDialog _userNotFoundDialog(String message) {
     return AlertDialog(
-      title: Text("User Not Found"),
+      title: Text("Invalid QR Code"),
       content: Container(
         child: Row(
           children: <Widget>[
@@ -333,7 +311,7 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
               size: 30,
             ),
             SizedBox(width: 10),
-            Text("Sorry, User is not Registered!"),
+            Text(message),
           ],
         ),
       ),

@@ -112,9 +112,17 @@ class RestClient {
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
-  Future<StandardResponse> changePin(String oldPin, String newPin, String id) async {
+  Future<StandardResponse> changePin(
+      String oldPin, String newPin, String id) async {
     Response response = await _dio
         .patch("/users/$id/pin", data: {"oldPin": oldPin, "newPin": newPin});
+
+    return apiCatcher(StandardResponse.fromJson(response.data));
+  }
+
+  Future<StandardResponse> checkIn(String id) async {
+    Response response =
+        await _dio.post("/checkin", data: {"individualId": id});
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }

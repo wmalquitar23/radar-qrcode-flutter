@@ -1,14 +1,21 @@
-import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/data/models/user_model.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/user_details/user_details_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/fields/custom_textfield.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/images/circle_image_widget.dart';
-import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/status/status_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
 class UserDetailsPage extends StatefulWidget {
+  final dynamic qrInformation;
+
+  const UserDetailsPage({Key key, this.qrInformation}) : super(key: key);
   @override
   _UserDetailsPageState createState() => _UserDetailsPageState();
 }
@@ -16,13 +23,6 @@ class UserDetailsPage extends StatefulWidget {
 class _UserDetailsPageState extends State<UserDetailsPage> {
   TextEditingController _addressController = TextEditingController();
   TextEditingController _ageController = TextEditingController();
-
-  @override
-  void initState() {
-    _addressController.text = "Purok 123, Brgy 4, Bacolod Negros Occ.";
-    _ageController.text = "24";
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,49 +34,52 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
           physics: BouncingScrollPhysics(),
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 25.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildImage(),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Container(
-                  child: HeaderText(
-                    title: "Lalisa Manoban",
-                    fontSize: 18,
-                    color: ColorUtil.primaryColor,
-                  ),
-                ),
-                SizedBox(
-                  height: 5.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: ExtendedImage.asset(
-                        'assets/images/undraw/success.png',
-                        width: 15,
+            child: BlocConsumer<UserDetailsBloc, UserDetailsState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                if (state is UserDetailsInitial) {
+                  BlocProvider.of<UserDetailsBloc>(context).add(
+                    OnLoadUserDetail(widget.qrInformation),
+                  );
+                }
+                if (state.userInformation != null) {
+                  _addressController.text = state?.userInformation?.address;
+                  _ageController.text = state?.userInformation?.age?.toString();
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _buildImage(state.userInformation),
+                      SizedBox(
+                        height: 10.0,
                       ),
-                    ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    DescriptionText(
-                      title: "VERIFIED",
-                      color: ColorUtil.primaryTextColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                _buildAddressTextField(),
-                _buildAgeTextField(),
-              ],
+                      Container(
+                        child: HeaderText(
+                          title: state?.userInformation?.fullName,
+                          fontSize: 18,
+                          color: ColorUtil.primaryColor,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          StatusWidget(
+                            isVerified: state?.userInformation?.isVerified,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      _buildAddressTextField(),
+                      _buildAgeTextField(),
+                    ],
+                  );
+                }
+                return Container();
+              },
             ),
           ),
         ),
@@ -89,7 +92,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     );
   }
 
-  Widget _buildImage() {
+  Widget _buildImage(User state) {
     return Center(
       child: Container(
         width: 120.0,
@@ -98,29 +101,9 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 10.0),
               child: CircleImage(
-                imageUrl: "assets/images/profile/lalisa.jpeg",
+                imageUrl: state?.profileImageUrl,
                 size: 120.0,
-                fromNetwork: false,
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                    color: ColorUtil.primaryBackgroundColor,
-                    shape: BoxShape.circle),
-                child: Container(
-                  margin: EdgeInsets.all(5),
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      color: Colors.black, shape: BoxShape.circle),
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                    size: 15,
-                  ),
-                ),
+                fromNetwork: true,
               ),
             ),
           ],
@@ -164,28 +147,52 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
 
   Widget _buildDecisionButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: PrimaryButton(
-              text: 'APPROVE',
-              color: Colors.green,
-            ),
+    return BlocConsumer<UserDetailsBloc, UserDetailsState>(
+      listener: (context, state) {
+        if (state.userApproveDone) {
+          Navigator.pushReplacementNamed(context, ESTABLISHMENT_HOME_ROUTE);
+        }
+      },
+      builder: (context, state) {
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: PrimaryButton(
+                    text: 'APPROVE',
+                    color: Colors.green,
+                    isLoading: state.userApproveLoading,
+                    onPressed: state.userInformation != null
+                        ? () {
+                            BlocProvider.of<UserDetailsBloc>(context).add(
+                              OnUserApprove(state.userInformation),
+                            );
+                          }
+                        : null,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: PrimaryButton(
+                    text: 'DECLINE',
+                    color: Colors.red,
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                          context, ESTABLISHMENT_HOME_ROUTE);
+                    },
+                  ),
+                ),
+              )
+            ],
           ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: PrimaryButton(
-              text: 'DECLINE',
-              color: Colors.red,
-            ),
-          ),
-        )
-      ],
+        );
+      },
     );
   }
 }

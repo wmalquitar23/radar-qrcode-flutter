@@ -6,6 +6,8 @@ import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_service.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/profile_repository.dart';
+import 'package:radar_qrcode_flutter/domain/repositories/transactions_repository.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/checkin_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
@@ -25,6 +27,7 @@ import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individ
 import 'package:radar_qrcode_flutter/presentation/bloc/profile/profile_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/user_details/user_details_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/navigation/navigation_bloc.dart';
 import 'package:sembast/sembast.dart';
@@ -35,6 +38,7 @@ import 'data/local_db/session_db.dart';
 import 'data/models/session_model.dart';
 import 'data/repositories_impl/authentication_repository_impl.dart';
 import 'data/repositories_impl/profile_repository_impl.dart';
+import 'data/repositories_impl/transactions_repository_impl.dart';
 import 'domain/repositories/authentication_repository.dart';
 import 'presentation/bloc/splash/splash_bloc.dart';
 
@@ -56,6 +60,8 @@ class DataInstantiator extends RadarDataInstantiator {
         AuthenticationRepositoryImpl(database, restClient);
     ProfileRepository profileRepository =
         ProfileRepositoryImpl(database, restClient);
+    TransactionsRepository transactionRepository =
+        TransactionsRepositoryImpl(database, restClient);
 
     //core
     GetIt.I.registerSingleton<RestClient>(restClient);
@@ -132,6 +138,10 @@ class DataInstantiator extends RadarDataInstantiator {
         getSessionUseCase: GetSessionUseCase(authenticationRepository),
       ),
     );
+    sl.registerFactory<UserDetailsBloc>(
+      () => UserDetailsBloc(
+          checkInUseCase: CheckInUseCase(transactionRepository)),
+    );
 
     //usecases
     GetIt.I.registerLazySingleton<RegisterIndividualUseCase>(
@@ -152,10 +162,14 @@ class DataInstantiator extends RadarDataInstantiator {
         () => UpdatePINUseCase(profileRepository));
     GetIt.I.registerLazySingleton<LogoutUseCase>(
         () => LogoutUseCase(authenticationRepository));
+    GetIt.I.registerLazySingleton<CheckInUseCase>(
+        () => CheckInUseCase(transactionRepository));
 
     //repositories
     GetIt.I
         .registerSingleton<AuthenticationRepository>(authenticationRepository);
+    GetIt.I.registerSingleton<ProfileRepository>(profileRepository);
+    GetIt.I.registerSingleton<TransactionsRepository>(transactionRepository);
 
     //navigator service
     GetIt.I.registerLazySingleton<NavigatorService>(() => NavigatorService());

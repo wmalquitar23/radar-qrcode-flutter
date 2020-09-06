@@ -8,6 +8,7 @@ import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishme
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/user_details/user_details_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
@@ -38,7 +39,7 @@ import '../../../dependency_instantiator.dart';
 import 'router_util.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
-  // final args = settings.arguments;
+  final args = settings.arguments;
   switch (settings.name) {
     case ONBOARD_ROUTE:
       return pushNamed(page: OnboardPage(), settings: settings);
@@ -98,7 +99,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case USER_DETAILS_ROUTE:
       return pushNamed(
-          page: UserDetailsPage(),
+          page: BlocProvider(
+            create: (_) => sl<UserDetailsBloc>(),
+            child: UserDetailsPage(
+              qrInformation: args,
+            ),
+          ),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;

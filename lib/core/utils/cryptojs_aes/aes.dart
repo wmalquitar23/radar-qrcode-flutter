@@ -43,7 +43,7 @@ Future<String> decryptAESCryptoJS(String encrypted) async {
         encrypter.decrypt64(base64.encode(encryptedBytes), iv: iv);
     return decrypted;
   } catch (error) {
-    throw error;
+    throw Exception("Not a valid QR from Radar");
   }
 }
 

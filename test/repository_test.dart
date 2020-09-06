@@ -6,21 +6,25 @@ import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.d
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/repositories_impl/authentication_repository_impl.dart';
+import 'package:radar_qrcode_flutter/data/repositories_impl/transactions_repository_impl.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/authentication_repository.dart';
 
 import 'package:intl/intl.dart';
+import 'package:radar_qrcode_flutter/domain/repositories/transactions_repository.dart';
 import 'test_data_instantiator.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   io.HttpOverrides.global = null;
   AuthenticationRepositoryImpl authenticationRepositoryImpl;
+  TransactionsRepositoryImpl transactionsRepositoryImpl;
   Session session;
 
   setUp(() async {
     RadarDataInstantiator dataInstantiator = TestDataInstantiator();
     await dataInstantiator.init();
     authenticationRepositoryImpl = GetIt.I.get<AuthenticationRepository>();
+    transactionsRepositoryImpl = GetIt.I.get<TransactionsRepository>();
   });
 
   tearDown(() async {
@@ -73,7 +77,8 @@ void main() {
       address,
     );
 
-    await authenticationRepositoryImpl.verifyOtp("123456"); // Assuming OTP is Correct
+    await authenticationRepositoryImpl
+        .verifyOtp("123456"); // Assuming OTP is Correct
 
     session = await authenticationRepositoryImpl.getCurrentSession();
 
@@ -151,6 +156,16 @@ void main() {
       //THEN SHOULD EXPECT
       expect(vericationResult, isNotNull);
       expect(vericationResult, false);
+    });
+  });
+  group("Transactions", () {
+    test('Check in', () async {
+      //GIVEN THAT mobileNumber is alerady used
+      String id = "5f53838759cfad1d8f00a477";
+
+      //WHEN
+      await transactionsRepositoryImpl.checkIn(id);
+
     });
   });
 }

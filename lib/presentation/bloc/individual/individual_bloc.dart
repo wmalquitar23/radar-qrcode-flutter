@@ -29,9 +29,9 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
         add(GetUserData(user: session.user));
       });
     } else if (event is GetUserData) {
-      String result = qrCodeObject(event?.user?.displayId,
-          await encryptAESCryptoJS(event?.user?.displayId));
-      yield IndividualGetUserSuccess(user: event.user, jsonQrCode: result);
+      String result = qrCodeObject(event?.user);
+      var encrypted = await encryptAESCryptoJS(result);
+      yield IndividualGetUserSuccess(user: event.user, jsonQrCode: encrypted);
     }
   }
 }

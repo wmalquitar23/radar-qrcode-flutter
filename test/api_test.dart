@@ -25,7 +25,7 @@ void main() {
 
   Future<void> login() async {
     //GIVEN THAT
-    var contactNumber = "9451096905";
+    var contactNumber = "96613912216";
     var pin = "4321";
 
     try {
@@ -248,6 +248,18 @@ void main() {
       //WHEN
       StandardResponse response =
           await restClient.changePin(oldPin, newPin, id);
+
+      //THEN SHOULD EXPECT
+      print(response.data);
+      expect(response.data, isNotNull);
+    });
+  });
+  group("Transactions", () {
+    test('CheckIn', () async {
+      //GIVEN THAT
+      String id = "5f53838759cfad1d8f00a477";
+      //WHEN
+      StandardResponse response = await restClient.checkIn(id);
 
       //THEN SHOULD EXPECT
       print(response.data);

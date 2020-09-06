@@ -1,4 +1,6 @@
 import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.dart';
+import 'package:intl/intl.dart';
+import 'package:radar_qrcode_flutter/core/utils/date_utils.dart';
 
 class User extends RadarModel {
   final String id;
@@ -34,4 +36,11 @@ class User extends RadarModel {
   });
 
   String get fullName => "$firstName $lastName";
+
+  String birthDateToString(DateTime birthdate) {
+    DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
+    return birthdayFormatter.format(birthdate);
+  }
+
+  int get age => birthDate != null ? DateUtils.calculateAge(birthDate) : null;
 }
