@@ -28,3 +28,7 @@ abstract class RadarMapper<T extends RadarModel> {
     return list;
   }
 }
+
+abstract class NetworkInfo {
+  Future<bool> get isConnected;
+}

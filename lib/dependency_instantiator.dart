@@ -1,7 +1,8 @@
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.dart';
+import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_service.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
@@ -34,6 +35,7 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
 
+import 'core/network/network_info_impl.dart';
 import 'data/local_db/session_db.dart';
 import 'data/models/session_model.dart';
 import 'data/repositories_impl/authentication_repository_impl.dart';
@@ -56,6 +58,8 @@ class DataInstantiator extends RadarDataInstantiator {
     var restClient = RestClient(dio);
 
     //implementations
+
+    DataConnectionChecker dataConnectionChecker = DataConnectionChecker();
     AuthenticationRepository authenticationRepository =
         AuthenticationRepositoryImpl(database, restClient);
     ProfileRepository profileRepository =
@@ -67,6 +71,9 @@ class DataInstantiator extends RadarDataInstantiator {
     GetIt.I.registerSingleton<RestClient>(restClient);
     GetIt.I.registerSingleton<Dio>(dio);
     GetIt.I.registerSingleton<Database>(database);
+    //core
+    sl.registerLazySingleton<NetworkInfo>(
+        () => NetworkInfoImpl(dataConnectionChecker));
 
     //bloc
     sl.registerFactory<SplashBloc>(
@@ -140,7 +147,9 @@ class DataInstantiator extends RadarDataInstantiator {
     );
     sl.registerFactory<UserDetailsBloc>(
       () => UserDetailsBloc(
-          checkInUseCase: CheckInUseCase(transactionRepository)),
+        checkInUseCase: CheckInUseCase(transactionRepository),
+        networkInfo: NetworkInfoImpl(dataConnectionChecker),
+      ),
     );
 
     //usecases

@@ -1,4 +1,4 @@
-import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.dart';
+import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:intl/intl.dart';
 
@@ -29,10 +29,15 @@ class UserMapper extends RadarMapper<User> {
   @override
   Map<String, dynamic> toMap(object) {
     return {
+      "_id": object.id,
+      "displayId": object.displayId,
       "firstname": object.firstName,
       "lastname": object.lastName,
       "pin": object.pin,
       "birthDate": object.birthDate.toIso8601String(),
+      "profileImageUrl": object.profileImageUrl,
+      "isVerified": object.isVerified,
+      "role": object.role,
       "gender": object.gender,
       "contactNumber": object.contactNumber,
       "address": {"name": object.address},

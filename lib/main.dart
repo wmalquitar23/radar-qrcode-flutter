@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'core/architecture/freddy_app_architecture.dart';
+import 'core/architecture/radar_app_architecture.dart';
 import 'dependency_instantiator.dart';
 import 'radar_app.dart' as app;
 

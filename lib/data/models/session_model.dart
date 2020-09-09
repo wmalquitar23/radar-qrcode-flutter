@@ -1,4 +1,4 @@
-import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.dart';
+import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 
 class Session extends RadarModel {

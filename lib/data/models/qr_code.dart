@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.dart';
+import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 
 class QRCode extends RadarModel {
   final int userID;

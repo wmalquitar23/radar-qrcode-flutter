@@ -40,7 +40,7 @@ class PrimaryButtonWithIcon extends StatelessWidget {
               text,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 16 ?? this.fontSize,
+                fontSize: 14 ?? this.fontSize,
               ),
             ),
           ],

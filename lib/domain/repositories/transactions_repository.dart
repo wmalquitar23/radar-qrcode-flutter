@@ -1,5 +1,9 @@
 
 
+import 'package:radar_qrcode_flutter/data/models/user_model.dart';
+
 abstract class TransactionsRepository {
-  Future<void> checkIn(String id);
+  Future<void> checkIn(User id, bool hasConnection);
+
+  Future<void> syncCheckInData();
 }

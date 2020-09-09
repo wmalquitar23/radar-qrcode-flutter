@@ -2,9 +2,10 @@ import 'dart:io' as io;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
-import 'package:radar_qrcode_flutter/core/architecture/freddy_app_architecture.dart';
+import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
+import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/data/repositories_impl/authentication_repository_impl.dart';
 import 'package:radar_qrcode_flutter/data/repositories_impl/transactions_repository_impl.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/authentication_repository.dart';
@@ -161,11 +162,21 @@ void main() {
   group("Transactions", () {
     test('Check in', () async {
       //GIVEN THAT mobileNumber is alerady used
-      String id = "5f53838759cfad1d8f00a477";
 
       //WHEN
-      await transactionsRepositoryImpl.checkIn(id);
-
+      await transactionsRepositoryImpl.checkIn(
+          User(
+            id: "5f54e91a59cfad1d8f00a491",
+            displayId: "JM4988",
+            firstName: "Jesther Jordan",
+            lastName: "Minor",
+            isVerified: false,
+            profileImageUrl:
+                "http://54.179.150.142:3000/api/v1/file/5f55abd259cfad1d8f00a495",
+            address: "Maniki, Kapalong, Davao del Norte",
+            birthDate: DateTime.now(),
+          ),
+          false);
     });
   });
 }

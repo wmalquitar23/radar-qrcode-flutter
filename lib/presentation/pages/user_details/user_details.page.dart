@@ -28,6 +28,9 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomRegularAppBar(
+        onBackTap: () {
+          Navigator.pushReplacementNamed(context, ESTABLISHMENT_HOME_ROUTE);
+        },
         backgroundColor: Colors.transparent,
         title: "User Details",
         body: SingleChildScrollView(
@@ -176,19 +179,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                   ),
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: PrimaryButton(
-                    text: 'DECLINE',
-                    color: Colors.red,
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, ESTABLISHMENT_HOME_ROUTE);
-                    },
-                  ),
-                ),
-              )
             ],
           ),
         );

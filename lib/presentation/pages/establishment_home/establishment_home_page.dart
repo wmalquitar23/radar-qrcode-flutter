@@ -61,16 +61,16 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                     children: [
                       state is EstablishmentGetUserSuccess
                           ? _buildAppBar()
-                          : CupertinoActivityIndicator(),
+                          : Container(),
                       state is EstablishmentGetUserSuccess
                           ? _buildEstablishmentDetails(state)
-                          : CupertinoActivityIndicator(),
+                          : Container(),
                       state is EstablishmentGetUserSuccess
                           ? _buildHint()
-                          : CupertinoActivityIndicator(),
+                          : Container(),
                       state is EstablishmentGetUserSuccess
                           ? _buildScanQRCodeButton()
-                          : CupertinoActivityIndicator(),
+                          : Container(),
                     ],
                   )
                 ],
@@ -148,7 +148,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
               Align(
                 alignment: Alignment.center,
                 child: HeaderText(
-                  title: state.user.establishmentName,
+                  title: state.user.firstName,
                   color: ColorUtil.primaryColor,
                 ),
               ),
