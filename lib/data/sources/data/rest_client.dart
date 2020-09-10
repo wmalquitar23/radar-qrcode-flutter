@@ -16,7 +16,7 @@ class RestClient {
 
   StandardResponse apiCatcher(StandardResponse standardResponse) {
     if (standardResponse.code != 200 && standardResponse.code != 201) {
-      throw Exception(standardResponse.code);
+      throw Exception(standardResponse.message);
     }
     return standardResponse;
   }
@@ -108,6 +108,7 @@ class RestClient {
 
   Future<StandardResponse> getProfileInfo() async {
     Response response = await _dio.get("/profile");
+    print(response);
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }

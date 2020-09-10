@@ -11,11 +11,13 @@ import 'package:radar_qrcode_flutter/domain/repositories/transactions_repository
 import 'package:radar_qrcode_flutter/domain/usecases/checkin_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/listen_for_checkin_data_use_case%20copy.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/logout_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/otp_verification_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_establishment_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/sync_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/update_pin_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/upload_profile_image_use_case.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/change_pin/change_pin_bloc.dart';
@@ -107,6 +109,9 @@ class DataInstantiator extends RadarDataInstantiator {
       () => IndividualBloc(
         listenForSessionUseCase:
             ListenForSessionUseCase(authenticationRepository),
+        getProfileInformationUseCase:
+            GetProfileInformationUseCase(profileRepository),
+        networkInfo: NetworkInfoImpl(dataConnectionChecker),
       ),
     );
     sl.registerFactory<EstablishmentBloc>(
@@ -116,6 +121,10 @@ class DataInstantiator extends RadarDataInstantiator {
         uploadProfileImageUseCase: UploadProfileImageUseCase(profileRepository),
         getProfileInformationUseCase:
             GetProfileInformationUseCase(profileRepository),
+        syncDataUseCase: SyncDataUseCase(transactionRepository),
+        listenForCheckInDataUseCase:
+            ListenForCheckInDataUseCase(transactionRepository),
+        networkInfo: NetworkInfoImpl(dataConnectionChecker),
       ),
     );
     sl.registerFactory<ProfileBloc>(
@@ -173,6 +182,10 @@ class DataInstantiator extends RadarDataInstantiator {
         () => LogoutUseCase(authenticationRepository));
     GetIt.I.registerLazySingleton<CheckInUseCase>(
         () => CheckInUseCase(transactionRepository));
+    GetIt.I.registerLazySingleton<SyncDataUseCase>(
+        () => SyncDataUseCase(transactionRepository));
+    GetIt.I.registerLazySingleton<ListenForCheckInDataUseCase>(
+        () => ListenForCheckInDataUseCase(transactionRepository));
 
     //repositories
     GetIt.I
@@ -199,8 +212,14 @@ class DataInstantiator extends RadarDataInstantiator {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      connectTimeout: 15000,
-      receiveTimeout: 15000,
+      connectTimeout: 5000,
+      receiveTimeout: 5000,
+      sendTimeout: 5000,
+      followRedirects: true,
+      validateStatus: (status) {
+        return status < 500;
+      },
+      
     );
 
     Dio dio = Dio(options);
@@ -219,6 +238,10 @@ class DataInstantiator extends RadarDataInstantiator {
           dio.interceptors.requestLock.unlock();
           return options; //continue
         },
+        onError: (execption){
+          print(execption);
+          throw Exception("Unknown error.");
+        }
       ),
     );
 

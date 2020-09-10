@@ -69,7 +69,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
             child: IndividualHomePage(),
           ),
           settings: settings,
-          pageTransitionType: PageTransitionType.fade);
+          pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
     case ESTABLISHMENT_INFO_ROUTE:
       return pushNamed(
@@ -127,7 +127,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return pushNamed(
           page: BlocProvider(
             create: (_) => sl<VerificationBloc>(),
-            child: VerificationPage(contactNumber: args,),
+            child: VerificationPage(
+              contactNumber: args,
+            ),
           ),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);

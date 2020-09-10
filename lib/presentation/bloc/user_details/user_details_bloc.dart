@@ -37,7 +37,7 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
         userApproveLoading: true,
       );
       try {
-        if (await networkInfo.isConnected) {
+        if (await networkInfo.isConnected()) {
           await checkInUseCase.execute(event.user, true);
         } else {
           await checkInUseCase.execute(event.user, false);

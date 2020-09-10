@@ -17,3 +17,5 @@ class GetUserData extends IndividualEvent {
 }
 
 class IndividualOnLoad extends IndividualEvent {}
+
+class OnRefresh extends IndividualEvent {}

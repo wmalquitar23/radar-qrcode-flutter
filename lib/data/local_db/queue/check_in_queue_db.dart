@@ -13,8 +13,13 @@ class CheckInDb extends Db {
           intMapStoreFactory.store("checkin_queue"),
         );
 
-  Stream<List<CheckIn>> listenForActivities() {
-    var query = store.query();
+  Stream<List<CheckIn>> listenForCheckIn() {
+    var finder = Finder(
+      filter: Filter.and([
+        Filter.equals("hasUploaded", false),
+      ]),
+    );
+    var query = store.query(finder: finder);
     return query.onSnapshots(db).map((snapshots) {
       return snapshots
           .map(

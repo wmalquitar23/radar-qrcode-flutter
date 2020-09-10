@@ -47,4 +47,9 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
       await checkInDb.updateData(data.key);
     });
   }
+
+  @override
+  Stream<List<CheckIn>> listenForCheckIn() {
+    return checkInDb.listenForCheckIn();
+  }
 }

@@ -30,5 +30,5 @@ abstract class RadarMapper<T extends RadarModel> {
 }
 
 abstract class NetworkInfo {
-  Future<bool> get isConnected;
+  Future<bool> isConnected();
 }

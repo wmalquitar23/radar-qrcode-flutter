@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
@@ -32,53 +33,88 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    return MobileStatusMarginTop(
-        child: Scaffold(
-      body: SingleChildScrollView(
-        child: BlocConsumer<IndividualBloc, IndividualState>(
+    return RefreshIndicator(
+      onRefresh: () async {
+        BlocProvider.of<IndividualBloc>(context).add(
+          OnRefresh(),
+        );
+      },
+      child: MobileStatusMarginTop(
+          child: Scaffold(
+        body: BlocConsumer<IndividualBloc, IndividualState>(
           listener: (context, state) async {
-            if (state is IndividualGetUserSuccess) {
-              _encryptedQr = state.jsonQrCode;
+            if (state.individualGetUserSuccess != null) {
+              _encryptedQr = state.individualGetUserSuccess.jsonQrCode;
+            }
+
+            if (state.individualGetuserFailureMessage != null) {
+              ToastUtil.showToast(
+                  context, state.individualGetuserFailureMessage);
+            }
+            if (state.individualGetuserSuccessMessage != null) {
+              ToastUtil.showToast(
+                  context, state.individualGetuserSuccessMessage);
             }
           },
           builder: (context, state) {
             if (state is IndividualInitial) {
               _onLoad();
             }
-            return Stack(
-              children: [
-                Container(
-                  height: screenSize.height * 0.66,
-                  decoration: BoxDecoration(
-                    color: ColorUtil.primaryColor,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(34.0),
-                        bottomRight: Radius.circular(34.0)),
-                  ),
-                ),
-                Column(
+
+            if (state.individualGetUserSuccess != null) {
+              return SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Stack(
                   children: [
-                    _buildAppBar(),
-                    state is IndividualGetUserSuccess
-                        ? _buildPersonInfo(state)
-                        : CupertinoActivityIndicator(),
-                    state is IndividualGetUserSuccess
-                        ? _buildQRInfo(screenSize, state)
-                        : CupertinoActivityIndicator(),
-                    state is IndividualGetUserSuccess
-                        ? _buildHint()
-                        : CupertinoActivityIndicator(),
-                    state is IndividualGetUserSuccess
-                        ? _buildVerifyIdentityButton()
-                        : CupertinoActivityIndicator(),
+                    Container(
+                      height: screenSize.height * 0.66,
+                      decoration: BoxDecoration(
+                        color: ColorUtil.primaryColor,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(34.0),
+                            bottomRight: Radius.circular(34.0)),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        state.individualGetUserSuccess != null
+                            ? _buildAppBar()
+                            : Container(),
+                        state.individualGetUserSuccess != null
+                            ? _buildPersonInfo(state.individualGetUserSuccess)
+                            : Container(),
+                        state.individualGetUserSuccess != null
+                            ? _buildQRInfo(
+                                screenSize, state.individualGetUserSuccess)
+                            : Container(),
+                        state.individualGetUserSuccess != null
+                            ? _buildHint()
+                            : Container(),
+                        state.individualGetUserSuccess != null
+                            ? _buildVerifyIdentityButton()
+                            : Container(),
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              );
+            }
+
+            return Center(
+              child: SingleChildScrollView(
+                child: Stack(
+                  children: [
+                    Center(
+                      child: CupertinoActivityIndicator(),
+                    ),
+                  ],
+                ),
+              ),
             );
           },
         ),
-      ),
-    ));
+      )),
+    );
   }
 
   Widget _buildVerifyIdentityButton() {
@@ -97,7 +133,11 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
       data: _encryptedQr.toString() ?? "",
       foregroundColor: Colors.black,
       version: QrVersions.auto,
-      size: screenSize.width * 0.55,
+      size: screenSize.width * 0.60,
+      embeddedImage: AssetImage('assets/images/app_icon/qr_icon.png'),
+      embeddedImageStyle: QrEmbeddedImageStyle(
+        size: Size(40, 40),
+      ),
       errorStateBuilder: (cxt, err) {
         return Container(
           child: Center(
