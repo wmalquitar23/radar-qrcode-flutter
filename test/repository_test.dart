@@ -4,10 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
+import 'package:radar_qrcode_flutter/data/models/address/barangay_model.dart';
+import 'package:radar_qrcode_flutter/data/models/address/city_model.dart';
+import 'package:radar_qrcode_flutter/data/models/address/province_model.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
+import 'package:radar_qrcode_flutter/data/repositories_impl/address_repository_impl.dart';
 import 'package:radar_qrcode_flutter/data/repositories_impl/authentication_repository_impl.dart';
 import 'package:radar_qrcode_flutter/data/repositories_impl/transactions_repository_impl.dart';
+import 'package:radar_qrcode_flutter/domain/repositories/address_repository.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/authentication_repository.dart';
 
 import 'package:intl/intl.dart';
@@ -177,6 +182,52 @@ void main() {
             birthDate: DateTime.now(),
           ),
           false);
+    });
+  });
+
+  group("Address", () {
+    AddressRepository addressRepository;
+
+    test("Province", () async {
+      //GIVEN THAT
+      addressRepository = AddressRepositoryImpl();
+
+      //WHEN
+      List<Province> result = await addressRepository.getAllProvince();
+
+      //THEN SHOULD EXPECT
+      print(result[0].provCode);
+      print(result[0].provDesc);
+      expect(result, isNotNull);
+      expect(result.length, isPositive);
+    });
+
+    test("City or Municipality", () async {
+      //GIVEN THAT
+      addressRepository = AddressRepositoryImpl();
+
+      //WHEN
+      List<City> result = await addressRepository.getAllCityOrMunicipality();
+
+      //THEN SHOULD EXPECT
+      print(result[0].citymunCode);
+      print(result[0].citymunDesc);
+      expect(result, isNotNull);
+      expect(result.length, isPositive);
+    });
+
+    test("Barangay", () async {
+      //GIVEN THAT
+      addressRepository = AddressRepositoryImpl();
+
+      //WHEN
+      List<Barangay> result = await addressRepository.getAllBarangay();
+
+      //THEN SHOULD EXPECT
+      print(result[0].brgyCode);
+      print(result[0].brgyDesc);
+      expect(result, isNotNull);
+      expect(result.length, isPositive);
     });
   });
 }

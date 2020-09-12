@@ -17,7 +17,7 @@ class RegisterPressed extends EstablishmentBasicInformationEvent {
     @required this.establishmentName,
     @required this.pin,
     @required this.contactNumber,
-    @required this.address,
+    this.address,
   });
 }
 

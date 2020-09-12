@@ -30,6 +30,10 @@ class TextFieldTheme {
         borderSide: BorderSide(color: Colors.transparent, width: 1),
         borderRadius: new BorderRadius.circular(15.0),
       ),
+      disabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.transparent, width: 1),
+        borderRadius: new BorderRadius.circular(15.0),
+      ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: ColorUtil.primaryColor, width: 2),
         borderRadius: new BorderRadius.circular(15.0),

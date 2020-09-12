@@ -8,7 +8,11 @@ import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/core/utils/string_utils.dart';
 import 'package:radar_qrcode_flutter/core/utils/style/textfield_theme.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
+import 'package:radar_qrcode_flutter/data/models/address/barangay_model.dart';
+import 'package:radar_qrcode_flutter/data/models/address/city_model.dart';
+import 'package:radar_qrcode_flutter/data/models/address/province_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/basic_information/address/address_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/dialogs/gender_dialog.dart';
@@ -36,7 +40,11 @@ class _IndividualBasicInformationPageState
   TextEditingController _pinController = TextEditingController();
   TextEditingController _confirmPinController = TextEditingController();
   TextEditingController _contactNumberController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
+  TextEditingController _streetHouseNumController = TextEditingController();
+
+  Province _selectedProvince;
+  City _selectedCity;
+  Barangay _selectedBarangay;
 
   int _pageControllerIndex;
   String gender;
@@ -49,6 +57,7 @@ class _IndividualBasicInformationPageState
   bool _basicInfo2IsValid = false;
   bool _pinMatched = true;
   bool _contactNumberIsValid = false;
+  bool _agreementCheckBox = false;
 
   @override
   initState() {
@@ -75,7 +84,6 @@ class _IndividualBasicInformationPageState
         gender: _genderValue,
         pin: _pinController.text,
         contactNumber: _contactNumberController.text,
-        address: _addressController.text,
       ),
     );
   }
@@ -107,9 +115,8 @@ class _IndividualBasicInformationPageState
     int changeCount = 0;
     changeCount += _pinController.text.isNotEmpty ? 1 : 0;
     changeCount += _confirmPinController.text.isNotEmpty ? 1 : 0;
-    changeCount += _addressController.text.isNotEmpty ? 1 : 0;
 
-    if (changeCount == 3) {
+    if (changeCount == 2) {
       fieldsNotEmpty = true;
     }
 
@@ -117,7 +124,17 @@ class _IndividualBasicInformationPageState
       isPinConfirmed = true;
     }
 
-    return (fieldsNotEmpty && isPinConfirmed && _contactNumberIsValid);
+    return (fieldsNotEmpty &&
+        isPinConfirmed &&
+        _contactNumberIsValid &&
+        _agreementCheckBox &&
+        _checkAddress());
+  }
+
+  bool _checkAddress() {
+    return (_selectedProvince != null &&
+        _selectedCity != null &&
+        _selectedBarangay != null);
   }
 
   void _onChangeValidityBasicInfo1() {
@@ -144,6 +161,21 @@ class _IndividualBasicInformationPageState
         contactNumber: _contactNumberController.text,
       ),
     );
+  }
+
+  void selectProvinceCallback(Province selectedProvince) {
+    _selectedProvince = selectedProvince;
+    _onChangeValidityBasicInfo2();
+  }
+
+  void selectCityCallback(City selectedCity) {
+    _selectedCity = selectedCity;
+    _onChangeValidityBasicInfo2();
+  }
+
+  void selectBarangayCallback(Barangay selectedBarangay) {
+    _selectedBarangay = selectedBarangay;
+    _onChangeValidityBasicInfo2();
   }
 
   @override
@@ -204,7 +236,16 @@ class _IndividualBasicInformationPageState
                     _buildCreatePINTextField(),
                     _buildConfirmPINTextField(),
                     _buildContactNumberTextField(),
-                    _buildAddressTextField()
+                    AddressWidget(
+                      selectProvinceCallback: (selectedProvince) =>
+                          selectProvinceCallback(selectedProvince),
+                      selectCityCallback: (selectedCity) =>
+                          selectCityCallback(selectedCity),
+                      selectBarangayCallback: (selectedBarangay) =>
+                          selectBarangayCallback(selectedBarangay),
+                    ),
+                    _buildStreetHouseNumTextField(),
+                    _buildAgreementLabel(),
                   ],
                 ),
                 SizedBox(height: 30),
@@ -390,15 +431,15 @@ class _IndividualBasicInformationPageState
     );
   }
 
-  Widget _buildAddressTextField() {
+  Widget _buildStreetHouseNumTextField() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: ShadowWidget(
         child: TextFormField(
-          controller: _addressController,
+          controller: _streetHouseNumController,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Address"),
+          decoration: TextFieldTheme.textfieldInputDecoration(
+              hintText: "Street/House No."),
           onChanged: (value) => _onChangeValidityBasicInfo2(),
         ),
       ),
@@ -481,6 +522,49 @@ class _IndividualBasicInformationPageState
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "Birth Date"),
         ),
+      ),
+    );
+  }
+
+  Widget _buildAgreementLabel() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
+      child: Row(
+        children: <Widget>[
+          Checkbox(
+            value: _agreementCheckBox,
+            onChanged: (value) {
+              setState(() {
+                _agreementCheckBox = value;
+              });
+              _onChangeValidityBasicInfo2();
+            },
+          ),
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Text(
+                  "I have read and agree to the ",
+                  style: TextStyle(fontSize: 11),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print("Go to Terms & Conditions Section");
+                  },
+                  child: Text(
+                    "Terms & Conditions",
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Color(0xff0367B2),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

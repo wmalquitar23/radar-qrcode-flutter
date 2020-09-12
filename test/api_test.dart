@@ -12,6 +12,7 @@ import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
 
 import 'package:intl/intl.dart';
+import 'package:radar_qrcode_flutter/data/sources/local_data/local_data_client.dart';
 import 'package:sembast/sembast.dart';
 import 'test_data_instantiator.dart';
 
@@ -264,6 +265,45 @@ void main() {
       //THEN SHOULD EXPECT
       print(response.data);
       expect(response.data, isNotNull);
+    });
+  });
+
+  group("Address", () {
+    test("Province", () async {
+      //GIVEN THAT
+      LocalDataClient localDataClient = LocalDataClient();
+
+      //WHEN
+      Map<String, dynamic> result = await localDataClient.getProvince();
+
+      //THEN SHOULD EXPECT
+      print(result["RECORDS"]);
+      expect(result, isNotNull);
+    });
+
+    test("City or Municipality", () async {
+      //GIVEN THAT
+      LocalDataClient localDataClient = LocalDataClient();
+
+      //WHEN
+      Map<String, dynamic> result =
+          await localDataClient.getCityOrMunicipality();
+
+      //THEN SHOULD EXPECT
+      print(result);
+      expect(result, isNotNull);
+    });
+
+    test("Barangay", () async {
+      //GIVEN THAT
+      LocalDataClient localDataClient = LocalDataClient();
+
+      //WHEN
+      Map<String, dynamic> result = await localDataClient.getBarangay();
+
+      //THEN SHOULD EXPECT
+      print(result);
+      expect(result, isNotNull);
     });
   });
 }
