@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/logout_use_case.dart';
@@ -22,15 +23,22 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     NavigationEvent event,
   ) async* {
     if (event is OnLogout) {
-      await logoutUseCase.execute();
+      try {
+        await logoutUseCase.execute();
+      } catch (e) {
+        Logger().e(e);
+      }
       yield NavigationLogoutSuccess();
     } else if (event is OnNavigationLoad) {
-      Session session = await getSessionUseCase.execute();
-
-      if (session.user.role == "individual") {
-        yield NavigationCheckUserRole(true);
-      } else {
-        yield NavigationCheckUserRole(false);
+      try {
+        Session session = await getSessionUseCase.execute();
+        if (session.user.role == "individual") {
+          yield NavigationCheckUserRole(true);
+        } else {
+          yield NavigationCheckUserRole(false);
+        }
+      } catch (e) {
+        Logger().e(e);
       }
     }
   }

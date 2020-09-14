@@ -21,14 +21,6 @@ class SignInVerificationPage extends StatefulWidget {
 }
 
 class _SignInVerificationPageState extends State<SignInVerificationPage> {
-  SignInVerificationBloc _bloc;
-
-  @override
-  void initState() {
-    _bloc = SignInVerificationBloc();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     var mediaQD = MediaQuery.of(context);
@@ -68,20 +60,19 @@ class _SignInVerificationPageState extends State<SignInVerificationPage> {
     );
   }
 
-  @override
-  void dispose() {
-    _bloc.close();
-    super.dispose();
-  }
-
   Widget _buildCode(maxWidth) {
     return BlocConsumer<SignInVerificationBloc, SignInVerificationState>(
       listener: (context, state) {
+        if (state is SignInSuccess) {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            Navigator.of(context).pushReplacementNamed(state.route);
+          });
+        }
+
         if (state is SignInFailure) {
           ToastUtil.showToast(context, state.error);
         }
       },
-      cubit: _bloc,
       builder: (BuildContext context, SignInVerificationState state) {
         return SingleChildScrollView(
           child: Container(
@@ -106,9 +97,13 @@ class _SignInVerificationPageState extends State<SignInVerificationPage> {
                               if (_fourthDigit == null) {
                                 return;
                               }
-
-                              _bloc.onSignIn(widget.contactNumber,
-                                  "$_firstDigit$_secondDigit$_thirdDigit$_fourthDigit");
+                              BlocProvider.of<SignInVerificationBloc>(context)
+                                  .add(
+                                SignIn(
+                                    contactNumber: widget.contactNumber,
+                                    pin:
+                                        "$_firstDigit$_secondDigit$_thirdDigit$_fourthDigit"),
+                              );
                             }),
                         SizedBox(
                           height: 20,

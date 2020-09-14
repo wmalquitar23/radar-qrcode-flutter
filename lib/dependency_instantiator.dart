@@ -52,6 +52,7 @@ import 'data/repositories_impl/authentication_repository_impl.dart';
 import 'data/repositories_impl/profile_repository_impl.dart';
 import 'data/repositories_impl/transactions_repository_impl.dart';
 import 'domain/repositories/authentication_repository.dart';
+import 'presentation/bloc/sign_in_verification/sign_in_verification_bloc.dart';
 import 'presentation/bloc/splash/splash_bloc.dart';
 
 final sl = GetIt.instance;
@@ -122,6 +123,7 @@ class DataInstantiator extends RadarDataInstantiator {
         getProfileInformationUseCase:
             GetProfileInformationUseCase(profileRepository),
         networkInfo: NetworkInfoImpl(dataConnectionChecker),
+        getSessionUseCase: GetSessionUseCase(authenticationRepository),
       ),
     );
     sl.registerFactory<EstablishmentBloc>(
@@ -135,6 +137,7 @@ class DataInstantiator extends RadarDataInstantiator {
         listenForCheckInDataUseCase:
             ListenForCheckInDataUseCase(transactionRepository),
         networkInfo: NetworkInfoImpl(dataConnectionChecker),
+        getSessionUseCase: GetSessionUseCase(authenticationRepository),
       ),
     );
     sl.registerFactory<ProfileBloc>(
@@ -181,6 +184,12 @@ class DataInstantiator extends RadarDataInstantiator {
     sl.registerFactory<VerificationIdBloc>(() => VerificationIdBloc(
         uploadVerificationIdUseCase:
             UploadVerificationIdUseCase(profileRepository)));
+
+    sl.registerFactory<SignInVerificationBloc>(() => SignInVerificationBloc(
+          signInUseCase: SignInUseCase(authenticationRepository),
+          getProfileInformationUseCase:
+              GetProfileInformationUseCase(profileRepository),
+        ));
 
     //usecases
     GetIt.I.registerLazySingleton<RegisterIndividualUseCase>(
@@ -263,9 +272,6 @@ class DataInstantiator extends RadarDataInstantiator {
           );
         dio.interceptors.requestLock.unlock();
         return options; //continue
-      }, onError: (execption) {
-        print(execption);
-        throw Exception("Unknown error.");
       }),
     );
 

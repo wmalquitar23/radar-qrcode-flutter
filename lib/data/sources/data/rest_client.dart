@@ -31,7 +31,7 @@ class RestClient {
     Response response = await _dio.post("/register/otp/", data: {
       "contactNumber": otp,
     });
-    return StandardResponse.fromJson(response.data);
+    return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
   Future<StandardResponse> registerEstablishment(
@@ -39,7 +39,7 @@ class RestClient {
     Response response = await _dio.post("/register/establishment",
         data: registerEstablishmentRequest);
 
-    return StandardResponse.fromJson(response.data);
+    return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
   Future<StandardResponse> checkin(
@@ -49,26 +49,26 @@ class RestClient {
       "establishmentId": establishmentId
     });
 
-    return StandardResponse.fromJson(response.data);
+    return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
   Future<StandardResponse> getAllIndividuals() async {
     Response response = await _dio.get("/individuals");
 
-    return StandardResponse.fromJson(response.data);
+    return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
   Future<StandardResponse> getAllEstablishments() async {
     Response response = await _dio.get("/establishments");
 
-    return StandardResponse.fromJson(response.data);
+    return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
   Future<StandardResponse> login(String contactNumber, String pin) async {
     Response response = await _dio
         .post("/login", data: {"contactNumber": contactNumber, "pin": pin});
 
-    return StandardResponse.fromJson(response.data);
+    return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
   Future<StandardResponse> fileUpload(File file) async {
@@ -78,12 +78,12 @@ class RestClient {
       )
     });
     Response response = await _dio.post("/file/upload", data: data);
-    return StandardResponse.fromJson(response.data);
+    return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
   Future<StandardResponse> submitRequirements(dynamic data) async {
     Response response = await _dio.post("/requirements", data: data);
-    return StandardResponse.fromJson(response.data);
+    return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
   Future<StandardResponse> downloadfile(String file) async {
@@ -113,7 +113,6 @@ class RestClient {
 
   Future<StandardResponse> getProfileInfo() async {
     Response response = await _dio.get("/profile");
-    print(response);
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }

@@ -11,6 +11,8 @@ class NavigationInitial extends NavigationState {}
 
 class NavigationLogoutSuccess extends NavigationState {}
 
+class NavigationIdle extends NavigationState {}
+
 class NavigationCheckUserRole extends NavigationState {
   
   final bool isIndividual;

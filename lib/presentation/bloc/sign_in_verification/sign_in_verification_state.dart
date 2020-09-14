@@ -11,6 +11,15 @@ class SignInVerificationInitial extends SignInVerificationState {}
 
 class ButtonLoading extends SignInVerificationState {}
 
+class SignInSuccess extends SignInVerificationState {
+  final String route;
+
+  SignInSuccess({this.route});
+
+  @override
+  List<Object> get props => [route];
+}
+
 class SignInFailure extends SignInVerificationState {
   final String error;
 

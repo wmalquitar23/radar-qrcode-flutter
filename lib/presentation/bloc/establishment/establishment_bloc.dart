@@ -11,6 +11,7 @@ import 'package:radar_qrcode_flutter/data/models/check_in.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_checkin_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/sync_data_use_case.dart';
@@ -26,15 +27,17 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
   final SyncDataUseCase syncDataUseCase;
   final ListenForCheckInDataUseCase listenForCheckInDataUseCase;
   final NetworkInfoImpl networkInfo;
+  final GetSessionUseCase getSessionUseCase;
 
-  EstablishmentBloc(
-      {this.listenForSessionUseCase,
-      this.uploadProfileImageUseCase,
-      this.getProfileInformationUseCase,
-      this.syncDataUseCase,
-      this.listenForCheckInDataUseCase,
-      this.networkInfo})
-      : super(EstablishmentInitial());
+  EstablishmentBloc({
+    this.listenForSessionUseCase,
+    this.uploadProfileImageUseCase,
+    this.getProfileInformationUseCase,
+    this.syncDataUseCase,
+    this.listenForCheckInDataUseCase,
+    this.networkInfo,
+    this.getSessionUseCase,
+  }) : super(EstablishmentInitial());
 
   StreamSubscription<Session> _sessionSubscription;
   StreamSubscription<List<CheckIn>> _checkInSubscription;
@@ -49,7 +52,6 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
         state,
         establishmentGetUserProgress: true,
       );
-      
 
       _sessionSubscription?.cancel();
       _checkInSubscription?.cancel();
@@ -57,16 +59,21 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
       _sessionSubscription = listenForSessionUseCase.stream().listen((session) {
         _checkInSubscription =
             listenForCheckInDataUseCase.stream().listen((listCheckIn) {
-          add(GetUserData(user: session.user, checkIn: listCheckIn));
+          add(GetUserData(checkIn: listCheckIn));
         });
       });
     } else if (event is GetUserData) {
-      yield EstablishmentState.copyWith(
-        state,
-        establishmentGetUserProgress: false,
-        user: event.user,
-        localCheckInData: event.checkIn,
-      );
+      Session session = await getSessionUseCase.execute();
+      if (session?.token != null) {
+        yield EstablishmentState.copyWith(
+          state,
+          establishmentGetUserProgress: false,
+          user: session?.user,
+          localCheckInData: event.checkIn,
+        );
+      } else {
+        _sessionSubscription?.cancel();
+      }
     }
 
     if (event is ProfileImageOnUpload) {
@@ -103,8 +110,7 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
         if (await networkInfo.isConnected()) {
           await syncDataUseCase.execute();
         } else {
-          throw Exception(
-              "Connect to the internet to upload local data.");
+          throw Exception("Connect to the internet to upload local data.");
         }
       } on DioError catch (e) {
         String errorhandler = ErrorHandler().dioErrorHandler(e);

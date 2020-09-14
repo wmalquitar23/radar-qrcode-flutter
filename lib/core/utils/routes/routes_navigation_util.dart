@@ -9,6 +9,7 @@ import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishme
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/sign_in_verification/sign_in_verification_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/upload_id/upload_id_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/user_details/user_details_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
@@ -160,7 +161,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case SIGN_IN_VERIFICATION_ROUTE:
       return pushNamed(
-          page: SignInVerificationPage(contactNumber: settings.arguments),
+          page: BlocProvider(
+            create: (_) => sl<SignInVerificationBloc>(),
+            child: SignInVerificationPage(contactNumber: settings.arguments),
+          ),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);
       break;

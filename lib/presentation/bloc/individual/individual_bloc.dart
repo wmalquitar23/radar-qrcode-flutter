@@ -10,6 +10,7 @@ import 'package:radar_qrcode_flutter/core/utils/strings/error_handler.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
 
 part 'individual_event.dart';
@@ -19,11 +20,13 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
   final ListenForSessionUseCase listenForSessionUseCase;
   final GetProfileInformationUseCase getProfileInformationUseCase;
   final NetworkInfoImpl networkInfo;
-  IndividualBloc(
-      {this.listenForSessionUseCase,
-      this.getProfileInformationUseCase,
-      this.networkInfo})
-      : super(IndividualInitial());
+  final GetSessionUseCase getSessionUseCase;
+  IndividualBloc({
+    this.listenForSessionUseCase,
+    this.getProfileInformationUseCase,
+    this.networkInfo,
+    this.getSessionUseCase,
+  }) : super(IndividualInitial());
 
   StreamSubscription<Session> _sessionSubscription;
   @override
@@ -38,17 +41,22 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
       _sessionSubscription?.cancel();
 
       _sessionSubscription = listenForSessionUseCase.stream().listen((session) {
-        add(GetUserData(user: session.user));
+        add(GetUserData());
       });
     } else if (event is GetUserData) {
-      String result = qrCodeObject(event?.user);
-      var encrypted = await encryptAESCryptoJS(result);
-      yield IndividualState.copyWith(
-        state,
-        individualGetuserProgress: false,
-        individualGetUserSuccess:
-            IndividualGetUserSuccess(user: event.user, jsonQrCode: encrypted),
-      );
+      Session session = await getSessionUseCase.execute();
+      if (session?.token != null) {
+        String result = qrCodeObject(session?.user);
+        var encrypted = await encryptAESCryptoJS(result);
+        yield IndividualState.copyWith(
+          state,
+          individualGetuserProgress: false,
+          individualGetUserSuccess: IndividualGetUserSuccess(
+              user: session.user, jsonQrCode: encrypted),
+        );
+      } else {
+        _sessionSubscription?.cancel();
+      }
     }
 
     if (event is OnRefresh) {
@@ -82,5 +90,11 @@ class IndividualBloc extends Bloc<IndividualEvent, IndividualState> {
         );
       }
     }
+  }
+
+  @override
+  Future<void> close() {
+    _sessionSubscription?.cancel();
+    return super.close();
   }
 }

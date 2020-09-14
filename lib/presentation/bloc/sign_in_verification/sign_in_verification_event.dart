@@ -10,8 +10,14 @@ abstract class SignInVerificationEvent extends Equatable {
 class IsFetching extends SignInVerificationEvent {}
 
 class SignIn extends SignInVerificationEvent {
-  const SignIn({this.contactNumber, this.pin});
-
   final String contactNumber;
   final String pin;
+
+  const SignIn({
+    this.contactNumber,
+    this.pin,
+  });
+
+  @override
+  List<Object> get props => [contactNumber, pin];
 }

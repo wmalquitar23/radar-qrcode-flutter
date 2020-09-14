@@ -7,7 +7,6 @@ import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/authentication_repository.dart';
 import 'package:sembast/sembast.dart';
-import 'package:sembast/sembast_io.dart';
 import 'package:intl/intl.dart';
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
@@ -26,7 +25,6 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
   @override
   Future<void> logout() async {
-    await databaseFactoryIo.deleteDatabase(db.path);
     await sessionDb?.deleteAll();
   }
 
@@ -73,7 +71,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   ) async {
     registerQueueDb.save(
       {
-        "name": establishmentName,
+        "firstname": establishmentName,
         "pin": pin,
         "contactNumber": contactNumber,
         "address": {"name": address},
