@@ -79,6 +79,12 @@ class _VerificationPageState extends State<VerificationPage> {
     );
   }
 
+  void _onResendPressed() {
+    BlocProvider.of<VerificationBloc>(context).add(
+      OnResendPressed(mobileNumber: widget.contactNumber),
+    );
+  }
+
   Widget _buildCode(maxWidth) {
     return BlocBuilder<VerificationBloc, VerificationState>(
       builder: (context, state) {
@@ -117,10 +123,30 @@ class _VerificationPageState extends State<VerificationPage> {
                             title: "I didn\'t receive the code. ",
                             color: ColorUtil.primaryTextColor,
                           ),
-                          DescriptionText(
-                            title: "Resend",
-                            color: ColorUtil.primaryColor,
-                          ),
+                          BlocBuilder<VerificationBloc, VerificationState>(
+                              builder: (context, state) {
+                            bool isEnableResend = true;
+
+                            if (state is ResendOnCoolDown) {
+                              isEnableResend = false;
+                            }
+
+                            if (state is ResendReady) {
+                              isEnableResend = true;
+                            }
+
+                            return GestureDetector(
+                              onTap: isEnableResend
+                                  ? () => _onResendPressed()
+                                  : null,
+                              child: DescriptionText(
+                                title: "Resend",
+                                color: isEnableResend
+                                    ? ColorUtil.primaryColor
+                                    : Colors.grey,
+                              ),
+                            );
+                          }),
                         ],
                       ),
                       SizedBox(

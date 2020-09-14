@@ -33,4 +33,6 @@ abstract class AuthenticationRepository {
   Future<void> signIn(String contactNumber, String pin);
 
   Future<bool> verifyMobileNumber(String mobileNumber);
+
+  Future<void> resendOTP(String mobileNumber);
 }

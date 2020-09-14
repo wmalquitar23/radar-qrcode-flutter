@@ -178,7 +178,11 @@ class _EstablishmentBasicInformationPageState
           EstablishmentBasicInformationState>(
         listener: (context, state) {
           if (state is RegisterDone) {
-            Navigator.pushNamed(context, VERIFICATION_CODE_ROUTE);
+            Navigator.pushNamed(
+              context,
+              VERIFICATION_CODE_ROUTE,
+              arguments: _contactNumberController.text,
+            );
           }
           if (state is RegisterFailure) {
             ToastUtil.showToast(context, state.error);

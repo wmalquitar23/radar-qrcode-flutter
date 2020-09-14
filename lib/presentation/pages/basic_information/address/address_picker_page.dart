@@ -180,7 +180,6 @@ class _AddressPickerPageState extends State<AddressPickerPage> {
             state is AddressPickerIsDoneSearching) {
           _setAddressList(state.addressList);
         }
-
         return Expanded(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -232,6 +231,13 @@ class _AddressPickerPageState extends State<AddressPickerPage> {
           "desc": city.citymunDesc,
           "isSelected":
               city.citymunCode == (_previousSelection as City)?.citymunCode,
+        };
+
+        selectAddress = () {
+          Navigator.pop(
+            context,
+            city,
+          );
         };
 
         selectAddress = () {

@@ -12,3 +12,8 @@ class OnContinueButtonPressed extends VerificationEvent {
 
   OnContinueButtonPressed({this.otp});
 }
+
+class OnResendPressed extends VerificationEvent {
+  final String mobileNumber;
+  OnResendPressed({@required this.mobileNumber});
+}

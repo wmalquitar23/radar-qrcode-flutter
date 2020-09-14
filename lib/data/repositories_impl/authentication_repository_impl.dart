@@ -120,4 +120,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         await restClient.verifyMobileNumber(mobileNumber);
     return verificationResult.data;
   }
+
+  @override
+  Future<void> resendOTP(String mobileNumber) async {
+    await restClient.otpMobileNumber(mobileNumber);
+  }
 }

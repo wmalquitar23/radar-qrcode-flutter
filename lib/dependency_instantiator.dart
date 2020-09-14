@@ -20,6 +20,7 @@ import 'package:radar_qrcode_flutter/domain/usecases/logout_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/otp_verification_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_establishment_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/resend_otp_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/sync_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/update_pin_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/upload_profile_image_use_case.dart';
@@ -111,6 +112,7 @@ class DataInstantiator extends RadarDataInstantiator {
       () => VerificationBloc(
         otpVerificationUseCase:
             OtpVerificationUseCase(authenticationRepository),
+        resendOTPUseCase: ResendOTPUseCase(authenticationRepository),
       ),
     );
     sl.registerFactory<IndividualBloc>(
@@ -209,6 +211,8 @@ class DataInstantiator extends RadarDataInstantiator {
         () => ListenForCheckInDataUseCase(transactionRepository));
     GetIt.I.registerLazySingleton<GetAddressUseCase>(
         () => GetAddressUseCase(addressRepository));
+    GetIt.I.registerLazySingleton<ResendOTPUseCase>(
+        () => ResendOTPUseCase(authenticationRepository));
 
     //repositories
     GetIt.I
@@ -243,30 +247,26 @@ class DataInstantiator extends RadarDataInstantiator {
       validateStatus: (status) {
         return status < 500;
       },
-      
     );
 
     Dio dio = Dio(options);
     dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (Options options) async {
-          SessionDb sessionDb = SessionDb(database);
-          dio.interceptors.requestLock.lock();
-          Session currentSession = await sessionDb.getCurrentSession();
-          if (currentSession?.token != null)
-            options.headers.addAll(
-              {
-                "Authorization": "Bearer ${currentSession.token}",
-              },
-            );
-          dio.interceptors.requestLock.unlock();
-          return options; //continue
-        },
-        onError: (execption){
-          print(execption);
-          throw Exception("Unknown error.");
-        }
-      ),
+      InterceptorsWrapper(onRequest: (Options options) async {
+        SessionDb sessionDb = SessionDb(database);
+        dio.interceptors.requestLock.lock();
+        Session currentSession = await sessionDb.getCurrentSession();
+        if (currentSession?.token != null)
+          options.headers.addAll(
+            {
+              "Authorization": "Bearer ${currentSession.token}",
+            },
+          );
+        dio.interceptors.requestLock.unlock();
+        return options; //continue
+      }, onError: (execption) {
+        print(execption);
+        throw Exception("Unknown error.");
+      }),
     );
 
     return dio;

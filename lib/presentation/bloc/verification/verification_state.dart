@@ -24,3 +24,7 @@ class VerificationFailure extends VerificationState {
 }
 
 class VerificationSuccess extends VerificationState {}
+
+class ResendReady extends VerificationState {}
+
+class ResendOnCoolDown extends VerificationState {}
