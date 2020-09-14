@@ -53,4 +53,21 @@ class ProfileRepositoryImpl extends ProfileRepository {
     Session session = await getCurrentSession();
     await restClient.changePin(oldPin, newPin, session.user.id);
   }
+
+  @override
+  Future<bool> uploadVerificationId(File file) async {
+    Map<String, String> env = await loadEnvFile();
+    StandardResponse response = await restClient.fileUpload(file);
+    Session session = await getCurrentSession();
+    StandardResponse submitResponse = await restClient.submitRequirements({
+      "userId": session.user.id,
+      "fileUrl": env['API_URL'] + response.data['url']
+    });
+    print("response " + submitResponse.message.toString());
+    if (submitResponse.message == 'success') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

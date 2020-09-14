@@ -1,14 +1,26 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:radar_qrcode_flutter/core/utils/image/image.utils.dart';
+import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/verification_identity/bloc/verification_id_bloc.dart';
 
 import '../../../core/utils/color_util.dart';
-import '../../../core/utils/routes/routes_list.dart';
 import '../../widgets/bar/custom_regular_app_bar_v2.dart';
 import '../../widgets/buttons/primary_button_widget.dart';
 import '../../widgets/pages/mobile_status_margin_top.dart';
 import '../../widgets/texts/description_text.dart';
 import '../../widgets/texts/header_text.dart';
 
-class IdentityVerificationPage extends StatelessWidget {
+class IdentityVerificationPage extends StatefulWidget {
+  @override
+  _IdentityVerificationPageState createState() =>
+      _IdentityVerificationPageState();
+}
+
+class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
   @override
   Widget build(BuildContext context) {
     return MobileStatusMarginTop(
@@ -69,8 +81,39 @@ class IdentityVerificationPage extends StatelessWidget {
       margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 40),
       child: PrimaryButton(
         text: "GET STARTED",
-        onPressed: () => Navigator.of(context).pushNamed(DUMMY_CAMERA_VIEW_ROUTE),
+        onPressed: () {
+          uploadID();
+        },
       ),
+    );
+  }
+
+  void uploadID() {
+    ImageUtils.pickImage(
+      context,
+      (File file) async {
+        File croppedFile = await ImageCropper.cropImage(
+            sourcePath: file.path,
+            cropStyle: CropStyle.rectangle,
+            aspectRatioPresets: [CropAspectRatioPreset.ratio16x9],
+            androidUiSettings: AndroidUiSettings(
+                toolbarTitle: "Select Verification ID",
+                hideBottomControls: true,
+                showCropGrid: true,
+                toolbarColor: ColorUtil.primaryColor,
+                toolbarWidgetColor: Colors.white,
+                initAspectRatio: CropAspectRatioPreset.ratio16x9,
+                lockAspectRatio: true),
+            iosUiSettings: IOSUiSettings(
+                minimumAspectRatio: 1.0,
+                aspectRatioLockEnabled: true,
+                aspectRatioPickerButtonHidden: true,
+                title: "Select Verification ID"));
+
+        Navigator.pushNamed(context, UPLOAD_ID_ROUTE, arguments: croppedFile);
+      },
+      maxWidth: 1024,
+      maxHeight: 512,
     );
   }
 }

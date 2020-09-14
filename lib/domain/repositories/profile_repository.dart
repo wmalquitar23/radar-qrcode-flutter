@@ -12,4 +12,6 @@ abstract class ProfileRepository {
   Future<void> updateUser(dynamic data);
 
   Future<void> changePin(String oldPin, String newPin);
+
+  Future<bool> uploadVerificationId(File file);
 }

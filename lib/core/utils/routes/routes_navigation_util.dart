@@ -9,6 +9,7 @@ import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishme
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/upload_id/upload_id_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/user_details/user_details_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
@@ -171,7 +172,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case UPLOAD_ID_ROUTE:
       return pushNamed(
-          page: UploadIDPage(),
+          page: BlocProvider(
+            create: (_) => sl<UploadIdBloc>(),
+            child: UploadIDPage(
+              selectedImage: args,
+            ),
+          ),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);
       break;

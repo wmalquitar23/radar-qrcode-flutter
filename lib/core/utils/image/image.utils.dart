@@ -23,15 +23,21 @@ class ImageUtils {
               imageQuality: imageQuality,
               maxHeight: maxHeight,
               maxWidth: maxWidth);
-          onFilePicked(File(picker.path));
+
+          if (picker != null) {
+            onFilePicked(File(picker.path));
+          }
         }, leading: Icon(Icons.photo_library), popAutomatically: true),
         ActionSheet("Camera", () async {
           PickedFile picker = await ImagePicker().getImage(
-              source: ImageSource.gallery,
+              source: ImageSource.camera,
               imageQuality: imageQuality,
               maxHeight: maxHeight,
               maxWidth: maxWidth);
-          onFilePicked(File(picker.path));
+
+          if (picker != null) {
+            onFilePicked(File(picker.path));
+          }
         }, leading: Icon(Icons.camera), popAutomatically: true),
       ],
     );

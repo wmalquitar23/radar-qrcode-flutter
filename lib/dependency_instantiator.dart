@@ -23,6 +23,7 @@ import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_cas
 import 'package:radar_qrcode_flutter/domain/usecases/sync_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/update_pin_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/upload_profile_image_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/upload_verification_id.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/address_picker/address_picker_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/change_pin/change_pin_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
@@ -34,9 +35,11 @@ import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individ
 import 'package:radar_qrcode_flutter/presentation/bloc/profile/profile_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/upload_id/upload_id_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/user_details/user_details_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/navigation/navigation_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/verification_identity/bloc/verification_id_bloc.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:path/path.dart';
@@ -170,6 +173,12 @@ class DataInstantiator extends RadarDataInstantiator {
         getAddressUseCase: GetAddressUseCase(addressRepository),
       ),
     );
+    sl.registerFactory<UploadIdBloc>(
+      () => UploadIdBloc(),
+    );
+    sl.registerFactory<VerificationIdBloc>(() => VerificationIdBloc(
+        uploadVerificationIdUseCase:
+            UploadVerificationIdUseCase(profileRepository)));
 
     //usecases
     GetIt.I.registerLazySingleton<RegisterIndividualUseCase>(
@@ -190,6 +199,8 @@ class DataInstantiator extends RadarDataInstantiator {
         () => UpdatePINUseCase(profileRepository));
     GetIt.I.registerLazySingleton<LogoutUseCase>(
         () => LogoutUseCase(authenticationRepository));
+    GetIt.I.registerLazySingleton<UploadVerificationIdUseCase>(
+        () => UploadVerificationIdUseCase(profileRepository));
     GetIt.I.registerLazySingleton<CheckInUseCase>(
         () => CheckInUseCase(transactionRepository));
     GetIt.I.registerLazySingleton<SyncDataUseCase>(

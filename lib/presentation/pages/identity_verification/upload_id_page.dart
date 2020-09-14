@@ -1,4 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:radar_qrcode_flutter/core/utils/image/image.utils.dart';
+import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
+import 'package:radar_qrcode_flutter/dependency_instantiator.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/upload_id/upload_id_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/verification_identity/bloc/verification_id_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/dialogs/custom_alert_dialog.dart';
 
 import '../../../core/utils/color_util.dart';
 import '../../../core/utils/routes/routes_list.dart';
@@ -8,30 +18,81 @@ import '../../widgets/buttons/secondary_button.dart';
 import '../../widgets/pages/mobile_status_margin_top.dart';
 import '../../widgets/texts/header_text.dart';
 
-class UploadIDPage extends StatelessWidget {
+class UploadIDPage extends StatefulWidget {
+  final File selectedImage;
+
+  const UploadIDPage({Key key, this.selectedImage}) : super(key: key);
+  @override
+  _UploadIDPageState createState() => _UploadIDPageState();
+}
+
+class _UploadIDPageState extends State<UploadIDPage> {
   @override
   Widget build(BuildContext context) {
-    return MobileStatusMarginTop(
-      child: CustomRegularAppBar(
-        backgroundColor: Colors.transparent,
-        title: "Upload ID",
-        body: Container(
-          margin: EdgeInsets.symmetric(horizontal: 25.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _buildIDSection(),
-              _buildTakeAnotherPhotoButton(context),
-              _buildGuidelines(),
-              _buildUploadButton(context),
-            ],
+    return BlocProvider(
+      create: (_) => sl<VerificationIdBloc>(),
+      child: MobileStatusMarginTop(
+          child: Stack(
+        alignment: Alignment.center,
+        children: [
+          CustomRegularAppBar(
+            backgroundColor: Colors.transparent,
+            title: "Upload ID",
+            body: BlocConsumer<UploadIdBloc, UploadIdState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                if (state is UploadIdInitial) {
+                  BlocProvider.of<UploadIdBloc>(context).add(
+                    UploadIDOnView(widget.selectedImage),
+                  );
+                }
+                if (state.selectedImage != null) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _buildIDSection(state.selectedImage),
+                        _buildTakeAnotherPhotoButton(context),
+                        _buildGuidelines(),
+                        _buildUploadButton(context, state.selectedImage),
+                      ],
+                    ),
+                  );
+                }
+                return Container();
+              },
+            ),
           ),
-        ),
-      ),
+          BlocConsumer<VerificationIdBloc, VerificationIdState>(
+            listener: (context, state) {
+              if (state is VerificationIdUploadingImageSuccess) {
+                Navigator.of(context).pushNamed(UPLOAD_ID_RESULT_ROUTE);
+              }
+            },
+            builder: (context, state) {
+              if (state is VerificationIdUploadingImageLoading) {
+                return CircularProgressIndicator();
+              } else if (state is VerificationIdUploadingImageFailure) {
+                return CustomAlertDialog(
+                  title: "Uploading Id Failed",
+                  message: state.error,
+                  onPostivePressed: () {
+                    Navigator.pop(context);
+                  },
+                  positiveBtnText: 'ok',
+                );
+              } else {
+                return Container();
+              }
+            },
+          )
+        ],
+      )),
     );
   }
 
-  Widget _buildIDSection() {
+  Widget _buildIDSection(File selectedImage) {
     return Container(
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.all(10),
@@ -39,10 +100,45 @@ class UploadIDPage extends StatelessWidget {
         border: Border.all(color: Color(0xFFD6D6D6)),
         color: Color(0xFFEFF1F3),
       ),
-      child: Image.asset(
-        'assets/images/undraw/sample-id.png',
-        fit: BoxFit.cover,
-      ),
+      child: selectedImage == null
+          ? Container()
+          : Container(
+              child: AspectRatio(
+                aspectRatio: 300 / 200,
+                child: Image.file(selectedImage),
+              ),
+            ),
+    );
+  }
+
+  void uploadID() {
+    ImageUtils.pickImage(
+      context,
+      (File file) async {
+        File croppedFile = await ImageCropper.cropImage(
+            sourcePath: file.path,
+            cropStyle: CropStyle.rectangle,
+            aspectRatioPresets: [CropAspectRatioPreset.ratio16x9],
+            androidUiSettings: AndroidUiSettings(
+                toolbarTitle: "Change Profile Image",
+                hideBottomControls: true,
+                showCropGrid: true,
+                toolbarColor: ColorUtil.primaryColor,
+                toolbarWidgetColor: Colors.white,
+                initAspectRatio: CropAspectRatioPreset.ratio16x9,
+                lockAspectRatio: true),
+            iosUiSettings: IOSUiSettings(
+                minimumAspectRatio: 1.0,
+                aspectRatioLockEnabled: true,
+                aspectRatioPickerButtonHidden: true,
+                title: "Profile Image"));
+
+        BlocProvider.of<UploadIdBloc>(context).add(
+          UploadIDOnView(croppedFile),
+        );
+      },
+      maxWidth: 1024,
+      maxHeight: 512,
     );
   }
 
@@ -55,8 +151,9 @@ class UploadIDPage extends StatelessWidget {
         height: 30,
         width: 170,
         radius: 12,
-        onPressed: () =>
-            Navigator.of(context).pushNamed(DUMMY_CAMERA_VIEW_ROUTE),
+        onPressed: () {
+          uploadID();
+        },
       ),
     );
   }
@@ -105,13 +202,16 @@ class UploadIDPage extends StatelessWidget {
     );
   }
 
-  Widget _buildUploadButton(BuildContext context) {
+  Widget _buildUploadButton(BuildContext context, File passedImage) {
     return Container(
       margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 40),
       child: PrimaryButton(
           text: "UPLOAD",
-          onPressed: () =>
-              Navigator.of(context).pushNamed(UPLOAD_ID_RESULT_ROUTE)),
+          onPressed: () {
+            print("printing" + passedImage.toString());
+            BlocProvider.of<VerificationIdBloc>(context)
+                .add(VerificationIdOnUpload(passedImage));
+          }),
     );
   }
 }

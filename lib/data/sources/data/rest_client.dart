@@ -81,6 +81,11 @@ class RestClient {
     return StandardResponse.fromJson(response.data);
   }
 
+  Future<StandardResponse> submitRequirements(dynamic data) async {
+    Response response = await _dio.post("/requirements", data: data);
+    return StandardResponse.fromJson(response.data);
+  }
+
   Future<StandardResponse> downloadfile(String file) async {
     Response response = await _dio.get("/file/$file");
 
