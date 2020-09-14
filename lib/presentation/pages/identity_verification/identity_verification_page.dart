@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:radar_qrcode_flutter/core/utils/image/image.utils.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
-import 'package:radar_qrcode_flutter/presentation/bloc/verification_identity/bloc/verification_id_bloc.dart';
 
 import '../../../core/utils/color_util.dart';
 import '../../widgets/bar/custom_regular_app_bar_v2.dart';
