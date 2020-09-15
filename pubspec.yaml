@@ -45,6 +45,7 @@ dependencies:
   tuple: ^1.0.3
   flutter_launcher_icons: ^0.7.5
   data_connection_checker: ^0.3.4
+  vibration: ^1.5.0
 
   # charlou
   relative_scale: 1.0.8

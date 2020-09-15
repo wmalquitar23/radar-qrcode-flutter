@@ -12,6 +12,7 @@ import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button
 import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
+import 'package:vibration/vibration.dart';
 
 class VerificationPage extends StatefulWidget {
   final String contactNumber;
@@ -25,7 +26,7 @@ class _VerificationPageState extends State<VerificationPage> {
   int _duration = 30;
   bool _isEnableResend = true;
 
-  int _currentDigit,
+  String _currentDigit,
       _firstDigit,
       _secondDigit,
       _thirdDigit,
@@ -125,11 +126,8 @@ class _VerificationPageState extends State<VerificationPage> {
   }
 
   Widget _buildCode(maxWidth) {
-    return BlocBuilder<VerificationBloc, VerificationState>(
-      builder: (context, state) {
-        if (state is VerificationFailure) {
-          ToastUtil.showToast(context, state.error);
-        }
+    return BlocConsumer<VerificationBloc, VerificationState>(
+      listener: (context, state) {
         if (state is VerificationSuccess) {
           SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.of(context).pushReplacementNamed(
@@ -138,8 +136,17 @@ class _VerificationPageState extends State<VerificationPage> {
           });
         }
         if (state is VerificationFailure) {
+          Vibration.vibrate(duration: 500);
+          _firstDigit = null;
+          _secondDigit = null;
+          _thirdDigit = null;
+          _fourthDigit = null;
+          _fifthDigit = null;
+          _sixthDigit = null;
           ToastUtil.showToast(context, state.error);
         }
+      },
+      builder: (context, state) {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: ConstrainedBox(
@@ -246,7 +253,7 @@ class _VerificationPageState extends State<VerificationPage> {
     );
   }
 
-  void _setCurrentDigit(int i, maxWidth) {
+  void _setCurrentDigit(String i, maxWidth) {
     setState(() {
       _currentDigit = i;
       if (_firstDigit == null) {
@@ -277,17 +284,17 @@ class _VerificationPageState extends State<VerificationPage> {
                   _otpKeyboardInputButton(
                       label: "1",
                       onPressed: () {
-                        _setCurrentDigit(1, maxWidth);
+                        _setCurrentDigit("1", maxWidth);
                       }),
                   _otpKeyboardInputButton(
                       label: "2",
                       onPressed: () {
-                        _setCurrentDigit(2, maxWidth);
+                        _setCurrentDigit("2", maxWidth);
                       }),
                   _otpKeyboardInputButton(
                       label: "3",
                       onPressed: () {
-                        _setCurrentDigit(3, maxWidth);
+                        _setCurrentDigit("3", maxWidth);
                       }),
                 ],
               ),
@@ -299,17 +306,17 @@ class _VerificationPageState extends State<VerificationPage> {
                   _otpKeyboardInputButton(
                       label: "4",
                       onPressed: () {
-                        _setCurrentDigit(4, maxWidth);
+                        _setCurrentDigit("4", maxWidth);
                       }),
                   _otpKeyboardInputButton(
                       label: "5",
                       onPressed: () {
-                        _setCurrentDigit(5, maxWidth);
+                        _setCurrentDigit("5", maxWidth);
                       }),
                   _otpKeyboardInputButton(
                       label: "6",
                       onPressed: () {
-                        _setCurrentDigit(6, maxWidth);
+                        _setCurrentDigit("6", maxWidth);
                       }),
                 ],
               ),
@@ -321,17 +328,17 @@ class _VerificationPageState extends State<VerificationPage> {
                   _otpKeyboardInputButton(
                       label: "7",
                       onPressed: () {
-                        _setCurrentDigit(7, maxWidth);
+                        _setCurrentDigit("7", maxWidth);
                       }),
                   _otpKeyboardInputButton(
                       label: "8",
                       onPressed: () {
-                        _setCurrentDigit(8, maxWidth);
+                        _setCurrentDigit("8", maxWidth);
                       }),
                   _otpKeyboardInputButton(
                       label: "9",
                       onPressed: () {
-                        _setCurrentDigit(9, maxWidth);
+                        _setCurrentDigit("9", maxWidth);
                       }),
                 ],
               ),
@@ -346,7 +353,7 @@ class _VerificationPageState extends State<VerificationPage> {
                   _otpKeyboardInputButton(
                       label: "0",
                       onPressed: () {
-                        _setCurrentDigit(0, maxWidth);
+                        _setCurrentDigit("0", maxWidth);
                       }),
                   _otpKeyboardActionButton(
                       label: new Icon(
@@ -394,7 +401,7 @@ class _VerificationPageState extends State<VerificationPage> {
     );
   }
 
-  Widget _buildOtpTextField(int digit) {
+  Widget _buildOtpTextField(String digit) {
     return digit != null
         ? _otpField(digit)
         : ShadowWidget(
@@ -403,7 +410,7 @@ class _VerificationPageState extends State<VerificationPage> {
           );
   }
 
-  Widget _otpField(int digit) {
+  Widget _otpField(String digit) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5),
       height: 45,
