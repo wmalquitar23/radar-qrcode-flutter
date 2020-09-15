@@ -28,80 +28,103 @@ class EstablishmentHomePage extends StatefulWidget {
 }
 
 class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
+  final _snackBarDuration = Duration(seconds: 2);
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  DateTime _currentBackPressTime;
+
   TextEditingController _addressController = TextEditingController();
   TextEditingController _contactNumberController = TextEditingController();
 
   String _imageUrl;
+
   void _onLoad() async {
     BlocProvider.of<EstablishmentBloc>(context).add(
       EstablishmentOnLoad(),
     );
   }
 
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (_currentBackPressTime == null ||
+        now.difference(_currentBackPressTime) > _snackBarDuration) {
+      _currentBackPressTime = now;
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text("Press Back again to quit the App."),
+        duration: _snackBarDuration,
+      ));
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    return RefreshIndicator(
-      onRefresh: () async {
-        BlocProvider.of<EstablishmentBloc>(context).add(
-          OnRefresh(),
-        );
-      },
-      child: MobileStatusMarginTop(
-        child: Scaffold(
-          body: BlocConsumer<EstablishmentBloc, EstablishmentState>(
-            listener: (context, state) {
-              if (state.syncDataFailureMessage != null) {
-                ToastUtil.showToast(context, state.syncDataFailureMessage);
-              }
-              if (state.establishementGetUserSuccessMessage != null) {
-                ToastUtil.showToast(
-                    context, state.establishementGetUserSuccessMessage);
-              }
-            },
-            builder: (context, state) {
-              if (state is EstablishmentInitial) {
-                _onLoad();
-              }
-              if (state.user != null) {
-                _imageUrl = state?.user?.profileImageUrl;
-                _addressController.text = state?.user?.address;
-                _contactNumberController.text = state?.user?.contactNumber;
-              }
-              if (state.user != null) {
-                return SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child: Stack(
-                    children: [
-                      Container(
-                        height: screenSize.height * 0.66,
-                        decoration: BoxDecoration(
-                          color: ColorUtil.primaryColor,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(34.0),
-                              bottomRight: Radius.circular(34.0)),
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          BlocProvider.of<EstablishmentBloc>(context).add(
+            OnRefresh(),
+          );
+        },
+        child: MobileStatusMarginTop(
+          child: Scaffold(
+            key: _scaffoldKey,
+            body: BlocConsumer<EstablishmentBloc, EstablishmentState>(
+              listener: (context, state) {
+                if (state.syncDataFailureMessage != null) {
+                  ToastUtil.showToast(context, state.syncDataFailureMessage);
+                }
+                if (state.establishementGetUserSuccessMessage != null) {
+                  ToastUtil.showToast(
+                      context, state.establishementGetUserSuccessMessage);
+                }
+              },
+              builder: (context, state) {
+                if (state is EstablishmentInitial) {
+                  _onLoad();
+                }
+                if (state.user != null) {
+                  _imageUrl = state?.user?.profileImageUrl;
+                  _addressController.text = state?.user?.address;
+                  _contactNumberController.text = state?.user?.contactNumber;
+                }
+                if (state.user != null) {
+                  return SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: screenSize.height * 0.66,
+                          decoration: BoxDecoration(
+                            color: ColorUtil.primaryColor,
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(34.0),
+                                bottomRight: Radius.circular(34.0)),
+                          ),
                         ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          state.user != null ? _buildAppBar() : Container(),
-                          state.user != null
-                              ? _buildEstablishmentDetails(
-                                  state.user, state.localCheckInData, state)
-                              : Container(),
-                          state.user != null ? _buildHint() : Container(),
-                          state.user != null
-                              ? _buildScanQRCodeButton()
-                              : Container(),
-                        ],
-                      )
-                    ],
-                  ),
-                );
-              }
-              return Container();
-            },
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            state.user != null ? _buildAppBar() : Container(),
+                            state.user != null
+                                ? _buildEstablishmentDetails(
+                                    state.user, state.localCheckInData, state)
+                                : Container(),
+                            state.user != null ? _buildHint() : Container(),
+                            state.user != null
+                                ? _buildScanQRCodeButton()
+                                : Container(),
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                }
+                return Container();
+              },
+            ),
           ),
         ),
       ),

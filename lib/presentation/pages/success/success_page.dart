@@ -27,7 +27,8 @@ class _SuccessPageState extends State<SuccessPage> {
             if (state is GoToRouteState) {
               WidgetsBinding.instance.addPostFrameCallback((_) async {
                 await Future.delayed(Duration(seconds: 2));
-                Navigator.of(context).pushReplacementNamed(state.route);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    state.route, (Route<dynamic> route) => false);
               });
             }
             if (state is VerificationFailure) {

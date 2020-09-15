@@ -50,8 +50,8 @@ class _NavigationPageState extends State<NavigationPage> {
                 body: BlocConsumer<NavigationBloc, NavigationState>(
                   listener: (context, state) {
                     if (state is NavigationLogoutSuccess) {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, ONBOARD_ROUTE);
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          ONBOARD_ROUTE, (Route<dynamic> route) => false);
                     }
                   },
                   builder: (context, state) {

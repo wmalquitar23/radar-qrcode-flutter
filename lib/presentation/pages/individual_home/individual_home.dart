@@ -22,98 +22,120 @@ class IndividualHomePage extends StatefulWidget {
 }
 
 class _IndividualHomePageState extends State<IndividualHomePage> {
+  final _snackBarDuration = Duration(seconds: 2);
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  DateTime _currentBackPressTime;
+  var _encryptedQr;
+
   void _onLoad() async {
     BlocProvider.of<IndividualBloc>(context).add(
       IndividualOnLoad(),
     );
   }
 
-  var _encryptedQr;
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (_currentBackPressTime == null ||
+        now.difference(_currentBackPressTime) > _snackBarDuration) {
+      _currentBackPressTime = now;
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text("Press Back again to quit the App."),
+        duration: _snackBarDuration,
+      ));
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    return RefreshIndicator(
-      onRefresh: () async {
-        BlocProvider.of<IndividualBloc>(context).add(
-          OnRefresh(),
-        );
-      },
-      child: MobileStatusMarginTop(
-          child: Scaffold(
-        body: BlocConsumer<IndividualBloc, IndividualState>(
-          listener: (context, state) async {
-            if (state.individualGetUserSuccess != null) {
-              _encryptedQr = state.individualGetUserSuccess.jsonQrCode;
-            }
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: RefreshIndicator(
+        onRefresh: () async {
+          BlocProvider.of<IndividualBloc>(context).add(
+            OnRefresh(),
+          );
+        },
+        child: MobileStatusMarginTop(
+            child: Scaffold(
+          key: _scaffoldKey,
+          body: BlocConsumer<IndividualBloc, IndividualState>(
+            listener: (context, state) async {
+              if (state.individualGetUserSuccess != null) {
+                _encryptedQr = state.individualGetUserSuccess.jsonQrCode;
+              }
 
-            if (state.individualGetuserFailureMessage != null) {
-              ToastUtil.showToast(
-                  context, state.individualGetuserFailureMessage);
-            }
-            if (state.individualGetuserSuccessMessage != null) {
-              ToastUtil.showToast(
-                  context, state.individualGetuserSuccessMessage);
-            }
-          },
-          builder: (context, state) {
-            if (state is IndividualInitial) {
-              _onLoad();
-            }
+              if (state.individualGetuserFailureMessage != null) {
+                ToastUtil.showToast(
+                    context, state.individualGetuserFailureMessage);
+              }
+              if (state.individualGetuserSuccessMessage != null) {
+                ToastUtil.showToast(
+                    context, state.individualGetuserSuccessMessage);
+              }
+            },
+            builder: (context, state) {
+              if (state is IndividualInitial) {
+                _onLoad();
+              }
 
-            if (state.individualGetUserSuccess != null) {
-              return SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Stack(
-                  children: [
-                    Container(
-                      height: screenSize.height * 0.66,
-                      decoration: BoxDecoration(
-                        color: ColorUtil.primaryColor,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(34.0),
-                            bottomRight: Radius.circular(34.0)),
+              if (state.individualGetUserSuccess != null) {
+                return SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: screenSize.height * 0.66,
+                        decoration: BoxDecoration(
+                          color: ColorUtil.primaryColor,
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(34.0),
+                              bottomRight: Radius.circular(34.0)),
+                        ),
                       ),
-                    ),
-                    Column(
-                      children: [
-                        state.individualGetUserSuccess != null
-                            ? _buildAppBar()
-                            : Container(),
-                        state.individualGetUserSuccess != null
-                            ? _buildPersonInfo(state.individualGetUserSuccess)
-                            : Container(),
-                        state.individualGetUserSuccess != null
-                            ? _buildQRInfo(
-                                screenSize, state.individualGetUserSuccess)
-                            : Container(),
-                        state.individualGetUserSuccess != null
-                            ? _buildHint()
-                            : Container(),
-                        state.individualGetUserSuccess != null
-                            ? _buildVerifyIdentityButton()
-                            : Container(),
-                      ],
-                    ),
-                  ],
+                      Column(
+                        children: [
+                          state.individualGetUserSuccess != null
+                              ? _buildAppBar()
+                              : Container(),
+                          state.individualGetUserSuccess != null
+                              ? _buildPersonInfo(state.individualGetUserSuccess)
+                              : Container(),
+                          state.individualGetUserSuccess != null
+                              ? _buildQRInfo(
+                                  screenSize, state.individualGetUserSuccess)
+                              : Container(),
+                          state.individualGetUserSuccess != null
+                              ? _buildHint()
+                              : Container(),
+                          state.individualGetUserSuccess != null
+                              ? _buildVerifyIdentityButton()
+                              : Container(),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return Center(
+                child: SingleChildScrollView(
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: CupertinoActivityIndicator(),
+                      ),
+                    ],
+                  ),
                 ),
               );
-            }
-
-            return Center(
-              child: SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    Center(
-                      child: CupertinoActivityIndicator(),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      )),
+            },
+          ),
+        )),
+      ),
     );
   }
 

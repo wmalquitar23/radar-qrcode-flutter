@@ -65,7 +65,7 @@ class _SignInVerificationPageState extends State<SignInVerificationPage> {
       listener: (context, state) {
         if (state is SignInSuccess) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
-            Navigator.of(context).pushReplacementNamed(state.route);
+            Navigator.of(context).pushNamedAndRemoveUntil(state.route, (Route<dynamic> route) => false);
           });
         }
 
