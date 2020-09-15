@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +21,9 @@ class VerificationPage extends StatefulWidget {
 }
 
 class _VerificationPageState extends State<VerificationPage> {
-  bool radiusBorder = false;
+  Timer _resendCooldownTimer;
+  int _duration = 30;
+  bool _isEnableResend = true;
 
   int _currentDigit,
       _firstDigit,
@@ -28,6 +32,12 @@ class _VerificationPageState extends State<VerificationPage> {
       _fourthDigit,
       _fifthDigit,
       _sixthDigit;
+
+  @override
+  void dispose() {
+    _resendCooldownTimer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +89,36 @@ class _VerificationPageState extends State<VerificationPage> {
     );
   }
 
+  void startResendCooldownTimer() {
+    setState(() {
+      _isEnableResend = false;
+    });
+
+    _duration = 30;
+    const oneSec = const Duration(seconds: 1);
+    _resendCooldownTimer = new Timer.periodic(
+      oneSec,
+      (Timer timer) => setState(
+        () {
+          if (_duration < 1) {
+            _onResendCooldownTimerFinished();
+          } else {
+            _duration--;
+          }
+        },
+      ),
+    );
+  }
+
+  void _onResendCooldownTimerFinished() {
+    setState(() {
+      _isEnableResend = true;
+    });
+    _resendCooldownTimer.cancel();
+  }
+
   void _onResendPressed() {
+    startResendCooldownTimer();
     BlocProvider.of<VerificationBloc>(context).add(
       OnResendPressed(mobileNumber: widget.contactNumber),
     );
@@ -123,30 +162,19 @@ class _VerificationPageState extends State<VerificationPage> {
                             title: "I didn\'t receive the code. ",
                             color: ColorUtil.primaryTextColor,
                           ),
-                          BlocBuilder<VerificationBloc, VerificationState>(
-                              builder: (context, state) {
-                            bool isEnableResend = true;
-
-                            if (state is ResendOnCoolDown) {
-                              isEnableResend = false;
-                            }
-
-                            if (state is ResendReady) {
-                              isEnableResend = true;
-                            }
-
-                            return GestureDetector(
-                              onTap: isEnableResend
-                                  ? () => _onResendPressed()
-                                  : null,
-                              child: DescriptionText(
-                                title: "Resend",
-                                color: isEnableResend
-                                    ? ColorUtil.primaryColor
-                                    : Colors.grey,
-                              ),
-                            );
-                          }),
+                          GestureDetector(
+                            onTap: _isEnableResend
+                                ? () => _onResendPressed()
+                                : null,
+                            child: DescriptionText(
+                              title: _isEnableResend
+                                  ? "Resend"
+                                  : "Resend($_duration)",
+                              color: _isEnableResend
+                                  ? ColorUtil.primaryColor
+                                  : Colors.grey,
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(

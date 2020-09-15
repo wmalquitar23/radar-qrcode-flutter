@@ -37,10 +37,6 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
       }
     } else if (event is OnResendPressed) {
       await resendOTPUseCase.execute(event.mobileNumber);
-
-      yield ResendOnCoolDown();
-      await Future.delayed(Duration(seconds: 30));
-      yield ResendReady();
     }
   }
 }
