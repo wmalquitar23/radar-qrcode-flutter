@@ -49,6 +49,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
     return MobileStatusMarginTop(
       child: CustomRegularAppBar(
         isContainerScrollable: false,
+        hasLeading: false,
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
@@ -57,7 +58,7 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
               physics: BouncingScrollPhysics(),
               child: Container(
                 padding: EdgeInsets.fromLTRB(
-                    0.0, 0.0, 15.0, MediaQuery.of(context).size.height * 0.20),
+                    0.0, 50, 15.0, MediaQuery.of(context).size.height * 0.20),
                 child: Column(
                   children: [
                     Padding(

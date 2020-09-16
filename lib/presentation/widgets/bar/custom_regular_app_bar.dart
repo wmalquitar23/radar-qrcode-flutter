@@ -9,6 +9,7 @@ class CustomRegularAppBar extends StatelessWidget {
   final FontWeight titleFontWeight;
   final VoidCallback onBackTap;
   final bool isContainerScrollable;
+  final bool hasLeading;
 
   const CustomRegularAppBar({
     Key key,
@@ -19,24 +20,27 @@ class CustomRegularAppBar extends StatelessWidget {
     this.titleColor,
     this.titleFontWeight,
     this.isContainerScrollable = true,
+    this.hasLeading = true,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: hasLeading ? AppBar(
         backgroundColor: backgroundColor ?? ColorUtil.primaryColor,
         centerTitle: true,
         elevation: 0.0,
-        leading: GestureDetector(
-          onTap: onBackTap ??
-              () {
-                Navigator.pop(context);
-              },
-          child: Icon(
-            Icons.arrow_back,
-            color: ColorUtil.primaryTextColor,
-          ),
-        ),
+        leading: hasLeading
+            ? GestureDetector(
+                onTap: onBackTap ??
+                    () {
+                      Navigator.pop(context);
+                    },
+                child: Icon(
+                  Icons.arrow_back,
+                  color: ColorUtil.primaryTextColor,
+                ),
+              )
+            : Container(),
         title: Text(
           title ?? "",
           style: TextStyle(
@@ -44,7 +48,7 @@ class CustomRegularAppBar extends StatelessWidget {
             color: titleColor ?? ColorUtil.primaryTextColor,
           ),
         ),
-      ),
+      ) : null,
       body: isContainerScrollable
           ? SingleChildScrollView(
               physics: BouncingScrollPhysics(),
