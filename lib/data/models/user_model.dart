@@ -35,7 +35,7 @@ class User extends RadarModel {
     this.establishmentName,
   });
 
-  String get fullName => "$firstName $lastName";
+  String get fullName => "$firstName $lastName".toUpperCase();
 
   String birthDateToString(DateTime birthdate) {
     DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
