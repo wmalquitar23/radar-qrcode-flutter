@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -25,8 +26,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
   TextEditingController _dateBirthController = TextEditingController();
   TextEditingController _genderController = TextEditingController();
   TextEditingController _contactNumberController = TextEditingController();
-
-  String _imageUrl;
 
   void _onLoad() async {
     BlocProvider.of<ProfileBloc>(context).add(
@@ -56,48 +55,52 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       birthdayFormatter.format(state?.user?.birthDate);
                   _genderController.text = state?.user?.gender;
                   _contactNumberController.text = state?.user?.contactNumber;
-                  _imageUrl = state?.user?.profileImageUrl;
-                }
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _buildImage(),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Container(
-                        child: HeaderText(
-                          title: state is ProfileGetDataSuccess
-                              ? state?.user?.fullName
-                              : "",
-                          fontSize: 18,
-                          color: ColorUtil.primaryColor,
+
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _buildImage(state?.user?.profileImageUrl),
+                        SizedBox(
+                          height: 10.0,
                         ),
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      state is ProfileGetDataSuccess
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                StatusWidget(
-                                  isVerified: state.user.isVerified,
-                                ),
-                              ],
-                            )
-                          : Container(),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      _buildAddressTextField(),
-                      _buildDateOfBirthTextField(),
-                      _buildGenderTextField(),
-                      _buildContactNumberTextField()
-                    ],
-                  ),
+                        Container(
+                          child: HeaderText(
+                            title: state is ProfileGetDataSuccess
+                                ? state?.user?.fullName
+                                : "",
+                            fontSize: 18,
+                            color: ColorUtil.primaryColor,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        state is ProfileGetDataSuccess
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  StatusWidget(
+                                    isVerified: state.user.isVerified,
+                                  ),
+                                ],
+                              )
+                            : Container(),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        _buildAddressTextField(),
+                        _buildDateOfBirthTextField(),
+                        _buildGenderTextField(),
+                        _buildContactNumberTextField()
+                      ],
+                    ),
+                  );
+                }
+
+                return Center(
+                  child: CupertinoActivityIndicator(),
                 );
               },
             )),
@@ -136,7 +139,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  Widget _buildImage() {
+  Widget _buildImage(String image) {
     return Center(
       child: Container(
         width: 120.0,
@@ -145,7 +148,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 10.0),
               child: CircleImage(
-                imageUrl: _imageUrl ?? "",
+                imageUrl: image,
                 size: 120.0,
                 fromNetwork: true,
               ),

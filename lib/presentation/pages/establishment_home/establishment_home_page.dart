@@ -35,8 +35,6 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
   TextEditingController _addressController = TextEditingController();
   TextEditingController _contactNumberController = TextEditingController();
 
-  String _imageUrl;
-
   void _onLoad() async {
     BlocProvider.of<EstablishmentBloc>(context).add(
       EstablishmentOnLoad(),
@@ -86,7 +84,6 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                   _onLoad();
                 }
                 if (state.user != null) {
-                  _imageUrl = state?.user?.profileImageUrl;
                   _addressController.text = state?.user?.address;
                   _contactNumberController.text = state?.user?.contactNumber;
                 }
@@ -163,7 +160,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 10.0),
                       child: CircleImage(
-                        imageUrl: _imageUrl ?? "",
+                        imageUrl: user.profileImageUrl,
                         size: 120.0,
                         fromNetwork: true,
                       ),

@@ -9,6 +9,7 @@ import 'package:radar_qrcode_flutter/core/utils/strings/error_handler.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/upload_profile_image_use_case.dart';
 
@@ -19,11 +20,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final ListenForSessionUseCase listenForSessionUseCase;
   final UploadProfileImageUseCase uploadProfileImageUseCase;
   final GetProfileInformationUseCase getProfileInformationUseCase;
-  ProfileBloc(
-      {this.listenForSessionUseCase,
-      this.uploadProfileImageUseCase,
-      this.getProfileInformationUseCase})
-      : super(ProfileInitial());
+  final GetSessionUseCase getSessionUseCase;
+  ProfileBloc({
+    this.listenForSessionUseCase,
+    this.uploadProfileImageUseCase,
+    this.getProfileInformationUseCase,
+    this.getSessionUseCase,
+  }) : super(ProfileInitial());
 
   StreamSubscription<Session> _sessionSubscription;
 
@@ -39,10 +42,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       _sessionSubscription?.cancel();
 
       _sessionSubscription = listenForSessionUseCase.stream().listen((session) {
-        add(GetUserData(user: session.user));
+        add(GetUserData());
       });
     } else if (event is GetUserData) {
-      yield ProfileGetDataSuccess(user: event.user);
+      Session session = await getSessionUseCase.execute();
+      if (session?.token != null) {
+        yield ProfileGetDataSuccess(user: session?.user);
+      } else {
+        _sessionSubscription?.cancel();
+      }
     }
 
     if (event is ProfileImageOnUpload) {
@@ -50,7 +58,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       try {
         await uploadProfileImageUseCase.execute(event.image);
         await getProfileInformationUseCase.execute();
-        
       } on DioError catch (e) {
         String errorhandler = ErrorHandler().dioErrorHandler(e);
         yield ProfileUploadingImageFailure(error: errorhandler);

@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/images/cache_image_widget.dart';
 
 class CircleImage extends StatelessWidget {
   final double size;
@@ -19,16 +21,33 @@ class CircleImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onClick,
-      child: Container(
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-                image:
-                    fromNetwork ? NetworkImage(imageUrl) : AssetImage(imageUrl),
-                fit: BoxFit.cover)),
-        width: size,
-        height: size,
-      ),
+      child: fromNetwork
+          ? CacheImage(
+              image: imageUrl,
+              size: size,
+              child: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: fromNetwork
+                            ? CachedNetworkImageProvider(imageUrl)
+                            : AssetImage(imageUrl),
+                        fit: BoxFit.cover)),
+                width: size,
+                height: size,
+              ),
+            )
+          : Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: fromNetwork
+                          ? NetworkImage(imageUrl)
+                          : AssetImage(imageUrl),
+                      fit: BoxFit.cover)),
+              width: size,
+              height: size,
+            ),
     );
   }
 }

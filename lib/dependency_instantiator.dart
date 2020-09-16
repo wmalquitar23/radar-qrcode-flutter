@@ -147,6 +147,7 @@ class DataInstantiator extends RadarDataInstantiator {
         uploadProfileImageUseCase: UploadProfileImageUseCase(profileRepository),
         getProfileInformationUseCase:
             GetProfileInformationUseCase(profileRepository),
+        getSessionUseCase: GetSessionUseCase(authenticationRepository),
       ),
     );
     sl.registerFactory<ChangePinBloc>(

@@ -8,12 +8,6 @@ abstract class ProfileEvent extends Equatable {
 }
 
 class GetUserData extends ProfileEvent {
-  final User user;
-
-  GetUserData({this.user});
-
-  @override
-  List<Object> get props => [user];
 }
 
 class ProfileOnLoad extends ProfileEvent {}
