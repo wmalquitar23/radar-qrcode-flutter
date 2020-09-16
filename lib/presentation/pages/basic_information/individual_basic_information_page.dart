@@ -13,6 +13,7 @@ import 'package:radar_qrcode_flutter/data/models/address/city_model.dart';
 import 'package:radar_qrcode_flutter/data/models/address/province_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/address/address_widget.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/terms_and_conditions/terms_and_conditions.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/dialogs/gender_dialog.dart';
@@ -533,9 +534,18 @@ class _IndividualBasicInformationPageState
         children: <Widget>[
           Checkbox(
             value: _agreementCheckBox,
-            onChanged: (value) {
-              setState(() {
-                _agreementCheckBox = value;
+            onChanged: (value) async {
+              await Navigator.push<bool>(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TermsAndConditionsPage(
+                    isAgree: _agreementCheckBox,
+                  ),
+                ),
+              ).then((value) {
+                setState(() {
+                  _agreementCheckBox = value;
+                });
               });
               _onChangeValidityBasicInfo2();
             },
@@ -550,8 +560,20 @@ class _IndividualBasicInformationPageState
                   maxLines: 2,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    print("Go to Terms & Conditions Section");
+                  onTap: () async {
+                    await Navigator.push<bool>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TermsAndConditionsPage(
+                          isAgree: _agreementCheckBox,
+                        ),
+                      ),
+                    ).then((value) {
+                      setState(() {
+                        _agreementCheckBox = value;
+                      });
+                    });
+                    _onChangeValidityBasicInfo2();
                   },
                   child: Text(
                     "Terms & Conditions",
@@ -568,6 +590,25 @@ class _IndividualBasicInformationPageState
       ),
     );
   }
+
+  // Future<void> _showTnCAlertDialog() async {
+  //   await showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return TermsAndConditionCustomDialog();
+  //       }).then(
+  //     (value) {
+  //       if (value != null) {
+  //         setState(
+  //           () {
+  //             _agreementCheckBox = value;
+  //             _onChangeValidityBasicInfo2();
+  //           },
+  //         );
+  //       }
+  //     },
+  //   );
+  // }
 
   Widget _buildContinuePage1Button() {
     return Container(

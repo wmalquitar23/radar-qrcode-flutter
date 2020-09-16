@@ -18,3 +18,4 @@ const String UPLOAD_ID_ROUTE = '/identity-verification/upload-id';
 const String UPLOAD_ID_RESULT_ROUTE = '/identity-verification/upload-id-result';
 const String DUMMY_CAMERA_VIEW_ROUTE = '/identity-verification/dummy-camera-view';
 const String ADDRESS_PICKER_PAGE_ROUTE = '/address-picker-page';
+const String TERMS_AND_CONDITIONS_ROUTE = '/terms-and-conditions';

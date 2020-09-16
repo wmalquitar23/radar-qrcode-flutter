@@ -11,6 +11,7 @@ import 'package:radar_qrcode_flutter/data/models/address/city_model.dart';
 import 'package:radar_qrcode_flutter/data/models/address/province_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/address/address_widget.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/terms_and_conditions/terms_and_conditions.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/verification/verification_page.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
@@ -411,9 +412,18 @@ class _EstablishmentBasicInformationPageState
         children: <Widget>[
           Checkbox(
             value: _agreementCheckBox,
-            onChanged: (value) {
-              setState(() {
-                _agreementCheckBox = value;
+            onChanged: (value) async {
+              await Navigator.push<bool>(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TermsAndConditionsPage(
+                    isAgree: _agreementCheckBox,
+                  ),
+                ),
+              ).then((value) {
+                setState(() {
+                  _agreementCheckBox = value;
+                });
               });
               _onChangeValidityBasicInfo();
             },
@@ -428,8 +438,20 @@ class _EstablishmentBasicInformationPageState
                   maxLines: 2,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    print("Go to Terms & Conditions Section");
+                  onTap: () async {
+                    await Navigator.push<bool>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TermsAndConditionsPage(
+                          isAgree: _agreementCheckBox,
+                        ),
+                      ),
+                    ).then((value) {
+                      setState(() {
+                        _agreementCheckBox = value;
+                      });
+                    });
+                    _onChangeValidityBasicInfo();
                   },
                   child: Text(
                     "Terms & Conditions",

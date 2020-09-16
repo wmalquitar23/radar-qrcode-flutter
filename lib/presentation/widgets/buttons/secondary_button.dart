@@ -35,7 +35,7 @@ class SecondaryButton extends StatelessWidget {
           this.text,
           style: TextStyle(
             color: Theme.of(context).primaryColor,
-            fontSize: this.fontSize,
+            fontSize: this.fontSize ?? 14,
           ),
         ),
       ),
