@@ -17,9 +17,11 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   void _onLoad() async {
-    BlocProvider.of<SplashBloc>(context).add(
-      GetSession(),
-    );
+    new Future.delayed(const Duration(seconds: 2), () {
+      BlocProvider.of<SplashBloc>(context).add(
+        GetSession(),
+      );
+    });
   }
 
   @override

@@ -313,10 +313,10 @@ class _SignInVerificationPageState extends State<SignInVerificationPage> {
           borderRadius: BorderRadius.circular(20.0)),
       child: Center(
         child: Text(
-          digit != null ? digit.toString() : "",
+          digit != null ? "⚪" : "",
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 20,
+              fontSize: 14,
               color: ColorUtil.primaryBackgroundColor,
               fontWeight: FontWeight.w600),
         ),
