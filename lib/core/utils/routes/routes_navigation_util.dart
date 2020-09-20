@@ -5,6 +5,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/router_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/address_picker/address_picker_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/contact_us/contact_us_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
@@ -149,7 +150,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case CONTACT_US_ROUTE:
       return pushNamed(
-          page: ContactUsPage(),
+          page: BlocProvider(
+            create: (_) => sl<ContactUsBloc>(),
+            child: ContactUsPage(),
+          ),
           settings: settings,
           pageTransitionType: PageTransitionType.fade);
       break;

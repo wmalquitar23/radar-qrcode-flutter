@@ -4,8 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
+import 'package:radar_qrcode_flutter/data/local_db/rapidpass_contact_db.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
 import 'package:radar_qrcode_flutter/data/mappers/user_mapper.dart';
+import 'package:radar_qrcode_flutter/data/models/rapidpass_contact_model.dart';
 import 'package:radar_qrcode_flutter/data/models/request/register_establishment_request.dart';
 import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
@@ -304,6 +306,69 @@ void main() {
       //THEN SHOULD EXPECT
       print(result);
       expect(result, isNotNull);
+    });
+  });
+
+  group("Contact - Local DB", () {
+    test("Invalid Data", () async {
+      //GIVEN THAT
+      RapidPassContactDb contactDb = RapidPassContactDb(database);
+
+      //WHEN
+      final result = await contactDb.getContact();
+
+      //THEN SHOULD EXPECT
+      print(result);
+      expect(result, isNull);
+    });
+
+    test("Save and Get", () async {
+      //GIVEN THAT
+      RapidPassContactDb contactDb = RapidPassContactDb(database);
+      final mNumber = "09087863725";
+      final emailAddr = "test@gmail.com";
+
+      //WHEN
+      await contactDb.saveContact(RapidPassContact(
+        mobileNumber: mNumber,
+        emailAddress: emailAddr,
+      ));
+      final result = await contactDb.getContact();
+
+      //THEN SHOULD EXPECT
+      print(result);
+      print(result.mobileNumber);
+      print(result.emailAddress);
+      expect(result.mobileNumber, mNumber);
+      expect(result.emailAddress, emailAddr);
+    });
+
+    test("Update", () async {
+      //GIVEN THAT
+      RapidPassContactDb contactDb = RapidPassContactDb(database);
+      final mNumber = "09087863725";
+      final emailAddr = "test@gmail.com";
+
+      final mNumberNew = "09999999999";
+      final emailAddrNew = "new_test@gmail.com";
+
+      await contactDb.saveContact(RapidPassContact(
+        mobileNumber: mNumber,
+        emailAddress: emailAddr,
+      ));
+
+      //WHEN
+      final result = await contactDb.updateContact(RapidPassContact(
+        mobileNumber: mNumberNew,
+        emailAddress: emailAddrNew,
+      ));
+
+      //THEN SHOULD EXPECT
+      print(result);
+      print(result.mobileNumber);
+      print(result.emailAddress);
+      expect(result.mobileNumber, mNumberNew);
+      expect(result.emailAddress, emailAddrNew);
     });
   });
 }

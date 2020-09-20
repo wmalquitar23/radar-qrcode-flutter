@@ -6,13 +6,16 @@ import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.da
 import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_service.dart';
 import 'package:radar_qrcode_flutter/data/repositories_impl/address_repository_impl.dart';
+import 'package:radar_qrcode_flutter/data/repositories_impl/rapidpass_contact_repository_impl.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/address_repository.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/profile_repository.dart';
+import 'package:radar_qrcode_flutter/domain/repositories/rapidpass_contact_repository.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/transactions_repository.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/checkin_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_address_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/get_rapidpass_contact_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_checkin_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
@@ -27,6 +30,7 @@ import 'package:radar_qrcode_flutter/domain/usecases/upload_profile_image_use_ca
 import 'package:radar_qrcode_flutter/domain/usecases/upload_verification_id.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/address_picker/address_picker_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/change_pin/change_pin_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/contact_us/contact_us_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/verify_existing_mobile_number_use_case.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
@@ -78,6 +82,8 @@ class DataInstantiator extends RadarDataInstantiator {
     TransactionsRepository transactionRepository =
         TransactionsRepositoryImpl(database, restClient);
     AddressRepository addressRepository = AddressRepositoryImpl();
+    RapidPassContactRepository rapidPassContactRepository =
+        RapidPassContactRepositoryImpl(database, restClient);
 
     //core
     GetIt.I.registerSingleton<RestClient>(restClient);
@@ -191,6 +197,9 @@ class DataInstantiator extends RadarDataInstantiator {
           getProfileInformationUseCase:
               GetProfileInformationUseCase(profileRepository),
         ));
+    sl.registerFactory(() => ContactUsBloc(
+        getRapidPassContactUseCase:
+            GetRapidPassContactUseCase(rapidPassContactRepository)));
 
     //usecases
     GetIt.I.registerLazySingleton<RegisterIndividualUseCase>(
@@ -223,6 +232,8 @@ class DataInstantiator extends RadarDataInstantiator {
         () => GetAddressUseCase(addressRepository));
     GetIt.I.registerLazySingleton<ResendOTPUseCase>(
         () => ResendOTPUseCase(authenticationRepository));
+    GetIt.I.registerLazySingleton<GetRapidPassContactUseCase>(
+        () => GetRapidPassContactUseCase(rapidPassContactRepository));
 
     //repositories
     GetIt.I
@@ -230,6 +241,8 @@ class DataInstantiator extends RadarDataInstantiator {
     GetIt.I.registerSingleton<ProfileRepository>(profileRepository);
     GetIt.I.registerSingleton<TransactionsRepository>(transactionRepository);
     GetIt.I.registerSingleton<AddressRepository>(addressRepository);
+    GetIt.I.registerSingleton<RapidPassContactRepository>(
+        rapidPassContactRepository);
 
     //navigator service
     GetIt.I.registerLazySingleton<NavigatorService>(() => NavigatorService());
