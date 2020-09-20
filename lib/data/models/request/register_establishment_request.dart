@@ -1,47 +1,36 @@
+import 'package:radar_qrcode_flutter/data/mappers/user_address_mapper.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
+
 class RegisterEstablishmentRequest {
-  String name;
+  String firstname;
   String pin;
   String contactNumber;
-  Address address;
+  UserAddress userAddress;
+
+  UserAddressMapper _userAddressMapper = UserAddressMapper();
 
   RegisterEstablishmentRequest({
-    this.name,
+    this.firstname,
     this.pin,
     this.contactNumber,
-    this.address
+    this.userAddress
   });
 
   RegisterEstablishmentRequest.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
+    firstname = json['firstname'];
     pin = json['pin'];
     contactNumber = json['contactNumber'];
-    address = json['address'] != null ? new Address.fromJson(json['address']) : null;
+    userAddress = json['address'] != null ? _userAddressMapper.fromMap(json['address']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
+    data['firstname'] = this.firstname;
     data['pin'] = this.pin;
     data['contactNumber'] = this.contactNumber;
-    if (this.address != null) {
-      data['address'] = this.address.toJson();
+    if (this.userAddress != null) {
+      data['address'] = _userAddressMapper.toMap(this.userAddress);
     }
-    return data;
-  }
-}
-
-class Address {
-  String name;
-
-  Address({this.name});
-
-  Address.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
     return data;
   }
 }
