@@ -1,7 +1,10 @@
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/data/local_db/queue/register_queue_db.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
+import 'package:radar_qrcode_flutter/data/mappers/user_address_mapper.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/data/models/request/register_establishment_request.dart';
+import 'package:radar_qrcode_flutter/data/models/request/register_individual_request.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
@@ -16,6 +19,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   RegisterQueueDb registerQueueDb;
 
   DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
+  UserAddressMapper userAddressMapper = UserAddressMapper();
 
   AuthenticationRepositoryImpl(this.db, this.restClient) {
     restClient = this.restClient;
@@ -45,18 +49,19 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       String middleName,
       String pin,
       String contactNumber,
-      String address,
+      UserAddress userAddress,
       DateTime birthdate,
       Gender gender) async {
     registerQueueDb.save(
       {
         "firstname": firstName,
+        "middlename": middleName,
         "lastname": lastName,
         "pin": pin,
         "birthDate": birthdayFormatter.format(birthdate),
         "gender": gender == Gender.male ? "male" : "female",
         "contactNumber": contactNumber,
-        "address": {"name": address},
+        "address": userAddressMapper.toMap(userAddress),
       },
     );
     await restClient.otpMobileNumber(contactNumber);
@@ -67,14 +72,14 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     String establishmentName,
     String pin,
     String contactNumber,
-    String address,
+    UserAddress userAddress,
   ) async {
     registerQueueDb.save(
       {
         "firstname": establishmentName,
         "pin": pin,
         "contactNumber": contactNumber,
-        "address": {"name": address},
+        "address": userAddressMapper.toMap(userAddress),
       },
     );
     await restClient.otpMobileNumber(contactNumber);
@@ -93,8 +98,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
     Map<dynamic, dynamic> registrationData = await getRegisterQueueData();
 
-    if (registrationData.length == 7) {
-      userInfoResponse = await restClient.registerIndividual(registrationData);
+    if (registrationData.length == 8) {
+      userInfoResponse = await restClient.registerIndividual(
+          RegisterIndividualRequest.fromJson(registrationData));
     } else if (registrationData.length == 4) {
       userInfoResponse = await restClient.registerEstablishment(
         RegisterEstablishmentRequest.fromJson(registrationData),
