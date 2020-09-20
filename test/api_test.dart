@@ -6,11 +6,11 @@ import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 import 'package:radar_qrcode_flutter/data/local_db/rapidpass_contact_db.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
-import 'package:radar_qrcode_flutter/data/mappers/user_mapper.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/data/models/rapidpass_contact_model.dart';
 import 'package:radar_qrcode_flutter/data/models/request/register_establishment_request.dart';
+import 'package:radar_qrcode_flutter/data/models/request/register_individual_request.dart';
 import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
-import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/data/sources/data/rest_client.dart';
 
 import 'package:intl/intl.dart';
@@ -70,28 +70,28 @@ void main() {
     var pin = "1234";
     var birthDate = birthdayFormatter.format(DateTime.utc(1995, 07, 31));
     var gender = "male";
-    var contactNumber = "9452092915";
-    var address = "Maniki, Kapalong, Davao del Norte";
+    var contactNumber = "9452082817";
 
-    UserMapper mapper = UserMapper();
-
-    dynamic data = mapper.toMap(
-      User(
-        firstName: firstName,
-        lastName: lastName,
-        middleName: middleName,
-        pin: pin,
-        gender: gender,
-        birthDate: birthdayFormatter.parse(birthDate),
-        contactNumber: contactNumber,
-        address: address,
+    var request = RegisterIndividualRequest(
+      firstname: firstName,
+      middlename: middleName,
+      lastname: lastName,
+      pin: pin,
+      birthDate: birthdayFormatter.parse(birthDate).toString(),
+      gender: gender,
+      contactNumber: contactNumber,
+      userAddress: UserAddress(
+        streetHouseNo: "Test",
+        brgyCode: "Test",
+        citymunCode: "Test",
+        provCode: "Test",
       ),
     );
 
-    print(data);
+    print(request.toJson());
 
     //WHEN
-    StandardResponse response = await restClient.registerIndividual(data);
+    StandardResponse response = await restClient.registerIndividual(request);
 
     //THEN SHOULD EXPECT
     print(response.data);
@@ -115,10 +115,16 @@ void main() {
   test('REGISTRATION establishment', () async {
     //GIVEN THAT
     var request = RegisterEstablishmentRequest(
-        name: "Starbucks",
-        pin: "1234",
-        contactNumber: "+639664391877",
-        address: Address(name: "Manila"));
+      firstname: "Starbucks",
+      pin: "1234",
+      contactNumber: "+639664391037",
+      userAddress: UserAddress(
+        streetHouseNo: "Test",
+        brgyCode: "Test",
+        citymunCode: "Test",
+        provCode: "Test",
+      ),
+    );
 
     //WHEN
     StandardResponse response = await restClient.registerEstablishment(request);

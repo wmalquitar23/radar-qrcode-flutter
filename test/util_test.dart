@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/aes.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/encrypt.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 
 void main() {
@@ -17,8 +18,14 @@ void main() {
         middleName: "Sapio",
         lastName: "Minor",
         gender: "Male",
+        birthDate: DateTime.now(),
         contactNumber: "9451096905",
-        address: "Maniki, Kapalong, Davao del Norte",
+        address: UserAddress(
+          streetHouseNo: "Test",
+          brgyCode: "Test",
+          citymunCode: "Test",
+          provCode: "Test",
+        ),
         role: "individual",
         isVerified: false,
         profileImageUrl: "",
