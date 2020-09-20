@@ -1,9 +1,11 @@
 import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
+import 'package:radar_qrcode_flutter/data/mappers/user_address_mapper.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:intl/intl.dart';
 
 class UserMapper extends RadarMapper<User> {
   DateFormat birthDateFormatter = DateFormat("yyyy-MM-dd");
+  UserAddressMapper userAddressMapper = UserAddressMapper();
   @override
   User fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
@@ -17,7 +19,7 @@ class UserMapper extends RadarMapper<User> {
           : null,
       gender: map['gender'],
       contactNumber: map['contactNumber'],
-      address: map['address']['name'],
+      address: userAddressMapper.fromMap(map['address']),
       role: map['role'],
       isVerified: map['isVerified'],
       profileImageUrl: map['profileImageUrl'],
@@ -40,7 +42,7 @@ class UserMapper extends RadarMapper<User> {
       "role": object.role,
       "gender": object.gender,
       "contactNumber": object.contactNumber,
-      "address": {"name": object.address},
+      "address": userAddressMapper.toMap(object.address),
     };
   }
 }

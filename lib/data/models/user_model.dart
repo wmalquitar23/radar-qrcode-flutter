@@ -1,6 +1,7 @@
 import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 import 'package:intl/intl.dart';
 import 'package:radar_qrcode_flutter/core/utils/date_utils.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 
 class User extends RadarModel {
   final String id;
@@ -11,7 +12,7 @@ class User extends RadarModel {
   final DateTime birthDate;
   final String gender;
   final String contactNumber;
-  final String address;
+  final UserAddress address;
   final String role;
   final bool isVerified;
   final String profileImageUrl;
