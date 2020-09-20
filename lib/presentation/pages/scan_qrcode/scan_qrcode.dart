@@ -236,15 +236,6 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
           right: 0,
           child: _buildHintMessage(),
         ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: Material(
-            color: Colors.black38,
-            child: _buildFlashButton(),
-          ),
-        )
       ],
     );
   }
@@ -260,6 +251,7 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
     );
   }
 
+  // ignore: unused_element
   Widget _buildFlashButton() {
     return IconButton(
       padding: const EdgeInsets.all(36.0),

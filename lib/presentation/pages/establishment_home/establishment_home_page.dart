@@ -85,7 +85,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                 }
                 if (state.user != null) {
                   _addressController.text = state?.user?.address;
-                  _contactNumberController.text = state?.user?.contactNumber;
+                  _contactNumberController.text = "+63${state?.user?.contactNumber}";
                 }
                 if (state.user != null) {
                   return SingleChildScrollView(
