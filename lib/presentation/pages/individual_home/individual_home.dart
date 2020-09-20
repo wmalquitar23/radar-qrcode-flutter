@@ -213,7 +213,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                       ),
                       SizedBox(height: 3),
                       Text(
-                        state?.user?.address,
+                        state?.user?.address?.streetHouseNo,
                         style: TextStyle(
                           height: 1.5,
                           fontSize: 10.0,
@@ -221,7 +221,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                           fontWeight: FontWeight.w600,
                         ),
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                        maxLines: 2,
                       ),
                     ],
                   ),

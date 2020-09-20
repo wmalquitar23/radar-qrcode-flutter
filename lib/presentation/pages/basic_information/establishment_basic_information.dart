@@ -9,6 +9,7 @@ import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
 import 'package:radar_qrcode_flutter/data/models/address/barangay_model.dart';
 import 'package:radar_qrcode_flutter/data/models/address/city_model.dart';
 import 'package:radar_qrcode_flutter/data/models/address/province_model.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/address/address_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/terms_and_conditions/terms_and_conditions.dart';
@@ -81,8 +82,9 @@ class _EstablishmentBasicInformationPageState
     changeCount += _pinController.text.isNotEmpty ? 1 : 0;
     changeCount += _confirmPinController.text.isNotEmpty ? 1 : 0;
     changeCount += _contactNumberController.text.isNotEmpty ? 1 : 0;
+    changeCount += _streetHouseNumController.text.isNotEmpty ? 1 : 0;
 
-    if (changeCount == 4) {
+    if (changeCount == 5) {
       fieldsNotEmpty = true;
     }
 
@@ -126,6 +128,13 @@ class _EstablishmentBasicInformationPageState
         establishmentName: _establishmentNameController.text,
         pin: _pinController.text,
         contactNumber: _contactNumberController.text,
+        userAddress: UserAddress(
+          streetHouseNo:
+              "${_streetHouseNumController.text}, ${_selectedBarangay.brgyDesc}, ${_selectedCity.citymunDesc}, ${_selectedProvince.provDesc}",
+          brgyCode: _selectedBarangay.brgyCode,
+          citymunCode: _selectedCity.citymunCode,
+          provCode: _selectedProvince.provCode,
+        ),
       ),
     );
   }
