@@ -54,7 +54,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   _dateBirthController.text =
                       birthdayFormatter.format(state?.user?.birthDate);
                   _genderController.text = state?.user?.gender;
-                  _contactNumberController.text = state?.user?.contactNumber;
+                  _contactNumberController.text = "+63${state?.user?.contactNumber}";
 
                   return Container(
                     margin: EdgeInsets.symmetric(horizontal: 25.0),
