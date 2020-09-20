@@ -50,22 +50,4 @@ class AddressPickerIsDoneFetching extends AddressPickerState {
         );
 }
 
-class AddressPickerIsSearching extends AddressPickerState {
-  final bool isSearching;
-
-  AddressPickerIsSearching({this.isSearching = true})
-      : super(isSearching: isSearching);
-}
-
-class AddressPickerIsDoneSearching extends AddressPickerState {
-  final bool isDoneSearching;
-  final List<Address> addressList;
-
-  AddressPickerIsDoneSearching({
-    this.isDoneSearching = true,
-    @required this.addressList,
-  }) : super(
-          addressList: addressList,
-          isDoneSearching: isDoneSearching,
-        );
-}
+class AddressPickerIsSearching extends AddressPickerState {}

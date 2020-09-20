@@ -19,9 +19,12 @@ class AddressPickerPage extends StatefulWidget {
 }
 
 class _AddressPickerPageState extends State<AddressPickerPage> {
+  TextEditingController _searchTextController = TextEditingController();
+
   String _title;
 
   List<Address> _addressList;
+  List<Address> _filteredAddressList;
 
   Address _previousSelection;
 
@@ -66,12 +69,60 @@ class _AddressPickerPageState extends State<AddressPickerPage> {
 
   void _searchAddress(String keyword) {
     BlocProvider.of<AddressPickerBloc>(context).add(
-      AddressPickerSearch(
-        addressType: _addressType,
-        filter: _filter,
-        keyword: keyword,
-      ),
+      AddressPickerSearch(),
     );
+
+    List<Address> filteredList = [];
+
+    switch (_addressType) {
+      case AddressType.province:
+        filteredList = _addressList
+            .where(
+              (addr) => (addr as Province)
+                  .provDesc
+                  .toLowerCase()
+                  .contains(keyword.toLowerCase()),
+            )
+            .cast<Address>()
+            .toList();
+        break;
+      case AddressType.city:
+        filteredList = _addressList
+            .where(
+              (addr) =>
+                  (addr as City)
+                      .citymunDesc
+                      .toLowerCase()
+                      .contains(keyword.toLowerCase()) &&
+                  (addr as City).provCode == _filter,
+            )
+            .cast<Address>()
+            .toList();
+        break;
+      case AddressType.barangay:
+        filteredList = _addressList
+            .where(
+              (addr) =>
+                  (addr as Barangay)
+                      .brgyDesc
+                      .toLowerCase()
+                      .contains(keyword.toLowerCase()) &&
+                  (addr as Barangay).citymunCode == _filter,
+            )
+            .cast<Address>()
+            .toList();
+        break;
+      default:
+    }
+
+    setState(() {
+      _filteredAddressList = filteredList;
+    });
+  }
+
+  void _clearSearch() {
+    _searchAddress("");
+    _searchTextController.text = "";
   }
 
   @override
@@ -124,6 +175,7 @@ class _AddressPickerPageState extends State<AddressPickerPage> {
         bottom: 10,
       ),
       child: TextFormField(
+        controller: _searchTextController,
         onChanged: (value) => _searchAddress(value),
         style: TextStyle(
           fontSize: 13,
@@ -138,10 +190,13 @@ class _AddressPickerPageState extends State<AddressPickerPage> {
               size: 20,
             ),
           ),
-          suffixIcon: Icon(
-            Icons.clear,
-            color: Colors.black45,
-            size: 20,
+          suffixIcon: GestureDetector(
+            onTap: _clearSearch,
+            child: Icon(
+              Icons.clear,
+              color: Colors.black45,
+              size: 20,
+            ),
           ),
           hintText: "Search Location",
           border: OutlineInputBorder(
@@ -171,15 +226,19 @@ class _AddressPickerPageState extends State<AddressPickerPage> {
           return _buildLoadingIndicator();
         }
 
-        if (state is AddressPickerIsFetchingData ||
-            state is AddressPickerIsSearching) {
+        if (state is AddressPickerIsFetchingData) {
           return _buildLoadingIndicator();
         }
 
-        if (state is AddressPickerIsDoneFetching ||
-            state is AddressPickerIsDoneSearching) {
+        if (state is AddressPickerIsDoneFetching) {
           _setAddressList(state.addressList);
+          _filteredAddressList = _addressList;
         }
+
+        if (_filteredAddressList.isEmpty) {
+          return _buildNoDataAvailable();
+        }
+
         return Expanded(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -191,9 +250,9 @@ class _AddressPickerPageState extends State<AddressPickerPage> {
                   indent: 20,
                   endIndent: 20,
                 ),
-                itemCount: _addressList.length,
+                itemCount: _filteredAddressList.length,
                 itemBuilder: (context, index) {
-                  return _buildListItem(_addressList[index]);
+                  return _buildListItem(_filteredAddressList[index]);
                 },
               ),
             ),
@@ -280,6 +339,20 @@ class _AddressPickerPageState extends State<AddressPickerPage> {
     return Expanded(
       child: Center(
         child: CupertinoActivityIndicator(),
+      ),
+    );
+  }
+
+  Widget _buildNoDataAvailable() {
+    return Expanded(
+      child: Center(
+        child: Text(
+          "No Match Found!",
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }
