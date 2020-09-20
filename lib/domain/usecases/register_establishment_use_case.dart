@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/authentication_repository.dart';
 
 class RegisterEstablishmentUseCase {
@@ -10,13 +11,13 @@ class RegisterEstablishmentUseCase {
     @required String establishmentName,
     @required String pin,
     @required String contactNumber,
-    @required String address,
+    @required UserAddress userAddress,
   }) {
     return repository.registerEstablishment(
       establishmentName,
       pin,
       contactNumber,
-      address,
+      userAddress,
     );
   }
 }
