@@ -36,7 +36,7 @@ class _VerificationPageState extends State<VerificationPage> {
 
   @override
   void dispose() {
-    _resendCooldownTimer.cancel();
+    _resendCooldownTimer?.cancel();
     super.dispose();
   }
 
