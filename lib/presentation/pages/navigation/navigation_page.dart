@@ -45,9 +45,9 @@ class _NavigationPageState extends State<NavigationPage> {
         builder: (context, height, width, sy, sx) {
           return MobileStatusMarginTop(
             backgroundColor: Colors.transparent,
-            child: Scaffold(
-                backgroundColor: Colors.transparent,
-                body: BlocConsumer<NavigationBloc, NavigationState>(
+            child: Container(
+                color: Colors.transparent,
+                child: BlocConsumer<NavigationBloc, NavigationState>(
                   listener: (context, state) {
                     if (state is NavigationLogoutSuccess) {
                       Navigator.of(context).pushNamedAndRemoveUntil(
