@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:radar_qrcode_flutter/core/utils/strings/error_handler.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_establishment_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/verify_existing_mobile_number_use_case.dart';
 
@@ -33,7 +34,7 @@ class EstablishmentBasicInformationBloc
           establishmentName: event.establishmentName,
           pin: event.pin,
           contactNumber: event.contactNumber,
-          address: event.address,
+          userAddress: event.userAddress,
         );
         yield RegisterDone();
       } on DioError catch (e) {
