@@ -29,6 +29,7 @@ import 'package:radar_qrcode_flutter/domain/usecases/update_pin_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/upload_profile_image_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/upload_verification_id.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/address_picker/address_picker_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/change_contact_number/change_contact_number_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/change_pin/change_pin_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/contact_us/contact_us_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
@@ -94,6 +95,12 @@ class DataInstantiator extends RadarDataInstantiator {
         () => NetworkInfoImpl(dataConnectionChecker));
 
     //bloc
+    sl.registerFactory<ChangeContactNumberBloc>(() => ChangeContactNumberBloc(
+          registerIndividualUseCase:
+              RegisterIndividualUseCase(authenticationRepository),
+          verifyExistingMobileNumberUseCase:
+              VerifyExistingMobileNumberUseCase(authenticationRepository),
+        ));
     sl.registerFactory<SplashBloc>(
       () => SplashBloc(
         getSessionUseCase: GetSessionUseCase(authenticationRepository),

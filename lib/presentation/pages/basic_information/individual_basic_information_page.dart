@@ -11,6 +11,7 @@ import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
 import 'package:radar_qrcode_flutter/data/models/address/barangay_model.dart';
 import 'package:radar_qrcode_flutter/data/models/address/city_model.dart';
 import 'package:radar_qrcode_flutter/data/models/address/province_model.dart';
+import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/address/address_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/terms_and_conditions/terms_and_conditions.dart';
@@ -84,6 +85,8 @@ class _IndividualBasicInformationPageState
         birthDate: StringUtils.convertDateFromString(_birthDateController.text),
         gender: _genderValue,
         pin: _pinController.text,
+        address:
+            "${_selectedBarangay.brgyDesc} ${_selectedCity.citymunDesc} ${_selectedProvince.provDesc}",
         contactNumber: _contactNumberController.text,
       ),
     );
@@ -210,7 +213,17 @@ class _IndividualBasicInformationPageState
             Navigator.pushNamed(
               context,
               VERIFICATION_CODE_ROUTE,
-              arguments: _contactNumberController.text,
+              arguments: User(
+                  firstName: _firstNameController.text,
+                  middleName: _middleNameController.text,
+                  lastName: _lastNameController.text,
+                  pin: _pinController.text,
+                  birthDate: StringUtils.convertDateFromString(
+                      _birthDateController.text),
+                  gender: _genderValue,
+                  address:
+                      "${_selectedBarangay.brgyDesc} ${_selectedCity.citymunDesc} ${_selectedProvince.provDesc}",
+                  contactNumber: _contactNumberController.text),
             );
           }
           if (state is RegisterFailure) {

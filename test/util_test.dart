@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/aes.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/encrypt.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,7 +17,7 @@ void main() {
         firstName: "Jesther Jordan",
         middleName: "Sapio",
         lastName: "Minor",
-        gender: "Male",
+        gender: Gender.male,
         contactNumber: "9451096905",
         address: "Maniki, Kapalong, Davao del Norte",
         role: "individual",

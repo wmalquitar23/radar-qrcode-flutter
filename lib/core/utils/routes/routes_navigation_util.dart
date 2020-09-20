@@ -5,6 +5,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/router_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/address_picker/address_picker_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/change_contact_number/change_contact_number_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/contact_us/contact_us_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
@@ -21,6 +22,7 @@ import 'package:radar_qrcode_flutter/presentation/bloc/change_pin/change_pin_blo
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/address/address_picker_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/establishment_basic_information.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/basic_information/individual_basic_information_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/change_contact_number/change_contact_number_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/change_pin/change_pin_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/contact_us/contact_us_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
@@ -133,7 +135,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           page: BlocProvider(
             create: (_) => sl<VerificationBloc>(),
             child: VerificationPage(
-              contactNumber: args,
+              user: args,
             ),
           ),
           settings: settings,
@@ -208,6 +210,18 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           create: (_) => sl<AddressPickerBloc>(),
           child: AddressPickerPage(
             args: args,
+          ),
+        ),
+        settings: settings,
+        pageTransitionType: PageTransitionType.fade,
+      );
+      break;
+    case CHANGE_CONTACT_NUMBER_ROUTE:
+      return pushNamed(
+        page: BlocProvider(
+          create: (_) => sl<ChangeContactNumberBloc>(),
+          child: ChangeContactNumberPage(
+            user: args,
           ),
         ),
         settings: settings,

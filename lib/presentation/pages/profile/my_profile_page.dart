@@ -53,7 +53,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   _addressController.text = state?.user?.address;
                   _dateBirthController.text =
                       birthdayFormatter.format(state?.user?.birthDate);
-                  _genderController.text = state?.user?.gender;
+                  _genderController.text = state?.user?.gender.toString();
                   _contactNumberController.text = state?.user?.contactNumber;
 
                   return Container(

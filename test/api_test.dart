@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
+import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/data/local_db/rapidpass_contact_db.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
 import 'package:radar_qrcode_flutter/data/mappers/user_mapper.dart';
@@ -69,7 +70,7 @@ void main() {
     var middleName = "Min${formatter.format(DateTime.now())}";
     var pin = "1234";
     var birthDate = birthdayFormatter.format(DateTime.utc(1995, 07, 31));
-    var gender = "male";
+    var gender = Gender.male;
     var contactNumber = "9452092915";
     var address = "Maniki, Kapalong, Davao del Norte";
 

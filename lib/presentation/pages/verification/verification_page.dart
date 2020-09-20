@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
+import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
@@ -15,8 +17,8 @@ import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart
 import 'package:vibration/vibration.dart';
 
 class VerificationPage extends StatefulWidget {
-  final String contactNumber;
-  const VerificationPage({Key key, this.contactNumber}) : super(key: key);
+  final User user;
+  const VerificationPage({Key key, this.user}) : super(key: key);
   @override
   _VerificationPageState createState() => _VerificationPageState();
 }
@@ -36,7 +38,9 @@ class _VerificationPageState extends State<VerificationPage> {
 
   @override
   void dispose() {
-    _resendCooldownTimer.cancel();
+    if (_resendCooldownTimer != null) {
+      _resendCooldownTimer.cancel();
+    }
     super.dispose();
   }
 
@@ -61,7 +65,8 @@ class _VerificationPageState extends State<VerificationPage> {
               ),
               Container(
                 child: DescriptionText(
-                  title: "6 digit code was sent to +63${widget.contactNumber}",
+                  title:
+                      "6 digit code was sent to +63${widget.user.contactNumber}",
                   color: ColorUtil.secondaryTextColor,
                   fontWeight: FontWeight.w600,
                 ),
@@ -121,7 +126,7 @@ class _VerificationPageState extends State<VerificationPage> {
   void _onResendPressed() {
     startResendCooldownTimer();
     BlocProvider.of<VerificationBloc>(context).add(
-      OnResendPressed(mobileNumber: widget.contactNumber),
+      OnResendPressed(mobileNumber: widget.user.contactNumber),
     );
   }
 
@@ -194,10 +199,17 @@ class _VerificationPageState extends State<VerificationPage> {
                             title: "I entered a wrong mobile number. ",
                             color: ColorUtil.primaryTextColor,
                           ),
-                          DescriptionText(
-                            title: "Change",
-                            color: ColorUtil.primaryColor,
-                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushReplacementNamed(
+                                  CHANGE_CONTACT_NUMBER_ROUTE,
+                                  arguments: widget.user);
+                            },
+                            child: DescriptionText(
+                              title: "Change",
+                              color: ColorUtil.primaryColor,
+                            ),
+                          )
                         ],
                       ),
                       SizedBox(
