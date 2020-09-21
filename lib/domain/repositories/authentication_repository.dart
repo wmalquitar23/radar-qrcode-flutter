@@ -1,4 +1,5 @@
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 
 abstract class AuthenticationRepository {
@@ -14,7 +15,7 @@ abstract class AuthenticationRepository {
     String middleName,
     String pin,
     String contactNumber,
-    String address,
+    UserAddress address,
     DateTime birthdate,
     Gender gender,
   );
@@ -23,7 +24,7 @@ abstract class AuthenticationRepository {
     String establishmentName,
     String pin,
     String contactNumber,
-    String address,
+    UserAddress address,
   );
 
   Future<dynamic> getRegisterQueueData();

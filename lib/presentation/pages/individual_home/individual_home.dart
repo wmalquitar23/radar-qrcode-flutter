@@ -10,7 +10,6 @@ import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_blo
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/images/circle_image_widget.dart';
-import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/status/status_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
@@ -214,7 +213,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                       ),
                       SizedBox(height: 3),
                       Text(
-                        state?.user?.address,
+                        state?.user?.address?.streetHouseNo,
                         style: TextStyle(
                           height: 1.5,
                           fontSize: 10.0,
@@ -222,7 +221,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                           fontWeight: FontWeight.w600,
                         ),
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                        maxLines: 2,
                       ),
                     ],
                   ),

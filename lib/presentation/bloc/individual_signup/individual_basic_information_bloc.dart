@@ -7,6 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:meta/meta.dart';
 import 'package:radar_qrcode_flutter/core/utils/strings/error_handler.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_individual_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/verify_existing_mobile_number_use_case.dart';
 
@@ -35,7 +36,7 @@ class IndividualBasicInformationBloc extends Bloc<
           event.middleName,
           event.pin,
           event.contactNumber,
-          event.address,
+          event.userAddress,
           event.birthDate,
           event.gender,
         );

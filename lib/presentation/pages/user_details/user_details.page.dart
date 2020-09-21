@@ -46,7 +46,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                   );
                 }
                 if (state.userInformation != null) {
-                  _addressController.text = state?.userInformation?.address;
+                  _addressController.text = state?.userInformation?.address?.streetHouseNo;
                   _ageController.text = state?.userInformation?.age?.toString();
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.center,

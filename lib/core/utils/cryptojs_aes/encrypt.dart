@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:radar_qrcode_flutter/data/mappers/user_address_mapper.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 
 String qrCodeObject(User user) {
@@ -9,7 +10,7 @@ String qrCodeObject(User user) {
     "lastname": user.lastName,
     "isVerified": user.isVerified,
     "profileImageUrl": user.profileImageUrl,
-    "address": {"name": user.address},
+    "address": UserAddressMapper().toMap(user.address),
     "birthDate": user.birthDateToString(user.birthDate),
   });
 }

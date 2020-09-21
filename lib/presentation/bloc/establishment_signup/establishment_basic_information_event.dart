@@ -11,13 +11,13 @@ class RegisterPressed extends EstablishmentBasicInformationEvent {
   final String establishmentName;
   final String pin;
   final String contactNumber;
-  final String address;
+  final UserAddress userAddress;
 
   RegisterPressed({
     @required this.establishmentName,
     @required this.pin,
     @required this.contactNumber,
-    this.address,
+    this.userAddress,
   });
 }
 

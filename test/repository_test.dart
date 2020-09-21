@@ -7,6 +7,7 @@ import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/data/models/address/barangay_model.dart';
 import 'package:radar_qrcode_flutter/data/models/address/city_model.dart';
 import 'package:radar_qrcode_flutter/data/models/address/province_model.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/data/repositories_impl/address_repository_impl.dart';
@@ -45,8 +46,13 @@ void main() {
     var lastName = "Minor${formatter.format(DateTime.now())}";
     var middleName = "Min${formatter.format(DateTime.now())}";
     var pin = "1234";
-    var contactNumber = "09359098175";
-    var address = "Maniki, Kapalong, Davao del Norte";
+    var contactNumber = "09459298175";
+    var address = UserAddress(
+      streetHouseNo: "Test",
+      brgyCode: "Test",
+      citymunCode: "Test",
+      provCode: "Test",
+    );
 
     //WHEN
     await authenticationRepositoryImpl.registerIndividual(
@@ -59,12 +65,13 @@ void main() {
       DateTime.now(),
       Gender.male,
     );
-    session = await authenticationRepositoryImpl.getCurrentSession();
+
+    var registrationData =
+        await authenticationRepositoryImpl.getRegisterQueueData();
 
     //THEN SHOULD EXPECT
-    print(session.user);
-    expect(session, isNotNull);
-    expect(session.token, isNotNull);
+    print(registrationData);
+    expect(registrationData, isNotNull);
   });
 
   test('SIGNUP establishment', () async {
@@ -73,7 +80,12 @@ void main() {
     var establishmentName = "Establishment${formatter.format(DateTime.now())}";
     var pin = "1234";
     var contactNumber = "9122226789"; // Assuming number is not yet registered
-    var address = "Maniki, Kapalong, Davao del Norte";
+    var address = UserAddress(
+      streetHouseNo: "Test",
+      brgyCode: "Test",
+      citymunCode: "Test",
+      provCode: "Test",
+    );
 
     //WHEN
     await authenticationRepositoryImpl.registerEstablishment(
@@ -83,16 +95,12 @@ void main() {
       address,
     );
 
-    await authenticationRepositoryImpl
-        .verifyOtp("123456"); // Assuming OTP is Correct
-
-    session = await authenticationRepositoryImpl.getCurrentSession();
+    var registrationData =
+        await authenticationRepositoryImpl.getRegisterQueueData();
 
     //THEN SHOULD EXPECT
-    print(session);
-    print(session.user);
-    expect(session, isNotNull);
-    expect(session.token, isNotNull);
+    print(registrationData);
+    expect(registrationData, isNotNull);
   });
 
   test('Register Queue', () async {
@@ -103,7 +111,12 @@ void main() {
     var middleName = "Min${formatter.format(DateTime.now())}";
     var pin = "1234";
     var contactNumber = "09359098175";
-    var address = "Maniki, Kapalong, Davao del Norte";
+    var address = UserAddress(
+      streetHouseNo: "Test",
+      brgyCode: "Test",
+      citymunCode: "Test",
+      provCode: "Test",
+    );
 
     //WHEN
     await authenticationRepositoryImpl.registerIndividual(
@@ -171,14 +184,19 @@ void main() {
       //WHEN
       await transactionsRepositoryImpl.checkIn(
           User(
-            id: "5f54e91a59cfad1d8f00a491",
-            displayId: "JM4988",
-            firstName: "Jesther Jordan",
-            lastName: "Minor",
+            id: "5f6798f7ddcb282c138cbd04",
+            displayId: "JT6059",
+            firstName: "Jonel",
+            lastName: "Test",
             isVerified: false,
             profileImageUrl:
-                "http://54.179.150.142:3000/api/v1/file/5f55abd259cfad1d8f00a495",
-            address: "Maniki, Kapalong, Davao del Norte",
+                "http://54.179.150.142:3000/api/v1/file/5f4920d939fd7162f2083de1",
+            address: UserAddress(
+              streetHouseNo: "Tres, Mabolo, CEBU CITY (Capital), CEBU",
+              brgyCode: "Mabolo",
+              citymunCode: "CEBU CITY (Capital)",
+              provCode: "CEBU",
+            ),
             birthDate: DateTime.now(),
           ),
           false);

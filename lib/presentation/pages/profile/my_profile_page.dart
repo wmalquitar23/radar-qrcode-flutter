@@ -50,11 +50,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
                 if (state is ProfileGetDataSuccess) {
                   DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
-                  _addressController.text = state?.user?.address;
+                  _addressController.text = state?.user?.address?.streetHouseNo;
                   _dateBirthController.text =
                       birthdayFormatter.format(state?.user?.birthDate);
                   _genderController.text = state?.user?.gender.toString();
-                  _contactNumberController.text = state?.user?.contactNumber;
+                  _contactNumberController.text = "+63${state?.user?.contactNumber}";
 
                   return Container(
                     margin: EdgeInsets.symmetric(horizontal: 25.0),

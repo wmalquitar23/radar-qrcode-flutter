@@ -135,7 +135,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           page: BlocProvider(
             create: (_) => sl<VerificationBloc>(),
             child: VerificationPage(
-              user: args,
+              contactNumber: args,
             ),
           ),
           settings: settings,

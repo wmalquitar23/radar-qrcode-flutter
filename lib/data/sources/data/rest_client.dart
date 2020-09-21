@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/data/models/request/register_establishment_request.dart';
+import 'package:radar_qrcode_flutter/data/models/request/register_individual_request.dart';
 import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
 
 class RestClient {
@@ -21,7 +22,7 @@ class RestClient {
     return standardResponse;
   }
 
-  Future<StandardResponse> registerIndividual(dynamic data) async {
+  Future<StandardResponse> registerIndividual(RegisterIndividualRequest data) async {
     Response response = await _dio.post("/register/individual", data: data);
 
     return apiCatcher(StandardResponse.fromJson(response.data));

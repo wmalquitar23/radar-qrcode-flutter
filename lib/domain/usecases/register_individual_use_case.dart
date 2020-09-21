@@ -1,4 +1,5 @@
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
+import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/domain/repositories/authentication_repository.dart';
 
 class RegisterIndividualUseCase {
@@ -12,7 +13,7 @@ class RegisterIndividualUseCase {
     String middleName,
     String pin,
     String contactNumber,
-    String address,
+    UserAddress userAddress,
     DateTime birthDate,
     Gender gender,
   ) {
@@ -22,7 +23,7 @@ class RegisterIndividualUseCase {
       middleName,
       pin,
       contactNumber,
-      address,
+      userAddress,
       birthDate,
       gender,
     );

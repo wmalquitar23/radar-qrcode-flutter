@@ -15,7 +15,7 @@ class ContinueButtonPressed extends ChangeContactNumberEvent {
   final Gender gender;
   final String pin;
   final String contactNumber;
-  final String address;
+  final UserAddress address;
 
   ContinueButtonPressed({
     this.firstName,

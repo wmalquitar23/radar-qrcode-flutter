@@ -3,11 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
-import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/verification/verification_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
@@ -17,8 +15,8 @@ import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart
 import 'package:vibration/vibration.dart';
 
 class VerificationPage extends StatefulWidget {
-  final User user;
-  const VerificationPage({Key key, this.user}) : super(key: key);
+  final String contactNumber;
+  const VerificationPage({Key key, this.contactNumber}) : super(key: key);
   @override
   _VerificationPageState createState() => _VerificationPageState();
 }
@@ -66,7 +64,7 @@ class _VerificationPageState extends State<VerificationPage> {
               Container(
                 child: DescriptionText(
                   title:
-                      "6 digit code was sent to +63${widget.user.contactNumber}",
+                      "6 digit code was sent to +63${widget.contactNumber}",
                   color: ColorUtil.secondaryTextColor,
                   fontWeight: FontWeight.w600,
                 ),
@@ -126,7 +124,7 @@ class _VerificationPageState extends State<VerificationPage> {
   void _onResendPressed() {
     startResendCooldownTimer();
     BlocProvider.of<VerificationBloc>(context).add(
-      OnResendPressed(mobileNumber: widget.user.contactNumber),
+      OnResendPressed(mobileNumber: widget.contactNumber),
     );
   }
 
@@ -203,7 +201,7 @@ class _VerificationPageState extends State<VerificationPage> {
                             onTap: () {
                               Navigator.of(context).pushReplacementNamed(
                                   CHANGE_CONTACT_NUMBER_ROUTE,
-                                  arguments: widget.user);
+                                  arguments: widget.contactNumber);
                             },
                             child: DescriptionText(
                               title: "Change",
