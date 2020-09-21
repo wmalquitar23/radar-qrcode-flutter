@@ -43,8 +43,6 @@ class AddressPickerBloc extends Bloc<AddressPickerEvent, AddressPickerState> {
         default:
       }
 
-      yield AddressPickerIsFetchingData();
-
       yield AddressPickerIsDoneFetching(addressList: addressList);
     } else if (event is AddressPickerSearch) {
       yield AddressPickerIsSearching();

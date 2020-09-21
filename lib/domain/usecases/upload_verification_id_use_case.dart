@@ -6,7 +6,7 @@ class UploadVerificationIdUseCase {
 
   UploadVerificationIdUseCase(this.repository);
 
-  Future<bool> execute(File file) async {
+  Future<void> execute(File file) async {
     return await repository.uploadVerificationId(file);
   }
 }

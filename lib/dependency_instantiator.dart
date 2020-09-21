@@ -27,7 +27,7 @@ import 'package:radar_qrcode_flutter/domain/usecases/resend_otp_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/sync_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/update_pin_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/upload_profile_image_use_case.dart';
-import 'package:radar_qrcode_flutter/domain/usecases/upload_verification_id.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/upload_verification_id_use_case.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/address_picker/address_picker_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/change_contact_number/change_contact_number_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/change_pin/change_pin_bloc.dart';

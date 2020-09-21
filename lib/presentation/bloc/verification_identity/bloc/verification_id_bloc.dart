@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/core/utils/strings/error_handler.dart';
-import 'package:radar_qrcode_flutter/domain/usecases/upload_verification_id.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/upload_verification_id_use_case.dart';
 
 part 'verification_id_event.dart';
 part 'verification_id_state.dart';
@@ -26,14 +26,8 @@ class VerificationIdBloc
     if (event is VerificationIdOnUpload) {
       yield VerificationIdUploadingImageLoading();
       try {
-        final bool result =
-            await uploadVerificationIdUseCase.execute(event.image);
-        if (result) {
-          yield VerificationIdUploadingImageSuccess();
-        } else {
-          yield VerificationIdUploadingImageFailure(
-              error: "Failed Uploading ID to Server");
-        }
+        await uploadVerificationIdUseCase.execute(event.image);
+        yield VerificationIdUploadingImageSuccess();
       } on DioError catch (e) {
         String errorhandler = ErrorHandler().dioErrorHandler(e);
         yield VerificationIdUploadingImageFailure(error: errorhandler);

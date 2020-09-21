@@ -52,21 +52,6 @@ class _AddressPickerPageState extends State<AddressPickerPage> {
     );
   }
 
-  void _setAddressList(List<Address> addrList) {
-    switch (_addressType) {
-      case AddressType.province:
-        _addressList = addrList;
-        break;
-      case AddressType.city:
-        _addressList = addrList;
-        break;
-      case AddressType.barangay:
-        _addressList = addrList;
-        break;
-      default:
-    }
-  }
-
   void _searchAddress(String keyword) {
     BlocProvider.of<AddressPickerBloc>(context).add(
       AddressPickerSearch(),
@@ -231,7 +216,7 @@ class _AddressPickerPageState extends State<AddressPickerPage> {
         }
 
         if (state is AddressPickerIsDoneFetching) {
-          _setAddressList(state.addressList);
+          _addressList = state.addressList;
           _filteredAddressList = _addressList;
         }
 
