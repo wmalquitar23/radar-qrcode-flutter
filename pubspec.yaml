@@ -47,13 +47,13 @@ dependencies:
   data_connection_checker: ^0.3.4
   vibration: ^1.5.0
   cached_network_image: ^2.3.2+1
-
-  # charlou
   relative_scale: 1.0.8
   flutter_svg: 0.17.4
   auto_size_text: 2.1.0
   extended_image: 1.1.0
   qr_code_scanner: ^0.0.13
+  enum_to_string: ^1.0.11
+
 
   ai_barcode: ^1.0.4
   permission_handler: ^5.0.1+1

@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 import 'package:intl/intl.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
@@ -45,4 +46,6 @@ class User extends RadarModel {
   }
 
   int get age => birthDate != null ? DateUtils.calculateAge(birthDate) : null;
+
+  String get genderToString => gender == Gender.male ? EnumToString.convertToString(Gender.male, camelCase: true) : EnumToString.convertToString(Gender.female, camelCase: true);
 }
