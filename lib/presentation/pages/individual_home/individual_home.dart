@@ -214,7 +214,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                       ),
                       SizedBox(height: 3),
                       Text(
-                        state.user.address != null ? state.user.address : "",
+                        state?.user?.address,
                         style: TextStyle(
                           height: 1.5,
                           fontSize: 10.0,
