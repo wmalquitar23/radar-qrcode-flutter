@@ -93,14 +93,16 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
         File croppedFile = await ImageCropper.cropImage(
             sourcePath: file.path,
             cropStyle: CropStyle.rectangle,
-            aspectRatioPresets: [CropAspectRatioPreset.ratio16x9],
+            aspectRatioPresets: [
+              CropAspectRatioPreset.ratio7x5,
+            ],
             androidUiSettings: AndroidUiSettings(
                 toolbarTitle: "Select Verification ID",
                 hideBottomControls: true,
                 showCropGrid: true,
                 toolbarColor: ColorUtil.primaryColor,
                 toolbarWidgetColor: Colors.white,
-                initAspectRatio: CropAspectRatioPreset.ratio16x9,
+                initAspectRatio: CropAspectRatioPreset.ratio7x5,
                 lockAspectRatio: true),
             iosUiSettings: IOSUiSettings(
                 minimumAspectRatio: 1.0,

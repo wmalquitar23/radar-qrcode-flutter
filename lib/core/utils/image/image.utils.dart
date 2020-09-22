@@ -12,7 +12,7 @@ class ImageUtils {
     double maxWidth,
     double maxHeight,
   }) async {
-    int imageQuality = 90;
+    int imageQuality = 100;
 
     PlatformBottomSheet.showBottomSheet(
       context,
