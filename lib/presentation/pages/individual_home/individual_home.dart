@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/strings/user_addresss_string.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
@@ -219,7 +220,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                       ),
                       SizedBox(height: 3),
                       Text(
-                        state?.user?.address?.streetHouseNo,
+                        UserAddressString.getValue(state?.user?.address),
                         style: TextStyle(
                           height: 1.5,
                           fontSize: 10.0,

@@ -6,8 +6,10 @@ import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text
 class CustomTextField extends StatelessWidget {
   final TextFormField child;
   final String label;
+  final bool isRichText;
 
-  const CustomTextField({Key key, this.label, this.child}) : super(key: key);
+  const CustomTextField({Key key, this.label, this.child, this.isRichText = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +26,15 @@ class CustomTextField extends StatelessWidget {
                 color: ColorUtil.primaryColor,
                 fontSize: 10,
               ),
-              Container(
-                height: 30.0,
-                child: child,
-              ),
+              isRichText
+                  ? Container(
+                      height: 50.0,
+                      child: child,
+                    )
+                  : Container(
+                      height: 30.0,
+                      child: child,
+                    ),
             ],
           ),
         ));

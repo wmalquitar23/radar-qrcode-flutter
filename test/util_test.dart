@@ -24,8 +24,11 @@ void main() {
         address: UserAddress(
           streetHouseNo: "Test",
           brgyCode: "Test",
+          brgyName: "Test",
           citymunCode: "Test",
+          citymunName: "Test",
           provCode: "Test",
+          provName: "Test",
         ),
         role: "individual",
         isVerified: false,

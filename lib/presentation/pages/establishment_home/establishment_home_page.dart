@@ -8,16 +8,17 @@ import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/image/image.utils.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/core/utils/strings/user_addresss_string.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
 import 'package:radar_qrcode_flutter/data/models/check_in.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_with_icon_widget.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/fields/custom_textfield.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/images/circle_image_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widget.dart';
-import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_content_text.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
 import '../../widgets/texts/description_text.dart';
@@ -31,6 +32,9 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
   final _snackBarDuration = Duration(seconds: 2);
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime _currentBackPressTime;
+
+  TextEditingController _addressController = TextEditingController();
+  TextEditingController _contactNumberController = TextEditingController();
 
   void _onLoad() async {
     BlocProvider.of<EstablishmentBloc>(context).add(
@@ -79,6 +83,13 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
               builder: (context, state) {
                 if (state is EstablishmentInitial) {
                   _onLoad();
+                }
+
+                if (state.user != null) {
+                  _addressController.text =
+                      UserAddressString.getValue(state.user.address);
+                  _contactNumberController.text =
+                      "+63${state?.user?.contactNumber}";
                 }
 
                 if (state.user != null) {
@@ -202,8 +213,8 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildAddressTextField(user?.address?.streetHouseNo),
-                _buildContactNumberTextField(user?.contactNumber),
+                _buildAddressTextField(),
+                _buildContactNumberTextField(),
                 AnimatedOpacity(
                   opacity: localCheckInData.length != 0 ? 1.0 : 0.0,
                   duration: Duration(seconds: 1),
@@ -294,30 +305,23 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
     );
   }
 
-  Widget _buildAddressTextField(String address) {
-    return HeaderContentText(
-      header: "Address",
-      content: Text(
-        address,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: ColorUtil.primaryTextColor,
-        ),
+  Widget _buildAddressTextField() {
+    return CustomTextField(
+      label: "Address",
+      isRichText: true,
+      child: TextFormField(
+        controller: _addressController,
+        readOnly: true,
       ),
     );
   }
 
-  Widget _buildContactNumberTextField(String contactNumber) {
-    return HeaderContentText(
-      header: "Contact Number",
-      content: Text(
-        "+63$contactNumber",
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: ColorUtil.primaryTextColor,
-        ),
+  Widget _buildContactNumberTextField() {
+    return CustomTextField(
+      label: "Contact Number",
+      child: TextFormField(
+        controller: _contactNumberController,
+        readOnly: true,
       ),
     );
   }

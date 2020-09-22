@@ -50,8 +50,11 @@ void main() {
     var address = UserAddress(
       streetHouseNo: "Test",
       brgyCode: "Test",
+      brgyName: "Test",
       citymunCode: "Test",
+      citymunName: "Test",
       provCode: "Test",
+      provName: "Test",
     );
 
     //WHEN
@@ -83,8 +86,11 @@ void main() {
     var address = UserAddress(
       streetHouseNo: "Test",
       brgyCode: "Test",
+      brgyName: "Test",
       citymunCode: "Test",
+      citymunName: "Test",
       provCode: "Test",
+      provName: "Test",
     );
 
     //WHEN
@@ -114,8 +120,11 @@ void main() {
     var address = UserAddress(
       streetHouseNo: "Test",
       brgyCode: "Test",
+      brgyName: "Test",
       citymunCode: "Test",
+      citymunName: "Test",
       provCode: "Test",
+      provName: "Test",
     );
 
     //WHEN
@@ -192,10 +201,13 @@ void main() {
             profileImageUrl:
                 "http://54.179.150.142:3000/api/v1/file/5f4920d939fd7162f2083de1",
             address: UserAddress(
-              streetHouseNo: "Tres, Mabolo, CEBU CITY (Capital), CEBU",
-              brgyCode: "Mabolo",
-              citymunCode: "CEBU CITY (Capital)",
-              provCode: "CEBU",
+              streetHouseNo: "Test",
+              brgyCode: "Test",
+              brgyName: "Test",
+              citymunCode: "Test",
+              citymunName: "Test",
+              provCode: "Test",
+              provName: "Test",
             ),
             birthDate: DateTime.now(),
           ),

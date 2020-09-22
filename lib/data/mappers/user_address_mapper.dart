@@ -7,8 +7,11 @@ class UserAddressMapper extends RadarMapper<UserAddress> {
     if (map == null) return null;
     return UserAddress(
       brgyCode: map['brgyCode'],
+      brgyName: map['brgyName'],
       citymunCode: map['citymunCode'],
+      citymunName: map['citymunName'],
       provCode: map['provCode'],
+      provName: map['provName'],
       streetHouseNo: map['streetHouseNo'],
     );
   }
@@ -17,8 +20,11 @@ class UserAddressMapper extends RadarMapper<UserAddress> {
   Map<String, dynamic> toMap(UserAddress userAddress) {
     return {
       "brgyCode": userAddress.brgyCode,
+      "brgyName": userAddress.brgyName,
       "citymunCode": userAddress.citymunCode,
+      "citymunName": userAddress.citymunName,
       "provCode": userAddress.provCode,
+      "provName": userAddress.provName,
       "streetHouseNo": userAddress.streetHouseNo,
     };
   }

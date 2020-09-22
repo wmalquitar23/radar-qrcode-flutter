@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/core/utils/strings/user_addresss_string.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/user_details/user_details_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
@@ -46,7 +47,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                   );
                 }
                 if (state.userInformation != null) {
-                  _addressController.text = state?.userInformation?.address?.streetHouseNo;
+                  _addressController.text = UserAddressString.getValue(
+                      state?.userInformation?.address);
                   _ageController.text = state?.userInformation?.age?.toString();
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -117,36 +119,23 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
 
   Widget _buildAddressTextField() {
     return CustomTextField(
-        label: "Address",
-        child: TextFormField(
-          controller: _addressController,
-          readOnly: true,
-          validator: (value) {
-            if (value.isEmpty) {
-              return "Empty field";
-            }
-            return null;
-          },
-          textInputAction: TextInputAction.next,
-          onFieldSubmitted: (v) => FocusScope.of(context).nextFocus(),
-        ));
+      label: "Address",
+      isRichText: true,
+      child: TextFormField(
+        controller: _addressController,
+        readOnly: true,
+      ),
+    );
   }
 
   Widget _buildAgeTextField() {
     return CustomTextField(
-        label: "Age",
-        child: TextFormField(
-          controller: _ageController,
-          readOnly: true,
-          validator: (value) {
-            if (value.isEmpty) {
-              return "Empty field";
-            }
-            return null;
-          },
-          textInputAction: TextInputAction.next,
-          onFieldSubmitted: (v) => FocusScope.of(context).nextFocus(),
-        ));
+      label: "Age",
+      child: TextFormField(
+        controller: _ageController,
+        readOnly: true,
+      ),
+    );
   }
 
   Widget _buildDecisionButtons() {

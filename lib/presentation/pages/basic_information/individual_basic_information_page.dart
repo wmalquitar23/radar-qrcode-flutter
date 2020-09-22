@@ -87,11 +87,13 @@ class _IndividualBasicInformationPageState
         pin: _pinController.text,
         contactNumber: _contactNumberController.text,
         userAddress: UserAddress(
-          streetHouseNo:
-              "${_streetHouseNumController.text}, ${_selectedBarangay.brgyDesc}, ${_selectedCity.citymunDesc}, ${_selectedProvince.provDesc}",
+          streetHouseNo: _streetHouseNumController.text,
           brgyCode: _selectedBarangay.brgyCode,
+          brgyName: _selectedBarangay.brgyDesc,
           citymunCode: _selectedCity.citymunCode,
+          citymunName: _selectedCity.citymunDesc,
           provCode: _selectedProvince.provCode,
+          provName: _selectedProvince.provDesc,
         ),
       ),
     );

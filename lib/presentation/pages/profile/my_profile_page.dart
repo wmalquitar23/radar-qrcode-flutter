@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/image/image.utils.dart';
+import 'package:radar_qrcode_flutter/core/utils/strings/user_addresss_string.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/profile/profile_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/fields/custom_textfield.dart';
@@ -50,11 +51,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
                 if (state is ProfileGetDataSuccess) {
                   DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
-                  _addressController.text = state?.user?.address?.streetHouseNo;
+
+                  _addressController.text =
+                      UserAddressString.getValue(state?.user?.address);
                   _dateBirthController.text =
                       birthdayFormatter.format(state?.user?.birthDate);
                   _genderController.text = state?.user?.genderToString;
-                  _contactNumberController.text = "+63${state?.user?.contactNumber}";
+                  _contactNumberController.text =
+                      "+63${state?.user?.contactNumber}";
 
                   return Container(
                     margin: EdgeInsets.symmetric(horizontal: 25.0),
@@ -187,11 +191,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
   Widget _buildAddressTextField() {
     return CustomTextField(
         label: "Address",
+        isRichText: true,
         child: TextFormField(
           controller: _addressController,
           readOnly: true,
-          textInputAction: TextInputAction.next,
-          onFieldSubmitted: (v) => FocusScope.of(context).nextFocus(),
         ));
   }
 
@@ -201,14 +204,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
         child: TextFormField(
           controller: _dateBirthController,
           readOnly: true,
-          validator: (value) {
-            if (value.isEmpty) {
-              return "Empty field";
-            }
-            return null;
-          },
-          textInputAction: TextInputAction.next,
-          onFieldSubmitted: (v) => FocusScope.of(context).nextFocus(),
         ));
   }
 
@@ -218,14 +213,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
         child: TextFormField(
           controller: _genderController,
           readOnly: true,
-          validator: (value) {
-            if (value.isEmpty) {
-              return "Empty field";
-            }
-            return null;
-          },
-          textInputAction: TextInputAction.next,
-          onFieldSubmitted: (v) => FocusScope.of(context).nextFocus(),
         ));
   }
 
@@ -235,14 +222,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
         child: TextFormField(
           controller: _contactNumberController,
           readOnly: true,
-          validator: (value) {
-            if (value.isEmpty) {
-              return "Empty field";
-            }
-            return null;
-          },
-          textInputAction: TextInputAction.next,
-          onFieldSubmitted: (v) => FocusScope.of(context).nextFocus(),
         ));
   }
 }

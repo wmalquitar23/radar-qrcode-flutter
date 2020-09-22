@@ -84,8 +84,11 @@ void main() {
       userAddress: UserAddress(
         streetHouseNo: "Test",
         brgyCode: "Test",
+        brgyName: "Test",
         citymunCode: "Test",
+        citymunName: "Test",
         provCode: "Test",
+        provName: "Test",
       ),
     );
 
@@ -122,8 +125,11 @@ void main() {
       userAddress: UserAddress(
         streetHouseNo: "Test",
         brgyCode: "Test",
+        brgyName: "Test",
         citymunCode: "Test",
+        citymunName: "Test",
         provCode: "Test",
+        provName: "Test",
       ),
     );
 
