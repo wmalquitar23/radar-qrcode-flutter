@@ -112,12 +112,18 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                                     ? _buildQRInfo(screenSize,
                                         state.individualGetUserSuccess)
                                     : Container(),
+                                SizedBox(
+                                  height: 50,
+                                ),
                                 state.individualGetUserSuccess != null
                                     ? _buildHint()
                                     : Container(),
                                 state.individualGetUserSuccess != null
                                     ? _buildVerifyIdentityButton()
                                     : Container(),
+                                SizedBox(
+                                  height: 50,
+                                )
                               ],
                             ),
                           ],
