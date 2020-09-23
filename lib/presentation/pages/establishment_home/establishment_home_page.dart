@@ -223,7 +223,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            color: ColorUtil.primaryBackgroundColor,
+                            color: Colors.red,
                             shape: BoxShape.circle),
                         child: GestureDetector(
                           onTap: () {

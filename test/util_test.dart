@@ -14,7 +14,7 @@ void main() {
   group("QRCode", () {
     test('Private key', () async {
       User user = User(
-        id: "GB5432",
+        id: "JM5432",
         firstName: "Jesther Jordan",
         middleName: "Sapio",
         lastName: "Minor",
@@ -32,7 +32,7 @@ void main() {
         ),
         role: "individual",
         isVerified: false,
-        profileImageUrl: "",
+        profileImageUrl: "https://www.w3schools.com/howto/img_avatar.png",
         displayId: "GB5432",
       );
       String qrToJson = qrCodeObject(user);

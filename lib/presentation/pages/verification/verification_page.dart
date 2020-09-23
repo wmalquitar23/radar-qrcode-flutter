@@ -187,31 +187,28 @@ class _VerificationPageState extends State<VerificationPage> {
                           ),
                         ],
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     DescriptionText(
+                      //       title: "I entered a wrong mobile number. ",
+                      //       color: ColorUtil.primaryTextColor,
+                      //     ),
+                      //     GestureDetector(
+                      //       onTap: () {
+                      //         Navigator.of(context).pushReplacementNamed(
+                      //             CHANGE_CONTACT_NUMBER_ROUTE,
+                      //             arguments: widget.contactNumber);
+                      //       },
+                      //       child: DescriptionText(
+                      //         title: "Change",
+                      //         color: ColorUtil.primaryColor,
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
                       SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          DescriptionText(
-                            title: "I entered a wrong mobile number. ",
-                            color: ColorUtil.primaryTextColor,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pushReplacementNamed(
-                                  CHANGE_CONTACT_NUMBER_ROUTE,
-                                  arguments: widget.contactNumber);
-                            },
-                            child: DescriptionText(
-                              title: "Change",
-                              color: ColorUtil.primaryColor,
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
+                        height: 30,
                       ),
                       PrimaryButton(
                         text: "CONTINUE",

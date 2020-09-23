@@ -318,7 +318,7 @@ class _IndividualBasicInformationPageState
           obscureText: true,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Create PIN"),
+              TextFieldTheme.textfieldInputDecoration(hintText: "Create 4 digit PIN"),
           onChanged: (value) {
             _validatePIN();
             _onChangeValidityBasicInfo2();
