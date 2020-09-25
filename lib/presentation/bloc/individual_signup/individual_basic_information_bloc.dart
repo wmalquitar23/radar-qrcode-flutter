@@ -49,14 +49,14 @@ class IndividualBasicInformationBloc extends Bloc<
         yield RegisterFailure(error: e);
       }
     } else if (event is ValidateContactNumber) {
-      final contactNumLength = event.contactNumber.length;
+      final contactNum = event.contactNumber;
 
-      if (contactNumLength < 10) {
+      if (contactNum[0] != '9' || contactNum.length < 10) {
         yield ContactNumberIsInvalid(
           message: "Mobile number is invalid.",
           invalidType: 0,
         );
-      } else if (contactNumLength == 10) {
+      } else if (contactNum.length == 10) {
         yield ContactNumberValidationInProgress();
         try {
           final bool numberIsAlreadyUsed =
