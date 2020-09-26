@@ -207,7 +207,6 @@ class _UploadIDPageState extends State<UploadIDPage> {
       child: PrimaryButton(
           text: "UPLOAD",
           onPressed: () {
-            print("printing" + passedImage.toString());
             BlocProvider.of<VerificationIdBloc>(context)
                 .add(VerificationIdOnUpload(passedImage));
           }),

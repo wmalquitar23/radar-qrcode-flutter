@@ -196,8 +196,11 @@ class DataInstantiator extends RadarDataInstantiator {
       () => UploadIdBloc(),
     );
     sl.registerFactory<VerificationIdBloc>(() => VerificationIdBloc(
-        uploadVerificationIdUseCase:
-            UploadVerificationIdUseCase(profileRepository)));
+          uploadVerificationIdUseCase:
+              UploadVerificationIdUseCase(profileRepository),
+          getProfileInformationUseCase:
+              GetProfileInformationUseCase(profileRepository),
+        ));
 
     sl.registerFactory<SignInVerificationBloc>(() => SignInVerificationBloc(
           signInUseCase: SignInUseCase(authenticationRepository),
