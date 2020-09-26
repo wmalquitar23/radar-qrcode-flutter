@@ -12,11 +12,17 @@ class AddressWidget extends StatefulWidget {
   final Function(Province) selectProvinceCallback;
   final Function(City) selectCityCallback;
   final Function(Barangay) selectBarangayCallback;
+  final Province previouslySelectedProvince;
+  final City previouslySelectedCity;
+  final Barangay previouslySelectedBarangay;
 
   AddressWidget({
     @required this.selectProvinceCallback,
     @required this.selectCityCallback,
     @required this.selectBarangayCallback,
+    this.previouslySelectedProvince,
+    this.previouslySelectedCity,
+    this.previouslySelectedBarangay,
   });
 
   @override
@@ -123,6 +129,24 @@ class _AddressWidgetState extends State<AddressWidget> {
     widget.selectBarangayCallback(
       _selectedBarangay,
     );
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      _selectedProvince = widget.previouslySelectedProvince;
+      _selectedCity = widget.previouslySelectedCity;
+      _selectedBarangay = widget.previouslySelectedBarangay;
+
+      _enableCityField = _selectedProvince != null;
+      _enableBarangayField = _selectedCity != null;
+
+      _provinceController.text = _selectedProvince?.provDesc ?? "";
+      _cityController.text = _selectedCity?.citymunDesc ?? "";
+      _barangayController.text = _selectedBarangay?.brgyDesc ?? "";
+    });
+
+    super.initState();
   }
 
   @override

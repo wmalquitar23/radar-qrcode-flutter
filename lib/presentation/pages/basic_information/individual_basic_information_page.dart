@@ -255,6 +255,9 @@ class _IndividualBasicInformationPageState
                           selectCityCallback(selectedCity),
                       selectBarangayCallback: (selectedBarangay) =>
                           selectBarangayCallback(selectedBarangay),
+                      previouslySelectedProvince: _selectedProvince,
+                      previouslySelectedCity: _selectedCity,
+                      previouslySelectedBarangay: _selectedBarangay,
                     ),
                     _buildStreetHouseNumTextField(),
                     _buildAgreementLabel(),
@@ -317,8 +320,8 @@ class _IndividualBasicInformationPageState
           ],
           obscureText: true,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Create 4 digit PIN"),
+          decoration: TextFieldTheme.textfieldInputDecoration(
+              hintText: "Create 4 digit PIN"),
           onChanged: (value) {
             _validatePIN();
             _onChangeValidityBasicInfo2();
