@@ -9,13 +9,15 @@ abstract class EstablishmentEvent extends Equatable {
 
 class GetUserData extends EstablishmentEvent {
   final List<CheckIn> checkIn;
+  final List<CheckIn> totalCheckin;
 
   GetUserData({
     this.checkIn,
+    this.totalCheckin,
   });
 
   @override
-  List<Object> get props => [checkIn];
+  List<Object> get props => [checkIn, totalCheckin];
 }
 
 class EstablishmentOnLoad extends EstablishmentEvent {}

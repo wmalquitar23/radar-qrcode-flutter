@@ -29,6 +29,17 @@ class CheckInDb extends Db {
     });
   }
 
+  Stream<List<CheckIn>> listenForTotalCheckIn() {
+    var query = store.query();
+    return query.onSnapshots(db).map((snapshots) {
+      return snapshots
+          .map(
+            (snapshot) => _checkInMapper.fromMap(snapshot.value),
+          )
+          .toList();
+    });
+  }
+
   Future<List<CheckIn>> getAllData() async {
     var finder = Finder(
       filter: Filter.and([

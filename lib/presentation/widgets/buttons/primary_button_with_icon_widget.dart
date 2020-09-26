@@ -5,7 +5,7 @@ class PrimaryButtonWithIcon extends StatelessWidget {
   const PrimaryButtonWithIcon({
     Key key,
     @required this.text,
-    // @required this.icon,
+    this.color,
     this.height,
     this.width,
     this.fontSize,
@@ -14,6 +14,7 @@ class PrimaryButtonWithIcon extends StatelessWidget {
   }) : super(key: key);
 
   final String text;
+  final Color color;
   final double height;
   final double width;
   final double fontSize;
@@ -30,7 +31,7 @@ class PrimaryButtonWithIcon extends StatelessWidget {
         onPressed: onPressed ?? () {},
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(this.radius ?? 25)),
-        color: ColorUtil.primaryColor,
+        color: color ?? ColorUtil.primaryColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

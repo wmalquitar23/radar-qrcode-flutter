@@ -29,6 +29,7 @@ class EstablishmentHomePage extends StatefulWidget {
 }
 
 class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
+  final int limitScanNumber = 500;
   final _snackBarDuration = Duration(seconds: 2);
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime _currentBackPressTime;
@@ -116,7 +117,8 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                                 : Container(),
                             state.user != null ? _buildHint() : Container(),
                             state.user != null
-                                ? _buildScanQRCodeButton()
+                                ? _buildScanQRCodeButton(
+                                    state.user, state.totalScannedCheckInData)
                                 : Container(),
                           ],
                         )
@@ -223,8 +225,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle),
+                            color: Colors.red, shape: BoxShape.circle),
                         child: GestureDetector(
                           onTap: () {
                             BlocProvider.of<EstablishmentBloc>(context).add(
@@ -342,14 +343,29 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
     );
   }
 
-  Widget _buildScanQRCodeButton() {
+  Widget _buildScanQRCodeButton(User user, List<CheckIn> totalScannedCheckInData) {
     return Container(
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
       child: PrimaryButtonWithIcon(
         onPressed: () {
-          Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
+          if (user.isVerified) {
+            Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
+          } else {
+            if (totalScannedCheckInData.length < limitScanNumber) {
+              Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
+            } else {
+              ToastUtil.showToast(context,
+                  "You have reached the scan limit. You need to subscribe the radar application to continue.");
+              return null;
+            }
+          }
         },
         text: 'SCAN QR CODE',
+        color: user.isVerified
+            ? ColorUtil.primaryColor
+            : (totalScannedCheckInData.length < limitScanNumber
+                ? ColorUtil.primaryColor
+                : ColorUtil.disabledColor),
       ),
     );
   }

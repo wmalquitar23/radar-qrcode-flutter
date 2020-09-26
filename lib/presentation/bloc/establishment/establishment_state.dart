@@ -9,6 +9,7 @@ class EstablishmentState extends Equatable {
   final String profileUploadImageFailureMessage;
   final bool syncDataProgress;
   final List<CheckIn> localCheckInData;
+  final List<CheckIn> totalScannedCheckInData;
   final bool syncDataSuccess;
   final String syncDataFailureMessage;
   final String establishementGetUserSuccessMessage;
@@ -22,6 +23,7 @@ class EstablishmentState extends Equatable {
     this.profileUploadImageFailureMessage,
     this.syncDataProgress,
     this.localCheckInData,
+    this.totalScannedCheckInData,
     this.syncDataSuccess,
     this.syncDataFailureMessage,
     this.establishementGetUserSuccessMessage,
@@ -37,6 +39,7 @@ class EstablishmentState extends Equatable {
         profileUploadImageFailureMessage,
         syncDataProgress,
         localCheckInData,
+        totalScannedCheckInData,
         syncDataSuccess,
         syncDataFailureMessage,
         establishementGetUserSuccessMessage,
@@ -52,28 +55,31 @@ class EstablishmentState extends Equatable {
     String profileUploadImageFailureMessage,
     bool syncDataProgress = false,
     List<CheckIn> localCheckInData,
+    List<CheckIn> totalScannedCheckInData,
     bool syncDataSuccess = false,
     String syncDataFailureMessage,
     String establishementGetUserSuccessMessage,
   }) {
     return EstablishmentState(
-      establishmentGetUserProgress:
-          establishmentGetUserProgress ?? state.establishmentGetUserProgress,
-      user: user ?? state.user,
-      establishmentGetUserFailure:
-          establishmentGetUserFailure ?? state.establishmentGetUserFailure,
-      profileUploadImageProgress:
-          profileUploadImageProgress ?? state.profileUploadImageProgress,
-      profileUploadImageSuccess:
-          profileUploadImageSuccess ?? state.profileUploadImageSuccess,
-      profileUploadImageFailureMessage: profileUploadImageFailureMessage ??
-          state.profileUploadImageFailureMessage,
-      syncDataProgress: syncDataProgress ?? state.syncDataProgress,
-      localCheckInData: localCheckInData ?? state.localCheckInData,
-      syncDataSuccess: syncDataSuccess ?? state.syncDataSuccess,
-      syncDataFailureMessage: syncDataFailureMessage ?? null,
-      establishementGetUserSuccessMessage: establishementGetUserSuccessMessage ?? null
-    );
+        establishmentGetUserProgress:
+            establishmentGetUserProgress ?? state.establishmentGetUserProgress,
+        user: user ?? state.user,
+        establishmentGetUserFailure:
+            establishmentGetUserFailure ?? state.establishmentGetUserFailure,
+        profileUploadImageProgress:
+            profileUploadImageProgress ?? state.profileUploadImageProgress,
+        profileUploadImageSuccess:
+            profileUploadImageSuccess ?? state.profileUploadImageSuccess,
+        profileUploadImageFailureMessage: profileUploadImageFailureMessage ??
+            state.profileUploadImageFailureMessage,
+        syncDataProgress: syncDataProgress ?? state.syncDataProgress,
+        localCheckInData: localCheckInData ?? state.localCheckInData,
+        totalScannedCheckInData:
+            totalScannedCheckInData ?? state.totalScannedCheckInData,
+        syncDataSuccess: syncDataSuccess ?? state.syncDataSuccess,
+        syncDataFailureMessage: syncDataFailureMessage ?? null,
+        establishementGetUserSuccessMessage:
+            establishementGetUserSuccessMessage ?? null);
   }
 }
 

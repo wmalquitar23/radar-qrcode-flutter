@@ -52,4 +52,9 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
   Stream<List<CheckIn>> listenForCheckIn() {
     return checkInDb.listenForCheckIn();
   }
+
+  @override
+  Stream<List<CheckIn>> listenForTotalCheckIn() {
+    return checkInDb.listenForTotalCheckIn();
+  }
 }

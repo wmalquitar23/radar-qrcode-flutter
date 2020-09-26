@@ -14,6 +14,7 @@ import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_checkin_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/listen_for_total_checkin_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/sync_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/upload_profile_image_use_case.dart';
 
@@ -28,6 +29,7 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
   final ListenForCheckInDataUseCase listenForCheckInDataUseCase;
   final NetworkInfoImpl networkInfo;
   final GetSessionUseCase getSessionUseCase;
+  final ListenForTotalCheckInDataUseCase listenForTotalCheckInDataUseCase;
 
   EstablishmentBloc({
     this.listenForSessionUseCase,
@@ -37,10 +39,12 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
     this.listenForCheckInDataUseCase,
     this.networkInfo,
     this.getSessionUseCase,
+    this.listenForTotalCheckInDataUseCase,
   }) : super(EstablishmentInitial());
 
   StreamSubscription<Session> _sessionSubscription;
   StreamSubscription<List<CheckIn>> _checkInSubscription;
+  StreamSubscription<List<CheckIn>> _totalCheckInSubscription;
   Logger logger = Logger();
 
   @override
@@ -55,11 +59,17 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
 
       _sessionSubscription?.cancel();
       _checkInSubscription?.cancel();
+      _totalCheckInSubscription?.cancel();
 
       _sessionSubscription = listenForSessionUseCase.stream().listen((session) {
         _checkInSubscription =
             listenForCheckInDataUseCase.stream().listen((listCheckIn) {
-          add(GetUserData(checkIn: listCheckIn));
+          _totalCheckInSubscription = listenForTotalCheckInDataUseCase
+              .stream()
+              .listen((totalListCheckIn) {
+            add(GetUserData(
+                checkIn: listCheckIn, totalCheckin: totalListCheckIn));
+          });
         });
       });
     } else if (event is GetUserData) {
@@ -70,9 +80,12 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
           establishmentGetUserProgress: false,
           user: session?.user,
           localCheckInData: event.checkIn,
+          totalScannedCheckInData: event.totalCheckin,
         );
       } else {
         _sessionSubscription?.cancel();
+        _checkInSubscription?.cancel();
+        _totalCheckInSubscription?.cancel();
       }
     }
 
@@ -162,6 +175,7 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
   Future<void> close() {
     _sessionSubscription?.cancel();
     _checkInSubscription?.cancel();
+    _totalCheckInSubscription?.cancel();
     return super.close();
   }
 }

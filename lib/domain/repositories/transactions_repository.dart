@@ -9,4 +9,6 @@ abstract class TransactionsRepository {
   Future<void> syncCheckInData();
 
   Stream<List<CheckIn>> listenForCheckIn();
+
+  Stream<List<CheckIn>> listenForTotalCheckIn();
 }

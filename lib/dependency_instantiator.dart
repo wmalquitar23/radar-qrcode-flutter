@@ -19,6 +19,7 @@ import 'package:radar_qrcode_flutter/domain/usecases/get_rapidpass_contact_use_c
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_checkin_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/listen_for_total_checkin_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/logout_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/otp_verification_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/register_establishment_use_case.dart';
@@ -151,6 +152,8 @@ class DataInstantiator extends RadarDataInstantiator {
             ListenForCheckInDataUseCase(transactionRepository),
         networkInfo: NetworkInfoImpl(dataConnectionChecker),
         getSessionUseCase: GetSessionUseCase(authenticationRepository),
+        listenForTotalCheckInDataUseCase:
+            ListenForTotalCheckInDataUseCase(transactionRepository),
       ),
     );
     sl.registerFactory<ProfileBloc>(
