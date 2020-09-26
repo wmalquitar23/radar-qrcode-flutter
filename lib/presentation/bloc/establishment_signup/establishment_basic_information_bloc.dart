@@ -13,8 +13,8 @@ import 'package:radar_qrcode_flutter/domain/usecases/verify_existing_mobile_numb
 part 'establishment_basic_information_event.dart';
 part 'establishment_basic_information_state.dart';
 
-class EstablishmentBasicInformationBloc
-    extends Bloc<EstablishmentBasicInformationEvent, EstablishmentBasicInformationState> {
+class EstablishmentBasicInformationBloc extends Bloc<
+    EstablishmentBasicInformationEvent, EstablishmentBasicInformationState> {
   final RegisterEstablishmentUseCase registerEstablishmentUseCase;
   final VerifyExistingMobileNumberUseCase verifyExistingMobileNumberUseCase;
   EstablishmentBasicInformationBloc(
@@ -45,14 +45,14 @@ class EstablishmentBasicInformationBloc
         yield RegisterFailure(error: e);
       }
     } else if (event is ValidateContactNumber) {
-      final contactNumLength = event.contactNumber.length;
+      final contactNum = event.contactNumber;
 
-      if (contactNumLength < 10) {
+      if (contactNum[0] != '9' || contactNum.length < 10) {
         yield ContactNumberIsInvalid(
           message: "Mobile number is invalid.",
           invalidType: 0,
         );
-      } else if (contactNumLength == 10) {
+      } else if (contactNum.length == 10) {
         yield ContactNumberValidationInProgress();
         try {
           final bool numberIsAlreadyUsed =
