@@ -1,5 +1,6 @@
 import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
+import 'package:radar_qrcode_flutter/data/mappers/requirement_mapper.dart';
 import 'package:radar_qrcode_flutter/data/mappers/user_address_mapper.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,7 @@ import 'package:intl/intl.dart';
 class UserMapper extends RadarMapper<User> {
   DateFormat birthDateFormatter = DateFormat("yyyy-MM-dd");
   UserAddressMapper userAddressMapper = UserAddressMapper();
+  RequirementMapper requirementMapper = RequirementMapper();
   @override
   User fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
@@ -36,6 +38,7 @@ class UserMapper extends RadarMapper<User> {
       profileImageUrl: map['profileImageUrl'],
       displayId: map['displayId'],
       establishmentName: map['firstname'],
+      requirement: requirementMapper.fromMap(map['requirements']),
     );
   }
 

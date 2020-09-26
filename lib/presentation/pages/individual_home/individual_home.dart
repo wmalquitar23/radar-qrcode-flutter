@@ -113,14 +113,12 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                                     ? _buildQRInfo(screenSize,
                                         state.individualGetUserSuccess)
                                     : Container(),
-                                SizedBox(
-                                  height: 50,
-                                ),
                                 state.individualGetUserSuccess != null
-                                    ? _buildHint()
+                                    ? _buildHint(state.individualGetUserSuccess)
                                     : Container(),
                                 state.individualGetUserSuccess != null
-                                    ? _buildVerifyIdentityButton()
+                                    ? _buildVerifyIdentityButton(
+                                        state.individualGetUserSuccess)
                                     : Container(),
                                 SizedBox(
                                   height: 50,
@@ -149,14 +147,41 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
     );
   }
 
-  Widget _buildVerifyIdentityButton() {
+  Widget _buildVerifyIdentityButton(IndividualGetUserSuccess state) {
     return Container(
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
-      child: PrimaryButton(
-        text: "Verify Identity",
-        onPressed: () =>
-            Navigator.of(context).pushNamed(IDENTITY_VERIFICATION_ROUTE),
-      ),
+      child: !state.user.isVerified
+          ? PrimaryButton(
+              text: state.user.requirement.isSubmitted
+                  ? "Pending Verification"
+                  : "Verify Identity",
+              color: state.user.requirement.isSubmitted
+                  ? ColorUtil.disabledColor
+                  : ColorUtil.primaryColor,
+              onPressed: () => state.user.requirement.isSubmitted
+                  ? null
+                  : Navigator.of(context)
+                      .pushNamed(IDENTITY_VERIFICATION_ROUTE),
+            )
+          : Column(
+              children: [
+                DescriptionText(
+                  title: "For Profile updates and any other concerns, please ",
+                  color: ColorUtil.primaryTextColor,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: DescriptionText(
+                    title: "get in touch with us",
+                    color: ColorUtil.primaryColor,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
     );
   }
 
@@ -310,14 +335,17 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
     );
   }
 
-  Widget _buildHint() {
+  Widget _buildHint(IndividualGetUserSuccess state) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
       child: Column(
         children: [
           DescriptionText(
-            title:
-                "In order to complete the verification, please take a picture of your valid government or company ID card.",
+            title: !state.user.isVerified
+                ? (state.user.requirement.isSubmitted
+                    ? "Your document has been successfully uploaded for review."
+                    : "In order to complete the verification, please take a picture of your valid government or company ID card.")
+                : "Help local authorities by sharing \nyour information with them.",
             color: ColorUtil.primaryTextColor,
             fontSize: 11,
             fontWeight: FontWeight.w600,

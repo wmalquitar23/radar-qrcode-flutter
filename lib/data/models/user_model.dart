@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/core/utils/date_utils.dart';
 import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
+import 'package:radar_qrcode_flutter/data/models/requirement.dart';
 
 class User extends RadarModel {
   final String id;
@@ -20,6 +21,7 @@ class User extends RadarModel {
   final String profileImageUrl;
   final String displayId;
   final String establishmentName;
+  final Requirement requirement;
 
   User({
     this.id,
@@ -36,6 +38,7 @@ class User extends RadarModel {
     this.profileImageUrl,
     this.displayId,
     this.establishmentName,
+    this.requirement,
   });
 
   String get fullName => "$firstName $lastName".toUpperCase();
