@@ -117,26 +117,28 @@ class _MyProfilePageState extends State<MyProfilePage> {
       context,
       (File file) async {
         File croppedFile = await ImageCropper.cropImage(
-            sourcePath: file.path,
-            cropStyle: CropStyle.circle,
-            aspectRatioPresets: [CropAspectRatioPreset.square],
-            androidUiSettings: AndroidUiSettings(
-                toolbarTitle: "Change Profile Image",
-                hideBottomControls: true,
-                showCropGrid: true,
-                toolbarColor: ColorUtil.primaryColor,
-                toolbarWidgetColor: Colors.white,
-                initAspectRatio: CropAspectRatioPreset.square,
-                lockAspectRatio: true),
-            iosUiSettings: IOSUiSettings(
-                minimumAspectRatio: 1.0,
-                aspectRatioLockEnabled: true,
-                aspectRatioPickerButtonHidden: true,
-                title: "Profile Image"));
-
-        BlocProvider.of<ProfileBloc>(context).add(
-          ProfileImageOnUpload(croppedFile),
+          sourcePath: file.path,
+          cropStyle: CropStyle.circle,
+          aspectRatioPresets: [CropAspectRatioPreset.square],
+          androidUiSettings: AndroidUiSettings(
+              toolbarTitle: "Change Profile Image",
+              hideBottomControls: true,
+              showCropGrid: true,
+              toolbarColor: ColorUtil.primaryColor,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.square,
+              lockAspectRatio: true),
+          iosUiSettings: IOSUiSettings(
+              minimumAspectRatio: 1.0,
+              aspectRatioLockEnabled: true,
+              aspectRatioPickerButtonHidden: true,
+              title: "Profile Image"),
         );
+        if (croppedFile != null) {
+          BlocProvider.of<ProfileBloc>(context).add(
+            ProfileImageOnUpload(croppedFile),
+          );
+        }
       },
       maxWidth: 1024,
       maxHeight: 512,

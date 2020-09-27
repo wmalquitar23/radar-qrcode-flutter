@@ -307,9 +307,11 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                 aspectRatioPickerButtonHidden: true,
                 title: "Profile Image"));
 
-        BlocProvider.of<EstablishmentBloc>(context).add(
-          ProfileImageOnUpload(croppedFile),
-        );
+        if (croppedFile != null) {
+          BlocProvider.of<EstablishmentBloc>(context).add(
+            ProfileImageOnUpload(croppedFile),
+          );
+        }
       },
       maxWidth: 1024,
       maxHeight: 512,

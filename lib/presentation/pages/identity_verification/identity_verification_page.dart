@@ -110,7 +110,9 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
                 aspectRatioPickerButtonHidden: true,
                 title: "Select Verification ID"));
 
-        Navigator.pushNamed(context, UPLOAD_ID_ROUTE, arguments: croppedFile);
+        if (croppedFile != null) {
+          Navigator.pushNamed(context, UPLOAD_ID_ROUTE, arguments: croppedFile);
+        }
       },
       maxWidth: 1024,
       maxHeight: 512,

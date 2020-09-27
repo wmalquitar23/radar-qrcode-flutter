@@ -132,9 +132,11 @@ class _UploadIDPageState extends State<UploadIDPage> {
                 aspectRatioPickerButtonHidden: true,
                 title: "Profile Image"));
 
-        BlocProvider.of<UploadIdBloc>(context).add(
-          UploadIDOnView(croppedFile),
-        );
+        if (croppedFile != null) {
+          BlocProvider.of<UploadIdBloc>(context).add(
+            UploadIDOnView(croppedFile),
+          );
+        }
       },
       maxWidth: 1024,
       maxHeight: 512,

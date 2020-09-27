@@ -172,7 +172,9 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                   fontWeight: FontWeight.w600,
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, CONTACT_US_ROUTE);
+                  },
                   child: DescriptionText(
                     title: "get in touch with us",
                     color: ColorUtil.primaryColor,
