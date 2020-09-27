@@ -107,6 +107,19 @@ class _NavigationPageState extends State<NavigationPage> {
                                         context, CHANGE_PIN_ROUTE);
                                   },
                                 ),
+                                state is NavigationCheckUserRole
+                                    ? !state.isIndividual
+                                        ? NavigationItem(
+                                            iconAsset: "profile.png",
+                                            title: 'Activation',
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              Navigator.pushNamed(context,
+                                                  ESTABLISHMENT_ACTIVATION_INFORMATION_ROUTE);
+                                            },
+                                          )
+                                        : Container()
+                                    : Container(),
                                 NavigationItem(
                                   iconAsset: "contact-us.png",
                                   title: 'Contact us',

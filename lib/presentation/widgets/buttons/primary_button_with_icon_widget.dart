@@ -11,6 +11,7 @@ class PrimaryButtonWithIcon extends StatelessWidget {
     this.fontSize,
     this.radius,
     this.onPressed,
+    this.icon,
   }) : super(key: key);
 
   final String text;
@@ -20,7 +21,7 @@ class PrimaryButtonWithIcon extends StatelessWidget {
   final double fontSize;
   final double radius;
   final VoidCallback onPressed;
-  // final Icon icon;
+  final Icon icon;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class PrimaryButtonWithIcon extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/app/qr-code.png'),
+            icon != null ? icon : Image.asset('assets/images/app/qr-code.png'),
             SizedBox(width: 10),
             Text(
               text,

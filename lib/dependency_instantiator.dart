@@ -33,6 +33,7 @@ import 'package:radar_qrcode_flutter/presentation/bloc/address_picker/address_pi
 import 'package:radar_qrcode_flutter/presentation/bloc/change_contact_number/change_contact_number_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/change_pin/change_pin_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/contact_us/contact_us_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/estab_activation_info/estab_activation_info_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/verify_existing_mobile_number_use_case.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
@@ -205,14 +206,26 @@ class DataInstantiator extends RadarDataInstantiator {
               GetProfileInformationUseCase(profileRepository),
         ));
 
-    sl.registerFactory<SignInVerificationBloc>(() => SignInVerificationBloc(
-          signInUseCase: SignInUseCase(authenticationRepository),
-          getProfileInformationUseCase:
-              GetProfileInformationUseCase(profileRepository),
-        ));
-    sl.registerFactory(() => ContactUsBloc(
+    sl.registerFactory<SignInVerificationBloc>(
+      () => SignInVerificationBloc(
+        signInUseCase: SignInUseCase(authenticationRepository),
+        getProfileInformationUseCase:
+            GetProfileInformationUseCase(profileRepository),
+      ),
+    );
+    sl.registerFactory(
+      () => ContactUsBloc(
         getRapidPassContactUseCase:
-            GetRapidPassContactUseCase(rapidPassContactRepository)));
+            GetRapidPassContactUseCase(rapidPassContactRepository),
+      ),
+    );
+    sl.registerFactory<EstabActivationInfoBloc>(
+      () => EstabActivationInfoBloc(
+        getProfileInformationUseCase:
+            GetProfileInformationUseCase(profileRepository),
+        getSessionUseCase: GetSessionUseCase(authenticationRepository),
+      ),
+    );
 
     //usecases
     GetIt.I.registerLazySingleton<RegisterIndividualUseCase>(

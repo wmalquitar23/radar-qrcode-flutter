@@ -7,6 +7,7 @@ import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/address_picker/address_picker_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/change_contact_number/change_contact_number_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/contact_us/contact_us_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/estab_activation_info/estab_activation_info_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
@@ -26,6 +27,7 @@ import 'package:radar_qrcode_flutter/presentation/pages/change_contact_number/ch
 import 'package:radar_qrcode_flutter/presentation/pages/change_pin/change_pin_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/contact_us/contact_us_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/establishment_activation_info/establishment_activation_information.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_home/establishment_home_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/dummy_camera_view.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/identity_verification_page.dart';
@@ -223,6 +225,16 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           child: ChangeContactNumberPage(
             user: args,
           ),
+        ),
+        settings: settings,
+        pageTransitionType: PageTransitionType.fade,
+      );
+      break;
+    case ESTABLISHMENT_ACTIVATION_INFORMATION_ROUTE:
+      return pushNamed(
+        page: BlocProvider(
+          create: (_) => sl<EstabActivationInfoBloc>(),
+          child: EstablishmentActivationInformation(),
         ),
         settings: settings,
         pageTransitionType: PageTransitionType.fade,

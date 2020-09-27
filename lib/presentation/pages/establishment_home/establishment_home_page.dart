@@ -115,7 +115,10 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                                 ? _buildEstablishmentDetails(
                                     state.user, state.localCheckInData, state)
                                 : Container(),
-                            state.user != null ? _buildHint() : Container(),
+                            state.user != null
+                                ? _buildHint(
+                                    state.user, state.totalScannedCheckInData)
+                                : Container(),
                             state.user != null
                                 ? _buildScanQRCodeButton(
                                     state.user, state.totalScannedCheckInData)
@@ -207,6 +210,13 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                     color: ColorUtil.primaryColor,
                   ),
                 ),
+                Align(
+                  alignment: Alignment.center,
+                  child: DescriptionText(
+                    title: "#${user.displayId}",
+                    color: ColorUtil.secondaryTextColor,
+                  ),
+                ),
               ],
             ),
             SizedBox(
@@ -225,7 +235,8 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            color: Colors.red, shape: BoxShape.circle),
+                          shape: BoxShape.circle,
+                        ),
                         child: GestureDetector(
                           onTap: () {
                             BlocProvider.of<EstablishmentBloc>(context).add(
@@ -236,8 +247,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                             margin: EdgeInsets.all(5),
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                                color: ColorUtil.primaryColor,
-                                shape: BoxShape.circle),
+                                color: Colors.red, shape: BoxShape.circle),
                             child: state.syncDataProgress
                                 ? CupertinoActivityIndicator()
                                 : Icon(
@@ -327,13 +337,17 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
     );
   }
 
-  Widget _buildHint() {
+  Widget _buildHint(User user, List<CheckIn> totalScannedCheckInData) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
       child: Column(
         children: [
           DescriptionText(
-            title: "Please scan a QR Code to retrieve user's information.",
+            title: user.isVerified
+                ? "Please scan a QR Code to retrieve user's information."
+                : (totalScannedCheckInData.length < limitScanNumber
+                    ? "Please scan a QR Code to retrieve user's information."
+                    : "You have reached the scan limit. You need to subscribe the radar application to proceed."),
             color: ColorUtil.primaryTextColor,
             fontSize: 11,
             fontWeight: FontWeight.w600,
@@ -343,7 +357,8 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
     );
   }
 
-  Widget _buildScanQRCodeButton(User user, List<CheckIn> totalScannedCheckInData) {
+  Widget _buildScanQRCodeButton(
+      User user, List<CheckIn> totalScannedCheckInData) {
     return Container(
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
       child: PrimaryButtonWithIcon(
@@ -354,8 +369,6 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
             if (totalScannedCheckInData.length < limitScanNumber) {
               Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
             } else {
-              ToastUtil.showToast(context,
-                  "You have reached the scan limit. You need to subscribe the radar application to continue.");
               return null;
             }
           }

@@ -21,3 +21,4 @@ const String DUMMY_CAMERA_VIEW_ROUTE =
 const String ADDRESS_PICKER_PAGE_ROUTE = '/address-picker-page';
 const String TERMS_AND_CONDITIONS_ROUTE = '/terms-and-conditions';
 const String CHANGE_CONTACT_NUMBER_ROUTE = '/change-contact-number';
+const String ESTABLISHMENT_ACTIVATION_INFORMATION_ROUTE = '/establishment-activation-information';
