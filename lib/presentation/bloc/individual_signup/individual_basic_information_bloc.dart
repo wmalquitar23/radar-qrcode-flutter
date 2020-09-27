@@ -51,7 +51,8 @@ class IndividualBasicInformationBloc extends Bloc<
     } else if (event is ValidateContactNumber) {
       final contactNum = event.contactNumber;
 
-      if (contactNum[0] != '9' || contactNum.length < 10) {
+      if ((contactNum.length > 0 && contactNum[0] != '9') ||
+          contactNum.length < 10) {
         yield ContactNumberIsInvalid(
           message: "Mobile number is invalid.",
           invalidType: 0,
