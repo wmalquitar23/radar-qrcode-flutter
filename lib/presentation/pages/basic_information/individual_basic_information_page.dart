@@ -37,6 +37,7 @@ class _IndividualBasicInformationPageState
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _middleNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _suffixNameController = TextEditingController();
   TextEditingController _birthDateController = TextEditingController();
   TextEditingController _genderController = TextEditingController();
   TextEditingController _pinController = TextEditingController();
@@ -82,6 +83,7 @@ class _IndividualBasicInformationPageState
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
         middleName: _middleNameController.text,
+        suffixName: _suffixNameController.text,
         birthDate: StringUtils.convertDateFromString(_birthDateController.text),
         gender: _genderValue,
         pin: _pinController.text,
@@ -295,6 +297,7 @@ class _IndividualBasicInformationPageState
                 _buildFirstNameTextField(),
                 _buildMiddleNameTextField(),
                 _buildLastNameTextField(),
+                _buildSuffixNameTextField(),
                 _buildBirthdateTextField(),
                 _buildGenderNameTextField()
               ],
@@ -503,6 +506,20 @@ class _IndividualBasicInformationPageState
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "Middle Name"),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSuffixNameTextField() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
+      child: ShadowWidget(
+        child: TextFormField(
+          controller: _suffixNameController,
+          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+          decoration:
+              TextFieldTheme.textfieldInputDecoration(hintText: "Suffix Name"),
         ),
       ),
     );
