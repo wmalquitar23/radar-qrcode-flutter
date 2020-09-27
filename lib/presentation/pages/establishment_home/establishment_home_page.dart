@@ -19,6 +19,7 @@ import 'package:radar_qrcode_flutter/presentation/widgets/fields/custom_textfiel
 import 'package:radar_qrcode_flutter/presentation/widgets/images/circle_image_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widget.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/status/status_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
 
 import '../../widgets/texts/description_text.dart';
@@ -29,7 +30,7 @@ class EstablishmentHomePage extends StatefulWidget {
 }
 
 class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
-  final int limitScanNumber = 500;
+  final int limitScanNumber = 20;
   final _snackBarDuration = Duration(seconds: 2);
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime _currentBackPressTime;
@@ -163,6 +164,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
         child: Column(
           children: <Widget>[
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Stack(
                   alignment: Alignment.center,
@@ -203,19 +205,22 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                   ],
                 ),
                 SizedBox(height: 15),
-                Align(
-                  alignment: Alignment.center,
-                  child: HeaderText(
-                    title: user.firstName,
-                    color: ColorUtil.primaryColor,
-                  ),
+                HeaderText(
+                  title: user.firstName,
+                  color: ColorUtil.primaryColor,
                 ),
-                Align(
-                  alignment: Alignment.center,
-                  child: DescriptionText(
-                    title: "#${user.displayId}",
-                    color: ColorUtil.secondaryTextColor,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    StatusWidget(
+                      isVerified: state.user.isVerified,
+                      iconOnly: true,
+                    ),
+                    DescriptionText(
+                      title: "#${user.displayId}",
+                      color: ColorUtil.primaryTextColor,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -349,11 +354,52 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                 ? "Please scan a QR Code to retrieve user's information."
                 : (totalScannedCheckInData.length < limitScanNumber
                     ? "Please scan a QR Code to retrieve user's information."
-                    : "You have reached the scan limit. You need to subscribe the radar application to proceed."),
+                    : "You have reached the scan limit. Please activate your account to continue using Radar."),
             color: ColorUtil.primaryTextColor,
             fontSize: 11,
             fontWeight: FontWeight.w600,
-          )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              DescriptionText(
+                title: user.isVerified
+                    ? ""
+                    : (totalScannedCheckInData.length < limitScanNumber
+                        ? "Activate your account to scan unlimited users."
+                        : "Click "),
+                color: ColorUtil.primaryTextColor,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                      context, ESTABLISHMENT_ACTIVATION_INFORMATION_ROUTE);
+                },
+                child: DescriptionText(
+                  title: user.isVerified
+                      ? ""
+                      : (totalScannedCheckInData.length < limitScanNumber
+                          ? ""
+                          : "here "),
+                  color: ColorUtil.primaryColor,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              DescriptionText(
+                title: user.isVerified
+                    ? ""
+                    : (totalScannedCheckInData.length < limitScanNumber
+                        ? ""
+                        : "to activate."),
+                color: ColorUtil.primaryTextColor,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ],
+          ),
         ],
       ),
     );

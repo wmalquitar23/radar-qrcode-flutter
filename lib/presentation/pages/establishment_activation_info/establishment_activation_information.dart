@@ -115,7 +115,7 @@ class _EstablishmentActivationInformationState
                           title: state.user.isVerified
                               ? "Your Establishment account is active"
                               : "Your Establishment account is inactive",
-                          fontSize: 22,
+                          fontSize: 20,
                           color: ColorUtil.primaryColor,
                           textAlign: TextAlign.center,
                         ),
@@ -133,7 +133,7 @@ class _EstablishmentActivationInformationState
                                         "Please activate your account to access the full features and exclusive benefits of Radar.",
                                     textAlign: TextAlign.center,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 15,
+                                    fontSize: 14,
                                   ),
                                 )
                               : Column(
@@ -195,7 +195,7 @@ class _EstablishmentActivationInformationState
                                           Container(
                                             child: HeaderText(
                                               title: "PHP500.00",
-                                              fontSize: 30,
+                                              fontSize: 28,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -205,7 +205,7 @@ class _EstablishmentActivationInformationState
                                           Container(
                                             child: HeaderText(
                                               title: "PER YEAR",
-                                              fontSize: 18,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -276,6 +276,7 @@ class _EstablishmentActivationInformationState
       padding: EdgeInsets.symmetric(vertical: 7),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 4),
@@ -290,7 +291,7 @@ class _EstablishmentActivationInformationState
             width: MediaQuery.of(context).size.width * 0.45,
             child: Text(
               text,
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 14),
             ),
           ),
         ],

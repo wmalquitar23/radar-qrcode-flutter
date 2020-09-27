@@ -5,8 +5,13 @@ import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text
 
 class StatusWidget extends StatelessWidget {
   final bool isVerified;
+  final bool iconOnly;
 
-  const StatusWidget({Key key, this.isVerified}) : super(key: key);
+  const StatusWidget({
+    Key key,
+    this.isVerified,
+    this.iconOnly = false,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return isVerified
@@ -22,7 +27,7 @@ class StatusWidget extends StatelessWidget {
                 width: 5.0,
               ),
               DescriptionText(
-                title: "VERIFIED",
+                title: iconOnly ? "" : "VERIFIED",
                 color: ColorUtil.primaryTextColor,
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
@@ -41,7 +46,7 @@ class StatusWidget extends StatelessWidget {
                 width: 5.0,
               ),
               DescriptionText(
-                title: "UNVERIFIED",
+                title: iconOnly ? "" : "UNVERIFIED",
                 color: ColorUtil.primaryTextColor,
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
