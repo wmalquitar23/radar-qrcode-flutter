@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/estab_activation_info/estab_activation_info_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
@@ -44,6 +45,9 @@ class _EstablishmentActivationInformationState
             builder: (context, state) {
               if (state is EstabActivationInfoInitial) {
                 _onLoad();
+              }
+              if (state is GetUserInformationFailure) {
+                ToastUtil.showToast(context, state.error);
               }
               if (state is GetUserInformationSuccess) {
                 return Center(
