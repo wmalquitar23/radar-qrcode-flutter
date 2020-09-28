@@ -27,7 +27,7 @@ class UserMapper extends RadarMapper<User> {
       firstName: map['firstname'],
       lastName: map['lastname'],
       middleName: map['middlename'] != null ? map['middlename'] : null,
-      suffixName: map['suffixname'] != null ? map['suffixname'] : null,
+      suffix: map['suffix'] != null ? map['suffix'] : null,
 
       birthDate: map['birthDate'] != null
           ? birthDateFormatter.parse(map['birthDate'])
@@ -52,7 +52,7 @@ class UserMapper extends RadarMapper<User> {
       "firstname": object.firstName,
       "middlename": object.middleName,
       "lastname": object.lastName,
-      "suffixname": object.suffixName,
+      "suffix": object.suffix,
       "pin": object.pin,
       "birthDate": object.birthDate.toIso8601String(),
       "profileImageUrl": object.profileImageUrl,

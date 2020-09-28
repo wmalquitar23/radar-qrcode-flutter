@@ -11,7 +11,7 @@ class User extends RadarModel {
   final String firstName;
   final String lastName;
   final String middleName;
-  final String suffixName;
+  final String suffix;
   final String pin;
   final DateTime birthDate;
   final Gender gender;
@@ -28,7 +28,7 @@ class User extends RadarModel {
     this.id,
     this.firstName,
     this.lastName,
-    this.suffixName,
+    this.suffix,
     this.gender,
     this.pin,
     this.middleName,

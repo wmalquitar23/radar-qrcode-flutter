@@ -11,7 +11,7 @@ class RegisterPressed extends IndividualBasicInformationEvent {
   final String firstName;
   final String middleName;
   final String lastName;
-  final String suffixName;
+  final String suffix;
   final DateTime birthDate;
   final Gender gender;
   final String pin;
@@ -22,7 +22,7 @@ class RegisterPressed extends IndividualBasicInformationEvent {
     this.firstName,
     this.middleName,
     this.lastName,
-    this.suffixName,
+    this.suffix,
     this.birthDate,
     this.gender,
     this.pin,
