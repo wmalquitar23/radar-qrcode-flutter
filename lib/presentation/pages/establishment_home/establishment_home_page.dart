@@ -114,7 +114,10 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                             state.user != null ? _buildAppBar() : Container(),
                             state.user != null
                                 ? _buildEstablishmentDetails(
-                                    state.user, state.localCheckInData, state)
+                                    state.user,
+                                    state.localCheckInData,
+                                    state.totalScannedCheckInData,
+                                    state)
                                 : Container(),
                             state.user != null
                                 ? _buildHint(
@@ -150,8 +153,8 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
     );
   }
 
-  Widget _buildEstablishmentDetails(
-      User user, List<CheckIn> localCheckInData, EstablishmentState state) {
+  Widget _buildEstablishmentDetails(User user, List<CheckIn> localCheckInData,
+      List<CheckIn> totalScannedCheckInData, EstablishmentState state) {
     return ShadowWidget(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -282,6 +285,21 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                 SizedBox(
                   height: 20,
                 ),
+                state.user.isVerified
+                    ? Container()
+                    : (totalScannedCheckInData.length < limitScanNumber
+                        ? Row(
+                            children: [
+                              DescriptionText(
+                                title:
+                                    "Activate your account to scan unlimited users.",
+                                color: Colors.red,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ],
+                          )
+                        : Container()),
               ],
             )
           ],

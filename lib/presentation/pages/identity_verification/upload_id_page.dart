@@ -170,7 +170,7 @@ class _UploadIDPageState extends State<UploadIDPage> {
           ),
           SizedBox(height: 10),
           _buildChecklistItem("The photo is not blurry"),
-          _buildChecklistItem("The image hasn't been manipulated in any way"),
+          _buildChecklistItem("The image has not been manipulated in any way"),
           _buildChecklistItem(
               "There is a border area around your ID and all four corners should be visible"),
         ],

@@ -245,7 +245,7 @@ class _EstablishmentActivationInformationState
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           _buildChecklistItem("Unlimited scan"),
-          _buildChecklistItem("No terminal fee"),
+          _buildChecklistItem("No termination fee"),
           _buildChecklistItem("Customer Support"),
           _buildChecklistItem("Establishment portal"),
         ],
