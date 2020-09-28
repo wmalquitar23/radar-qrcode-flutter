@@ -34,6 +34,7 @@ class IndividualBasicInformationBloc extends Bloc<
           event.firstName,
           event.lastName,
           event.middleName,
+          event.suffix,
           event.pin,
           event.contactNumber,
           event.userAddress,
