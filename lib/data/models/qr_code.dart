@@ -6,6 +6,7 @@ class QRCode extends RadarModel {
   final String firstName;
   final String middleName;
   final String lastName;
+  final String suffix;
   final String address;
   final int age;
   final bool isVerified;
@@ -14,6 +15,7 @@ class QRCode extends RadarModel {
     @required this.userID,
     @required this.firstName,
     this.middleName,
+    this.suffix,
     @required this.lastName,
     @required this.address,
     @required this.age,

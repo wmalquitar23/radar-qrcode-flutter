@@ -28,7 +28,6 @@ class UserMapper extends RadarMapper<User> {
       lastName: map['lastname'],
       middleName: map['middlename'] != null ? map['middlename'] : null,
       suffix: map['suffix'] != null ? map['suffix'] : null,
-
       birthDate: map['birthDate'] != null
           ? birthDateFormatter.parse(map['birthDate'])
           : null,

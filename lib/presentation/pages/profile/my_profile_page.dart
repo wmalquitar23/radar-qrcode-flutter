@@ -76,6 +76,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                 : "",
                             fontSize: 18,
                             color: ColorUtil.primaryColor,
+                            textAlign: TextAlign.center,
                           ),
                         ),
                         SizedBox(

@@ -43,7 +43,9 @@ class User extends RadarModel {
     this.requirement,
   });
 
-  String get fullName => "$firstName $lastName".toUpperCase();
+  String get fullName =>
+      "$firstName ${middleName.length > 0 ? middleName[0] + ". " : ""}$lastName${suffix.length > 0 ? ", " + suffix : ""}"
+          .toUpperCase();
 
   String birthDateToString(DateTime birthdate) {
     DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
@@ -52,5 +54,7 @@ class User extends RadarModel {
 
   int get age => birthDate != null ? DateUtils.calculateAge(birthDate) : null;
 
-  String get genderToString => gender == Gender.male ? EnumToString.convertToString(Gender.male, camelCase: true) : EnumToString.convertToString(Gender.female, camelCase: true);
+  String get genderToString => gender == Gender.male
+      ? EnumToString.convertToString(Gender.male, camelCase: true)
+      : EnumToString.convertToString(Gender.female, camelCase: true);
 }
