@@ -519,7 +519,7 @@ class _IndividualBasicInformationPageState
           controller: _suffixController,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Suffix Name"),
+              TextFieldTheme.textfieldInputDecoration(hintText: "Suffix"),
         ),
       ),
     );
