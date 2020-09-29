@@ -18,6 +18,7 @@ import 'package:radar_qrcode_flutter/presentation/pages/terms_and_conditions/ter
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/dialogs/gender_dialog.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/dialogs/suffix_picker_dialog.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
@@ -470,7 +471,7 @@ class _IndividualBasicInformationPageState
       child: ShadowWidget(
         child: TextField(
           onTap: () {
-            _showAlertDialog();
+            _showGenderPickerDialog();
           },
           controller: _genderController,
           readOnly: true,
@@ -515,8 +516,12 @@ class _IndividualBasicInformationPageState
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: ShadowWidget(
-        child: TextFormField(
+        child: TextField(
+          onTap: () {
+            _showSuffixPickerDialog();
+          },
           controller: _suffixController,
+          readOnly: true,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "Suffix"),
@@ -672,7 +677,7 @@ class _IndividualBasicInformationPageState
     );
   }
 
-  Future<void> _showAlertDialog() async {
+  Future<void> _showGenderPickerDialog() async {
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -692,6 +697,23 @@ class _IndividualBasicInformationPageState
                 break;
               default:
             }
+          },
+        );
+        _onChangeValidityBasicInfo1();
+      },
+    );
+  }
+
+  Future<void> _showSuffixPickerDialog() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SuffixPickerDialog(selectedValue: _suffixController.text);
+        }).then(
+      (value) {
+        setState(
+          () {
+            _suffixController.text = value ?? _suffixController.text;
           },
         );
         _onChangeValidityBasicInfo1();
