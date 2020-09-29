@@ -18,6 +18,12 @@ class AppHasSession extends SplashState {
   AppHasSession(this.route);
 }
 
+class AppInformation extends SplashState {
+  final AppInfo appInfo;
+
+  AppInformation({this.appInfo});
+}
+
 class AppHasNoSession extends SplashState {}
 
 class SplashDone extends SplashState {}

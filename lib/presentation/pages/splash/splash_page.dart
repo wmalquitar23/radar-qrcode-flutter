@@ -2,7 +2,9 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:radar_qrcode_flutter/data/models/app_info.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/splash/splash_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
 import 'package:relative_scale/relative_scale.dart';
 
 import '../../../core/utils/color_util.dart';
@@ -16,12 +18,11 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  AppInfo appInfo = AppInfo();
   void _onLoad() async {
-    new Future.delayed(const Duration(seconds: 2), () {
-      BlocProvider.of<SplashBloc>(context).add(
-        GetSession(),
-      );
-    });
+    BlocProvider.of<SplashBloc>(context).add(
+      GetSession(),
+    );
   }
 
   @override
@@ -39,6 +40,9 @@ class _SplashPageState extends State<SplashPage> {
               SchedulerBinding.instance.addPostFrameCallback((_) {
                 Navigator.of(context).pushReplacementNamed(ONBOARD_ROUTE);
               });
+            }
+            if (state is AppInformation) {
+              appInfo = state.appInfo;
             }
           },
           builder: (context, state) {
@@ -59,6 +63,13 @@ class _SplashPageState extends State<SplashPage> {
                       'assets/images/app/logo-black.png',
                       width: sx(300),
                     ),
+                    SizedBox(height: 10.0,),
+                    appInfo != null
+                        ? DescriptionText(
+                            title: "Current version: ${appInfo?.version}.${appInfo?.buildNumber} ",
+                            fontWeight: FontWeight.w500,
+                          )
+                        : Container(),
                     Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

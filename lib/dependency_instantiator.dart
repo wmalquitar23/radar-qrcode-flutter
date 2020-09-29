@@ -14,6 +14,7 @@ import 'package:radar_qrcode_flutter/domain/repositories/rapidpass_contact_repos
 import 'package:radar_qrcode_flutter/domain/repositories/transactions_repository.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/checkin_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_address_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/get_app_info_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_rapidpass_contact_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
@@ -106,6 +107,7 @@ class DataInstantiator extends RadarDataInstantiator {
     sl.registerFactory<SplashBloc>(
       () => SplashBloc(
         getSessionUseCase: GetSessionUseCase(authenticationRepository),
+        getAppInfoUseCase: GetAppInfoUseCase(),
       ),
     );
     sl.registerFactory<RegisterAsBloc>(

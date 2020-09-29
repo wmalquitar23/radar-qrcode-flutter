@@ -44,3 +44,4 @@ app.*.map.json
 /pubspec.lock
 /assets/env/.env
 /radar.db
+/assets/keys/
