@@ -6,6 +6,7 @@ class RegisterIndividualRequest {
   String firstname;
   String middlename;
   String lastname;
+  String suffix;
   String pin;
   String birthDate;
   Gender gender;
@@ -14,20 +15,23 @@ class RegisterIndividualRequest {
 
   UserAddressMapper _userAddressMapper = UserAddressMapper();
 
-  RegisterIndividualRequest(
-      {this.firstname,
-      this.middlename,
-      this.lastname,
-      this.pin,
-      this.birthDate,
-      this.gender,
-      this.contactNumber,
-      this.userAddress});
+  RegisterIndividualRequest({
+    this.firstname,
+    this.middlename,
+    this.lastname,
+    this.suffix,
+    this.pin,
+    this.birthDate,
+    this.gender,
+    this.contactNumber,
+    this.userAddress,
+  });
 
   RegisterIndividualRequest.fromJson(Map<String, dynamic> json) {
     firstname = json['firstname'];
     middlename = json['middlename'];
     lastname = json['lastname'];
+    suffix = json['suffix'];
     pin = json['pin'];
     birthDate = json['birthDate'];
     gender = json['gender'] == "male" ? Gender.male : Gender.female;
@@ -42,6 +46,7 @@ class RegisterIndividualRequest {
     data['firstname'] = this.firstname;
     data['middlename'] = this.middlename;
     data['lastname'] = this.lastname;
+    data['suffix'] = this.suffix;
     data['pin'] = this.pin;
     data['birthDate'] = this.birthDate;
     data['gender'] = this.gender == Gender.male ? "male" : "female";

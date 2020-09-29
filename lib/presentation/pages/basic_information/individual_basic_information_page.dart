@@ -18,6 +18,7 @@ import 'package:radar_qrcode_flutter/presentation/pages/terms_and_conditions/ter
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_regular_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/dialogs/gender_dialog.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/dialogs/suffix_picker_dialog.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/header_text.dart';
@@ -37,6 +38,7 @@ class _IndividualBasicInformationPageState
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _middleNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _suffixController = TextEditingController();
   TextEditingController _birthDateController = TextEditingController();
   TextEditingController _genderController = TextEditingController();
   TextEditingController _pinController = TextEditingController();
@@ -82,6 +84,7 @@ class _IndividualBasicInformationPageState
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
         middleName: _middleNameController.text,
+        suffix: _suffixController.text,
         birthDate: StringUtils.convertDateFromString(_birthDateController.text),
         gender: _genderValue,
         pin: _pinController.text,
@@ -295,10 +298,13 @@ class _IndividualBasicInformationPageState
                 _buildFirstNameTextField(),
                 _buildMiddleNameTextField(),
                 _buildLastNameTextField(),
+                _buildSuffixTextField(),
                 _buildBirthdateTextField(),
                 _buildGenderNameTextField()
               ],
             ),
+            SizedBox(height: 30),
+            _buildWarningNote(),
             SizedBox(height: 30),
             _buildContinuePage1Button()
           ],
@@ -467,7 +473,7 @@ class _IndividualBasicInformationPageState
       child: ShadowWidget(
         child: TextField(
           onTap: () {
-            _showAlertDialog();
+            _showGenderPickerDialog();
           },
           controller: _genderController,
           readOnly: true,
@@ -503,6 +509,24 @@ class _IndividualBasicInformationPageState
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
               TextFieldTheme.textfieldInputDecoration(hintText: "Middle Name"),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSuffixTextField() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
+      child: ShadowWidget(
+        child: TextField(
+          onTap: () {
+            _showSuffixPickerDialog();
+          },
+          controller: _suffixController,
+          readOnly: true,
+          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+          decoration:
+              TextFieldTheme.textfieldInputDecoration(hintText: "Suffix"),
         ),
       ),
     );
@@ -624,6 +648,29 @@ class _IndividualBasicInformationPageState
   //   );
   // }
 
+  Widget _buildWarningNote() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 10,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.red[50],
+        border: Border(
+          left: BorderSide(
+            width: 8,
+            color: Colors.red,
+          ),
+        ),
+      ),
+      child: Text(
+        "Please make sure all details are correct to avoid delay or problem with your account in the future.",
+        style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
+        textAlign: TextAlign.justify,
+      ),
+    );
+  }
+
   Widget _buildContinuePage1Button() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
@@ -655,7 +702,7 @@ class _IndividualBasicInformationPageState
     );
   }
 
-  Future<void> _showAlertDialog() async {
+  Future<void> _showGenderPickerDialog() async {
     await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -675,6 +722,23 @@ class _IndividualBasicInformationPageState
                 break;
               default:
             }
+          },
+        );
+        _onChangeValidityBasicInfo1();
+      },
+    );
+  }
+
+  Future<void> _showSuffixPickerDialog() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SuffixPickerDialog(selectedValue: _suffixController.text);
+        }).then(
+      (value) {
+        setState(
+          () {
+            _suffixController.text = value ?? _suffixController.text;
           },
         );
         _onChangeValidityBasicInfo1();

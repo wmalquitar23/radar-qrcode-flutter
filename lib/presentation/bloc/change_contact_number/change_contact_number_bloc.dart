@@ -35,6 +35,7 @@ class ChangeContactNumberBloc
           event.firstName,
           event.lastName,
           event.middleName,
+          event.suffix,
           event.pin,
           event.contactNumber,
           event.address,

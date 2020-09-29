@@ -47,6 +47,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       String firstName,
       String lastName,
       String middleName,
+      String suffix,
       String pin,
       String contactNumber,
       UserAddress userAddress,
@@ -57,6 +58,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         "firstname": firstName,
         "middlename": middleName,
         "lastname": lastName,
+        "suffix": suffix,
         "pin": pin,
         "birthDate": birthdayFormatter.format(birthdate),
         "gender": gender == Gender.male ? "male" : "female",
@@ -98,7 +100,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
     Map<dynamic, dynamic> registrationData = await getRegisterQueueData();
 
-    if (registrationData.length == 8) {
+    if (registrationData.length == 9) {
       userInfoResponse = await restClient.registerIndividual(
           RegisterIndividualRequest.fromJson(registrationData));
     } else if (registrationData.length == 4) {

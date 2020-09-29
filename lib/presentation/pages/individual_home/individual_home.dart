@@ -244,6 +244,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                         title: state?.user?.fullName,
                         color: ColorUtil.primaryColor,
                         fontSize: 16,
+                        textAlign: TextAlign.start,
                       ),
                       SizedBox(height: 3),
                       Text(

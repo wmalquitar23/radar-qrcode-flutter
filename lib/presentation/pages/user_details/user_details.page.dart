@@ -62,6 +62,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                           title: state?.userInformation?.fullName,
                           fontSize: 18,
                           color: ColorUtil.primaryColor,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       SizedBox(

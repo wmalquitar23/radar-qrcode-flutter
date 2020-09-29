@@ -13,6 +13,7 @@ abstract class AuthenticationRepository {
     String firstName,
     String lastName,
     String middleName,
+    String suffix,
     String pin,
     String contactNumber,
     UserAddress address,

@@ -45,6 +45,7 @@ void main() {
     var firstName = "Jesther${formatter.format(DateTime.now())}";
     var lastName = "Minor${formatter.format(DateTime.now())}";
     var middleName = "Min${formatter.format(DateTime.now())}";
+    var suffix = "Jr";
     var pin = "1234";
     var contactNumber = "09459298175";
     var address = UserAddress(
@@ -62,6 +63,7 @@ void main() {
       firstName,
       lastName,
       middleName,
+      suffix,
       pin,
       contactNumber,
       address,
@@ -115,6 +117,7 @@ void main() {
     var firstName = "Jesther${formatter.format(DateTime.now())}";
     var lastName = "Minor${formatter.format(DateTime.now())}";
     var middleName = "Min${formatter.format(DateTime.now())}";
+    var suffix = "Jr";
     var pin = "1234";
     var contactNumber = "09359098175";
     var address = UserAddress(
@@ -132,6 +135,7 @@ void main() {
       firstName,
       lastName,
       middleName,
+      suffix,
       pin,
       contactNumber,
       address,

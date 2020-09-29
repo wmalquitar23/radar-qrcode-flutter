@@ -68,15 +68,17 @@ void main() {
     var firstName = "Jesther${formatter.format(DateTime.now())}";
     var lastName = "Minor${formatter.format(DateTime.now())}";
     var middleName = "Min${formatter.format(DateTime.now())}";
+    var suffix = "Jr";
     var pin = "1234";
     var birthDate = birthdayFormatter.format(DateTime.utc(1995, 07, 31));
     var gender = Gender.male;
-    var contactNumber = "9452082819";
+    var contactNumber = "9452082829";
 
     var request = RegisterIndividualRequest(
       firstname: firstName,
       middlename: middleName,
       lastname: lastName,
+      suffix: suffix,
       pin: pin,
       birthDate: birthdayFormatter.parse(birthDate).toString(),
       gender: gender,
