@@ -125,6 +125,36 @@ class SuffixPickerDialogState extends State<SuffixPickerDialog> {
               Row(
                 children: <Widget>[
                   Radio<String>(
+                    value: 'IV',
+                    groupValue: widget.selectedValue,
+                    onChanged: (value) {
+                      Navigator.of(context).pop(value);
+                    },
+                  ),
+                  Text(
+                    "IV",
+                    style: TextStyle(fontSize: 12.0),
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Radio<String>(
+                    value: 'V',
+                    groupValue: widget.selectedValue,
+                    onChanged: (value) {
+                      Navigator.of(context).pop(value);
+                    },
+                  ),
+                  Text(
+                    "V",
+                    style: TextStyle(fontSize: 12.0),
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Radio<String>(
                     value: 'JR',
                     groupValue: widget.selectedValue,
                     onChanged: (value) {
