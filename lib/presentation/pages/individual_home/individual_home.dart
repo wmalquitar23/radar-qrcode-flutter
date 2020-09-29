@@ -54,6 +54,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.blue));
     final Size screenSize = MediaQuery.of(context).size;
+    final double containerSize = screenSize.height * 0.60;
     return WillPopScope(
       onWillPop: onWillPop,
       child: RefreshIndicator(
@@ -92,7 +93,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                         child: Stack(
                           children: [
                             Container(
-                              height: screenSize.height * 0.66,
+                              height: containerSize,
                               decoration: BoxDecoration(
                                 color: ColorUtil.primaryColor,
                                 borderRadius: BorderRadius.only(
@@ -110,8 +111,10 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                                         state.individualGetUserSuccess)
                                     : Container(),
                                 state.individualGetUserSuccess != null
-                                    ? _buildQRInfo(screenSize,
-                                        state.individualGetUserSuccess)
+                                    ? _buildQRInfo(
+                                        screenSize,
+                                        state.individualGetUserSuccess,
+                                        containerSize)
                                     : Container(),
                                 state.individualGetUserSuccess != null
                                     ? _buildHint(state.individualGetUserSuccess)
@@ -192,7 +195,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
       data: _encryptedQr.toString() ?? "",
       foregroundColor: Colors.black,
       version: QrVersions.auto,
-      size: screenSize.width * 0.60,
+      size: screenSize.width * 0.70,
       embeddedImage: AssetImage('assets/images/app_icon/qr_icon.png'),
       embeddedImageStyle: QrEmbeddedImageStyle(
         size: Size(40, 40),
@@ -283,56 +286,58 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
     );
   }
 
-  Widget _buildQRInfo(Size screenSize, IndividualGetUserSuccess state) {
+  Widget _buildQRInfo(
+      Size screenSize, IndividualGetUserSuccess state, double containerSize) {
     return ShadowWidget(
       child: Container(
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20.0),
-          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: ColorUtil.primaryBackgroundColor,
-            borderRadius: BorderRadius.all(Radius.circular(21.0)),
-          ),
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DescriptionText(
-                        title: "My QR Code",
-                        color: ColorUtil.primaryTextColor,
-                        fontSize: 18,
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      DescriptionText(
-                        title: '#${state?.user?.displayId}',
-                        color: ColorUtil.primarySubTextColor,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ],
-                  ),
-                  StatusWidget(
-                    isVerified: state.user.isVerified,
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Divider(thickness: 0.3, color: ColorUtil.primarySubTextColor),
-              SizedBox(
-                height: 10.0,
-              ),
-              _generateQrCOde(screenSize, state)
-            ],
-          ),
+        margin: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: ColorUtil.primaryBackgroundColor,
+          borderRadius: BorderRadius.all(Radius.circular(21.0)),
+        ),
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DescriptionText(
+                      title: "My QR Code",
+                      color: ColorUtil.primaryTextColor,
+                      fontSize: 18,
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    DescriptionText(
+                      title: '#${state?.user?.displayId}',
+                      color: ColorUtil.primarySubTextColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ],
+                ),
+                StatusWidget(
+                  isVerified: state.user.isVerified,
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Divider(thickness: 0.3, color: ColorUtil.primarySubTextColor),
+            SizedBox(
+              height: 10.0,
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              child: _generateQrCOde(screenSize, state),
+            ),
+          ],
         ),
       ),
     );

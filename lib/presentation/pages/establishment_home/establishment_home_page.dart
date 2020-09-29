@@ -61,6 +61,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+    final double containerSize = screenSize.height * 0.60;
     return WillPopScope(
       onWillPop: onWillPop,
       child: RefreshIndicator(
@@ -100,7 +101,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                     child: Stack(
                       children: [
                         Container(
-                          height: screenSize.height * 0.66,
+                          height: containerSize,
                           decoration: BoxDecoration(
                             color: ColorUtil.primaryColor,
                             borderRadius: BorderRadius.only(
@@ -113,11 +114,14 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                           children: [
                             state.user != null ? _buildAppBar() : Container(),
                             state.user != null
-                                ? _buildEstablishmentDetails(
-                                    state.user,
-                                    state.localCheckInData,
-                                    state.totalScannedCheckInData,
-                                    state)
+                                ? Container(
+                                    margin: EdgeInsets.only(bottom: 20),
+                                    child: _buildEstablishmentDetails(
+                                        state.user,
+                                        state.localCheckInData,
+                                        state.totalScannedCheckInData,
+                                        state),
+                                  )
                                 : Container(),
                             state.user != null
                                 ? _buildHint(
@@ -289,6 +293,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                     ? Container()
                     : (totalScannedCheckInData.length < limitScanNumber
                         ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               DescriptionText(
                                 title:

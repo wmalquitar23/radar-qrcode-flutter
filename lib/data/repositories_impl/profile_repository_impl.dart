@@ -33,6 +33,14 @@ class ProfileRepositoryImpl extends ProfileRepository {
   Future<Session> fetchUserInfo() async {
     StandardResponse userInfoResponse = await restClient.getProfileInfo();
     Session session = await getCurrentSession();
+
+    Map<String, String> env = await loadEnvFile();
+    if (userInfoResponse.data['profileImageUrl']
+        .contains("54.179.150.142:3000")) {
+      userInfoResponse.data['profileImageUrl'] = userInfoResponse
+          .data['profileImageUrl']
+          .replaceAll('54.179.150.142', env['HOST_URL']);
+    }
     await sessionDb
         .save({"token": session.token, "user": userInfoResponse.data});
     return await getCurrentSession();
