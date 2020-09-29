@@ -304,6 +304,8 @@ class _IndividualBasicInformationPageState
               ],
             ),
             SizedBox(height: 30),
+            _buildWarningNote(),
+            SizedBox(height: 30),
             _buildContinuePage1Button()
           ],
         ),
@@ -645,6 +647,29 @@ class _IndividualBasicInformationPageState
   //     },
   //   );
   // }
+
+  Widget _buildWarningNote() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 10,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.red[50],
+        border: Border(
+          left: BorderSide(
+            width: 8,
+            color: Colors.red,
+          ),
+        ),
+      ),
+      child: Text(
+        "Please make sure all details are correct to avoid delay or problem with your account in the future.",
+        style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
+        textAlign: TextAlign.justify,
+      ),
+    );
+  }
 
   Widget _buildContinuePage1Button() {
     return Container(
