@@ -31,7 +31,7 @@ class OnboardPage extends StatelessWidget {
                 ),
                 Spacer(flex: 30),
                 ExtendedImage.asset('assets/images/app/onboard_graphic.png'),
-                Spacer(flex: 30),
+                Spacer(flex: 10),
                 Text(
                   'Be Part of the Change',
                   style: TextStyle(
@@ -40,11 +40,13 @@ class OnboardPage extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1,
                   ),
+                  textAlign: TextAlign.center,
                 ),
+                Spacer(flex: 10),
                 LightText(
                     text:
                         'By using Radar, you are helping to stop the spread of COVID-19, and protecting your community.'),
-                Spacer(flex: 30),
+                Spacer(flex: 25),
                 StandardButton(
                   text: 'REGISTER NOW',
                   onPressed: () {
