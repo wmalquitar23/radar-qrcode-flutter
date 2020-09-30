@@ -42,7 +42,6 @@ class OnboardPage extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                Spacer(flex: 10),
                 LightText(
                     text:
                         'By using Radar, you are helping to stop the spread of COVID-19, and protecting your community.'),
