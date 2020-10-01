@@ -393,7 +393,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                 ? "Please scan a QR Code to retrieve user's information."
                 : (totalScannedCheckInData.length < limitScanNumber
                     ? "Please scan a QR Code to retrieve user's information."
-                    : "You have reached the scan limit. Please activate your account to continue using Radar."),
+                  : "You have reached the scan limit. Please activate your account to continue using Radar."),
             color: ColorUtil.primaryTextColor,
             fontSize: 11,
             fontWeight: FontWeight.w600,
