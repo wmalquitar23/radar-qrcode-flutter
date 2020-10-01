@@ -30,7 +30,7 @@ class EstablishmentHomePage extends StatefulWidget {
 }
 
 class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
-  final int limitScanNumber = 20;
+  final int limitScanNumber = 501;
   final _snackBarDuration = Duration(seconds: 2);
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime _currentBackPressTime;
@@ -295,13 +295,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              DescriptionText(
-                                title:
-                                    "Activate your account to scan unlimited users.",
-                                color: Colors.red,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              Flexible(child: _buildWarningNote()),
                             ],
                           )
                         : Container()),
@@ -309,6 +303,28 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildWarningNote() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 10,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.red[50],
+        border: Border(
+          left: BorderSide(
+            width: 8,
+            color: Colors.red,
+          ),
+        ),
+      ),
+      child: Text(
+        "Upgrade your account now to have unlimited access, check your activation menu for more details, Thank you.",
+        style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.w500),
       ),
     );
   }
