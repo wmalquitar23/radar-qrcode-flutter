@@ -1,4 +1,4 @@
-package com.example.radar_qrcode_flutter
+package com.radar_qrcode_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 

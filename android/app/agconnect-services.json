@@ -1,0 +1,12 @@
+{
+	"client":{
+		"cp_id":"2640063000003631125",
+		"product_id":"736430079244656223",
+		"client_id":"464387926424290432",
+		"client_secret":"193187F3EEA8C5055854DDA260DAF2BF499909F04F5E0510E7F613389C8690EA",
+		"app_id":"103001039",
+		"package_name":"com.radar_qrcode_flutter",
+		"api_key":"CgB6e3x9t7wP3/URg1N/pDfJIXGr8Os1DZmQUHA9rC6ZGFdi9WvMGKC6tFroXvTXF1mNG2jSLRsM0mmADgpHeZxg"
+	},
+	"configuration_version":"1.0"
+}

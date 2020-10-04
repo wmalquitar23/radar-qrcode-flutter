@@ -73,17 +73,17 @@ c. Gender
 d. Place of Residence (City/Town, Province);
 e. Mobile number;
 f. Health and medical condition;
-g. Result of COVID-19 testing;
+g. Result of virus testing;
 h. Location information;
 i. Names of the persons encountered.
 j. Valid government ID
 
 2. PURPOSE OF COLLECTION
 The Developer shall collect, store, and process personal data from and about any person using the mobile application for crowd-sourcing information related to points of contact made by the user, including but not limited to information on places visited and persons encountered. The Developer
-shall also collect, store, and process personal data related to the medical condition of the user, specifically if the user is a person under investigation or a person positively tested with COVID-19. The
-collected data shall be used to map out potential places and persons that a COvID-19 infected person had made contact with. The said places will be identified for public dissemination of information, and the said persons will be notified of having been in possible contact with a COVID-19 infected person.
-The collected data shall also be shared with the Department of Health and other government agencies of the Republic of the Philippines, for the purpose of aiding in the government initiatives related to the
-COVID-19 pandemic.
+shall also collect, store, and process personal data related to the medical condition of the user, specifically if the user is a person under investigation or a person positively tested with virus. The
+collected data shall be used to map out potential places and persons that an infected person had made contact with. The said places will be identified for public dissemination of information, and the said persons will be notified of having been in possible contact with the infected person.
+The collected data shall also be shared with the Department of Health and other government agencies of the Republic of the Philippines, for the purpose of aiding in the government related to this 
+current pandemic.
 
 The Developer shall also collect, store, and process personal data from and about any person using the application to protect its lawful rights and interests in internal administrative proceedings and in court
 proceedings and to establish, exercise, or defend its legal claims.
@@ -97,7 +97,7 @@ The Developer does not sell or disclose the personal data it processes to third 
 necessary to protect, defend, and/or enforce the Developer's rights, property, or the personal safety of its employees and other individuals.
 
 The Developer may allow access to the user's personal data to third parties, particularly: (a) to its staff, when necessary to fulfill their functions, (b) to lawyer-users that intend to offer legal assistance, and (c)
-to government authorities, regulatory agencies, and law enforcement officials, if required for the purposes specified above, or if mandated by law, or if required for the legal protection of our legitimate interests in compliance with applicable laws. The Developer may allow the Department of Health and other government agencies access to the data for the purpose of assisting in the COVID-19 pandemic
+to government authorities, regulatory agencies, and law enforcement officials, if required for the purposes specified above, or if mandated by law, or if required for the legal protection of our legitimate interests in compliance with applicable laws. The Developer may allow the Department of Health and other government agencies access to the data for the purpose of assisting in the current pandemic
 initiatives of the government. The Developer remains responsible over the personal data disclosed to such third parties. As such, the Developer ensures that such third parties are contractually obligated
 to comply with the requirements of the Data Privacy Act and its IRR, and shall process your data strictly in accordance with the purposes enumerated above.
 

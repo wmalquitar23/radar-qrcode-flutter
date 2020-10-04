@@ -44,7 +44,7 @@ class OnboardPage extends StatelessWidget {
                 ),
                 LightText(
                     text:
-                        'By using Radar, you are helping to stop the spread of COVID-19, and protecting your community.'),
+                        'By using Radar, you are helping to stop the spread of any potential viruses, and protecting your community.'),
                 Spacer(flex: 25),
                 StandardButton(
                   text: 'REGISTER NOW',
