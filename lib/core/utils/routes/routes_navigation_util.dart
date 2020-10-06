@@ -34,6 +34,7 @@ import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/up
 import 'package:radar_qrcode_flutter/presentation/pages/individual_home/individual_home.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/onboard/onboard_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/profile/my_profile_page.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/red_alert/red_alert_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/register_as/register_as_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/scan_qrcode/scan_qrcode.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/signin/sign_in_page.dart';
@@ -224,6 +225,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
             user: args,
           ),
         ),
+        settings: settings,
+        pageTransitionType: PageTransitionType.fade,
+      );
+      break;
+    case RED_ALERT_ROUTE:
+      return pushNamed(
+        page: RedAlertPage(),
         settings: settings,
         pageTransitionType: PageTransitionType.fade,
       );

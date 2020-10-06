@@ -67,10 +67,10 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
             OnRefresh(),
           );
         },
-        child: MobileStatusMarginTop(
-          child: Scaffold(
-            key: _scaffoldKey,
-            body: BlocConsumer<EstablishmentBloc, EstablishmentState>(
+        child: Scaffold(
+          key: _scaffoldKey,
+          body: SafeArea(
+            child: BlocConsumer<EstablishmentBloc, EstablishmentState>(
               listener: (context, state) {
                 if (state.syncDataFailureMessage != null) {
                   ToastUtil.showToast(context, state.syncDataFailureMessage);
@@ -347,7 +347,8 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
       child: PrimaryButtonWithIcon(
         onPressed: () {
-          Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
+          //Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
+          Navigator.pushNamed(context, RED_ALERT_ROUTE);
         },
         text: 'SCAN QR CODE',
       ),

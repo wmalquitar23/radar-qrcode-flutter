@@ -11,4 +11,5 @@ class ColorUtil {
   static Color get verifyNumberBlackColor => Color(0xFF2B3038);
   static Color get primaryButtonColor => Color(0xffC0D9EC);
   static Color get successColor => Color(0xff56c596);
+  static Color get lightBlueBackground => Color(0x40D9E9FE);
 }
