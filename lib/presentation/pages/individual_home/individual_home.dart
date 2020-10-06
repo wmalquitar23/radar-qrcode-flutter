@@ -161,11 +161,51 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
               color: state.user.requirement.isSubmitted
                   ? ColorUtil.disabledColor
                   : ColorUtil.primaryColor,
-              onPressed: () => state.user.requirement.isSubmitted
-                  ? null
-                  : Navigator.of(context)
-                      .pushNamed(IDENTITY_VERIFICATION_ROUTE),
-            )
+              onPressed: () {
+                if (state.user.requirement.isSubmitted) {
+                  return null;
+                } else {
+                  // set up the buttons
+                  Widget cancelButton = FlatButton(
+                    child: Text("Cancel"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                  Widget continueButton = FlatButton(
+                    child: Text("Proceed"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.of(context)
+                          .pushNamed(IDENTITY_VERIFICATION_ROUTE);
+                    },
+                  );
+
+                  // set up the AlertDialog
+                  AlertDialog alert = AlertDialog(
+                    title: Text("Important Note"),
+                    content: DescriptionText(
+                      title:
+                          "Please change your profile image with your recent picture before sending your ID for validation. Note that you can no longer change your profile image once your account is validated.",
+                      fontWeight: FontWeight.w500,
+                      color: ColorUtil.primaryTextColor,
+                      textAlign: TextAlign.left,
+                    ),
+                    actions: [
+                      cancelButton,
+                      continueButton,
+                    ],
+                  );
+
+                  // show the dialog
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alert;
+                    },
+                  );
+                }
+              })
           : Column(
               children: [
                 DescriptionText(

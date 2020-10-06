@@ -51,7 +51,7 @@ class UploadResultPage extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 20.0),
             child: DescriptionText(
               title:
-                  "Your request is being reviewed and you should receive a reply as soon as possible (xx hrs?)",
+                  "Your request is being reviewed and you should receive a reply as soon as possible 24-48hrs",
               color: ColorUtil.primaryTextColor,
               fontSize: 14,
               fontWeight: FontWeight.w500,

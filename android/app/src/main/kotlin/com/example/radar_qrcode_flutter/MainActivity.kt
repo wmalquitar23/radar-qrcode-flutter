@@ -1,4 +1,4 @@
-package com.radar_qrcode_flutter
+package com.travelpud_radar
 
 import io.flutter.embedding.android.FlutterActivity
 
