@@ -331,7 +331,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
     return Stack(
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 17.0),
+          padding: const EdgeInsets.only(bottom: 25.0),
           child: ShadowWidget(
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -404,8 +404,8 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
             alignment: Alignment.center,
             child: Image.asset(
               'assets/images/icons/scan-qr.png',
-              width: 40,
-              height: 40,
+              width: 50,
+              height: 50,
             ),
           ),
         ),
