@@ -185,11 +185,32 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
 
       dynamic jsonDecrypt = jsonDecode(decrypted);
 
-      Navigator.of(context).pop();
-      Navigator.of(context).pushReplacementNamed(
-        USER_DETAILS_ROUTE,
-        arguments: jsonDecrypt,
-      );
+      // Add Condition
+      // If data role is establishment, use Individual Scan API
+      // If data role is individual, proceed with the old flow
+
+      if (jsonDecrypt["role"] == "establishment") {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return _userNotFoundDialog("Establishment Scanned");
+          },
+        );
+      } else {
+        // Navigator.of(context).pop();
+        // Navigator.of(context).pushReplacementNamed(
+        //   USER_DETAILS_ROUTE,
+        //   arguments: jsonDecrypt,
+        // );
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return _userNotFoundDialog("Individual Scanned");
+          },
+        );
+      }
     } catch (e) {
       showDialog(
         context: context,

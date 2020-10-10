@@ -328,56 +328,86 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
 
   Widget _buildQRInfo(
       Size screenSize, IndividualGetUserSuccess state, double containerSize) {
-    return ShadowWidget(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.0),
-        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: ColorUtil.primaryBackgroundColor,
-          borderRadius: BorderRadius.all(Radius.circular(21.0)),
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 17.0),
+          child: ShadowWidget(
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: ColorUtil.primaryBackgroundColor,
+                borderRadius: BorderRadius.all(Radius.circular(21.0)),
+              ),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DescriptionText(
+                            title: "My QR Code",
+                            color: ColorUtil.primaryTextColor,
+                            fontSize: 18,
+                          ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          DescriptionText(
+                            title: '#${state?.user?.displayId}',
+                            color: ColorUtil.primarySubTextColor,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ],
+                      ),
+                      StatusWidget(
+                        isVerified: state.user.isVerified,
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Divider(thickness: 0.3, color: ColorUtil.primarySubTextColor),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    child: _generateQrCOde(screenSize, state),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DescriptionText(
-                      title: "My QR Code",
-                      color: ColorUtil.primaryTextColor,
-                      fontSize: 18,
-                    ),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    DescriptionText(
-                      title: '#${state?.user?.displayId}',
-                      color: ColorUtil.primarySubTextColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ],
-                ),
-                StatusWidget(
-                  isVerified: state.user.isVerified,
-                )
-              ],
+        _buildScanQRButton(screenSize),
+      ],
+    );
+  }
+
+  Positioned _buildScanQRButton(Size screenSize) {
+    return Positioned(
+      bottom: 0,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
+        },
+        child: Container(
+          width: screenSize.width,
+          child: Align(
+            alignment: Alignment.center,
+            child: Image.asset(
+              'assets/images/icons/scan-qr.png',
+              width: 40,
+              height: 40,
             ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Divider(thickness: 0.3, color: ColorUtil.primarySubTextColor),
-            SizedBox(
-              height: 10.0,
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 20),
-              child: _generateQrCOde(screenSize, state),
-            ),
-          ],
+          ),
         ),
       ),
     );
