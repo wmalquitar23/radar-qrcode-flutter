@@ -400,12 +400,24 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
         },
         child: Container(
           width: screenSize.width,
-          child: Align(
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/images/icons/scan-qr.png',
-              width: 50,
-              height: 50,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2.0,
+                  blurRadius: 5,
+                ),
+              ],
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Image.asset(
+                'assets/images/icons/scan-qr.png',
+                width: 50,
+                height: 50,
+              ),
             ),
           ),
         ),
