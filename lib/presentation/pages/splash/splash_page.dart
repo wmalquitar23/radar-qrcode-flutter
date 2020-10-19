@@ -38,7 +38,7 @@ class _SplashPageState extends State<SplashPage> {
             }
             if (state is AppHasNoSession) {
               SchedulerBinding.instance.addPostFrameCallback((_) {
-                Navigator.of(context).pushReplacementNamed(ONBOARD_ROUTE);
+                Navigator.pushReplacementNamed(context, BASIC_INFORMATION_ROUTE);
               });
             }
             if (state is AppInformation) {
@@ -63,10 +63,13 @@ class _SplashPageState extends State<SplashPage> {
                       'assets/images/app/logo-black.png',
                       width: sx(300),
                     ),
-                    SizedBox(height: 10.0,),
+                    SizedBox(
+                      height: 10.0,
+                    ),
                     appInfo != null
                         ? DescriptionText(
-                            title: "Current version: ${appInfo?.version}.${appInfo?.buildNumber} ",
+                            title:
+                                "Current version: ${appInfo?.version}.${appInfo?.buildNumber} ",
                             fontWeight: FontWeight.w500,
                           )
                         : Container(),

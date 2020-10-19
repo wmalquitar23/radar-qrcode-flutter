@@ -51,7 +51,7 @@ class _NavigationPageState extends State<NavigationPage> {
                   listener: (context, state) {
                     if (state is NavigationLogoutSuccess) {
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                          ONBOARD_ROUTE, (Route<dynamic> route) => false);
+                          BASIC_INFORMATION_ROUTE, (Route<dynamic> route) => false);
                     }
                   },
                   builder: (context, state) {
@@ -59,7 +59,7 @@ class _NavigationPageState extends State<NavigationPage> {
                       BlocProvider.of<NavigationBloc>(context).add(
                         OnNavigationLoad(),
                       );
-                    }
+                    } 
                     return Column(
                       children: [
                         CustomAppBar(

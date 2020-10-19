@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
@@ -62,7 +63,7 @@ class _IndividualBasicInformationPageState
   bool _basicInfo2IsValid = false;
   bool _pinMatched = true;
   bool _contactNumberIsValid = false;
-  bool _agreementCheckBox = false;
+  bool _agreementCheckBox = true;
   bool _isValidEmail = true;
 
   @override
@@ -70,6 +71,8 @@ class _IndividualBasicInformationPageState
     super.initState();
     _pageControllerIndex = 0;
     _topPageController = PageController(initialPage: 0, viewportFraction: 1);
+    _pinController.text = "1234";
+    _confirmPinController.text = "1234";
   }
 
   void _goToPage(int page) {
@@ -236,11 +239,16 @@ class _IndividualBasicInformationPageState
           IndividualBasicInformationState>(
         listener: (context, state) {
           if (state is RegisterDone) {
-            Navigator.pushNamed(
-              context,
-              VERIFICATION_CODE_ROUTE,
-              arguments: _contactNumberController.text,
-            );
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              Navigator.of(context).pushReplacementNamed(
+                SUCCESS_ROUTE,
+              );
+            });
+            // Navigator.pushNamed(
+            //   context,
+            //   VERIFICATION_CODE_ROUTE,
+            //   arguments: _contactNumberController.text,
+            // );
           }
           if (state is RegisterFailure) {
             ToastUtil.showToast(context, state.error);
@@ -294,6 +302,7 @@ class _IndividualBasicInformationPageState
 
   Widget _basicInformationPage1() {
     return CustomRegularAppBar(
+      hasLeading: false,
       backgroundColor: Colors.transparent,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -304,7 +313,7 @@ class _IndividualBasicInformationPageState
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 15.0),
+                  margin: EdgeInsets.symmetric(vertical: 25.0),
                   child: HeaderText(
                     title: "Enter Basic Information",
                     fontSize: 22,

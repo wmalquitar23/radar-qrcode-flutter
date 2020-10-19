@@ -56,7 +56,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     Gender gender,
     String email,
   ) async {
-    registerQueueDb.save(
+await registerQueueDb.save(
       {
         "firstName": firstName,
         "middleName": middleName,
@@ -72,7 +72,16 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         "email": email,
       },
     );
-    await restClient.otpMobileNumber(contactNumber);
+
+    Map<dynamic, dynamic> registrationData = await getRegisterQueueData();
+
+    StandardResponse userInfoResponse = await restClient.registerIndividual(
+        RegisterIndividualRequest.fromJson(registrationData));
+
+    await sessionDb.save({
+      "user": userInfoResponse.data['user'],
+      "token": userInfoResponse.data['token']
+    });
   }
 
   @override
