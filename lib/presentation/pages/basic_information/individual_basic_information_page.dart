@@ -373,7 +373,7 @@ class _IndividualBasicInformationPageState
               currentState is ContactNumberState,
           listener: (context, state) {
             if (state is ContactNumberValidationFailure) {
-              ToastUtil.showToast(context, state.error);
+              ToastUtil.showToast(context, state.error.toString());
             }
 
             _contactNumberIsValid =

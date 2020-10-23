@@ -50,7 +50,7 @@ class ContactNumberIsInvalid extends ContactNumberState {
 class ContactNumberValidationInProgress extends ContactNumberState {}
 
 class ContactNumberValidationFailure extends ContactNumberState {
-  final String error;
+  final dynamic error;
 
   const ContactNumberValidationFailure({@required this.error});
 
