@@ -98,8 +98,8 @@ class _ContactUsPageState extends State<ContactUsPage> {
                   ),
                   DescriptionText(
                     title: _isEnglish
-                        ? "Your feedback or concern is very important to us, so if you have any please contact us via phone or email given below."
-                        : "Kung may concern o problima kayo sa inyong radar app tumawag lang sa aming numero or email na nasa baba.",
+                        ? "Your feedback or concern is very important to us, so if you encounter problems or have any concern, please contact us via phone or send a message on the email provided below."
+                        : "Kung may concern o problema kayo sa inyong radar app, tumawag lang sa aming numero o magmessage sa aming email na nakasaad sa ibaba.",
                     fontWeight: FontWeight.w500,
                     color: ColorUtil.primaryTextColor,
                     textAlign: TextAlign.left,
