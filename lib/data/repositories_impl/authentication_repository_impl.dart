@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/data/local_db/queue/register_queue_db.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
@@ -55,9 +56,11 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       Gender gender) async {
     registerQueueDb.save(
       {
-        "firstname": firstName,
-        "middlename": middleName,
-        "lastname": lastName,
+        "firstName": firstName,
+        "middleName": middleName,
+        "lastName": lastName,
+        "role": "individual",
+        "designatedArea": "",
         "suffix": suffix,
         "pin": pin,
         "birthDate": birthdayFormatter.format(birthdate),
@@ -78,8 +81,10 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   ) async {
     registerQueueDb.save(
       {
-        "firstname": establishmentName,
+        "firstName": establishmentName,
         "pin": pin,
+        "designatedArea": "",
+        "role": "establishment",
         "contactNumber": contactNumber,
         "address": userAddressMapper.toMap(userAddress),
       },
@@ -96,14 +101,14 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   Future<void> verifyOtp(String otp) async {
     StandardResponse userInfoResponse;
 
-    await restClient.verifyOtp(otp);
-
     Map<dynamic, dynamic> registrationData = await getRegisterQueueData();
 
-    if (registrationData.length == 9) {
+    await restClient.verifyOtp(otp, registrationData['contactNumber']);
+
+    if (registrationData['role'] == "individual") {
       userInfoResponse = await restClient.registerIndividual(
           RegisterIndividualRequest.fromJson(registrationData));
-    } else if (registrationData.length == 4) {
+    } else {
       userInfoResponse = await restClient.registerEstablishment(
         RegisterEstablishmentRequest.fromJson(registrationData),
       );
@@ -122,9 +127,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   Future<bool> verifyMobileNumber(String mobileNumber) async {
-    final verificationResult =
-        await restClient.verifyMobileNumber(mobileNumber);
-    return verificationResult.data;
+    return await restClient.verifyMobileNumber(mobileNumber);
   }
 
   @override

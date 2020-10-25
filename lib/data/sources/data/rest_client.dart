@@ -22,14 +22,21 @@ class RestClient {
     return standardResponse;
   }
 
-  Future<StandardResponse> registerIndividual(RegisterIndividualRequest data) async {
+  Future<StandardResponse> registerIndividual(
+      RegisterIndividualRequest data) async {
     Response response = await _dio.post("/register/individual", data: data);
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
+  Future<StandardResponse> register(RegisterIndividualRequest data) async {
+    Response response = await _dio.post("/api/auth/register", data: data);
+
+    return apiCatcher(StandardResponse.fromJson(response.data));
+  }
+
   Future<StandardResponse> otpMobileNumber(String otp) async {
-    Response response = await _dio.post("/register/otp/", data: {
+    Response response = await _dio.post("/otp/generate", data: {
       "contactNumber": otp,
     });
     return apiCatcher(StandardResponse.fromJson(response.data));
@@ -98,18 +105,21 @@ class RestClient {
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
-  Future<StandardResponse> verifyOtp(String otp) async {
-    Response response = await _dio.post("/verify/otp", data: {
+  Future<StandardResponse> verifyOtp(String otp, String contactNumber) async {
+    Response response = await _dio.post("/otp/verify", data: {
       "code": otp,
     });
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
-  Future<StandardResponse> verifyMobileNumber(String mobileNumber) async {
-    Response response = await _dio.get("/identity/$mobileNumber");
-
-    return apiCatcher(StandardResponse.fromJson(response.data));
+  Future<bool> verifyMobileNumber(String mobileNumber) async {
+    try {
+      await _dio.head("/users?contactNumber=$mobileNumber");
+      return true;
+    } on DioError catch (e) {
+      return false;
+    }
   }
 
   Future<StandardResponse> getProfileInfo() async {
@@ -127,8 +137,7 @@ class RestClient {
   }
 
   Future<StandardResponse> checkIn(String id) async {
-    Response response =
-        await _dio.post("/checkin", data: {"individualId": id});
+    Response response = await _dio.post("/checkin", data: {"individualId": id});
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }

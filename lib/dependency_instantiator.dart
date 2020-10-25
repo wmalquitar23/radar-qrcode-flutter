@@ -296,8 +296,9 @@ class DataInstantiator extends RadarDataInstantiator {
       sendTimeout: 5000,
       followRedirects: true,
       validateStatus: (status) {
-        return status < 500;
+        return status < 400;
       },
+      receiveDataWhenStatusError: true,
     );
 
     Dio dio = Dio(options);

@@ -29,8 +29,8 @@ void main() {
 
   Future<void> login() async {
     //GIVEN THAT
-    var contactNumber = "96613912216";
-    var pin = "4321";
+    var contactNumber = "9451096905";
+    var pin = "5555";
 
     try {
       StandardResponse userInfoResponse =
@@ -226,13 +226,7 @@ void main() {
       final mobileNumber = "9452092915";
 
       //WHEN
-      StandardResponse response =
-          await restClient.verifyMobileNumber(mobileNumber);
-
-      //THEN SHOULD EXPECT
-      print(response.data);
-      expect(response, isNotNull);
-      expect(response.data, true);
+      await restClient.verifyMobileNumber(mobileNumber);
     });
 
     test('Mobile number is not yet used', () async {
@@ -240,13 +234,7 @@ void main() {
       final mobileNumber = "9664191171";
 
       //WHEN
-      StandardResponse response =
-          await restClient.verifyMobileNumber(mobileNumber);
-
-      //THEN SHOULD EXPECT
-      print(response.data);
-      expect(response, isNotNull);
-      expect(response.data, false);
+      await restClient.verifyMobileNumber(mobileNumber);
     });
   });
 
