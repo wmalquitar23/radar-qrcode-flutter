@@ -31,7 +31,7 @@ abstract class AuthenticationRepository {
 
   Future<dynamic> getRegisterQueueData();
 
-  Future<void> verifyOtp(String otp);
+  Future<void> verifyOtp(String otp, String contactNumber);
 
   Future<void> signIn(String contactNumber, String pin);
 

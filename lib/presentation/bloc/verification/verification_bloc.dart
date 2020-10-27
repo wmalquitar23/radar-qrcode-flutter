@@ -26,7 +26,7 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
     if (event is OnContinueButtonPressed) {
       yield VerificationProgress();
       try {
-        await otpVerificationUseCase.execute(event.otp);
+        await otpVerificationUseCase.execute(event.otp, event.contactNumber);
         yield VerificationSuccess();
       } on DioError catch (e) {
         String errorhandler = ErrorHandler().dioErrorHandler(e);
