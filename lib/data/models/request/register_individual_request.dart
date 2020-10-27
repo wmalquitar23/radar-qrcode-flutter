@@ -6,6 +6,8 @@ class RegisterIndividualRequest {
   String firstname;
   String middlename;
   String lastname;
+  String role;
+  String designatedArea;
   String suffix;
   String pin;
   String birthDate;
@@ -20,6 +22,8 @@ class RegisterIndividualRequest {
     this.middlename,
     this.lastname,
     this.suffix,
+    this.role,
+    this.designatedArea,
     this.pin,
     this.birthDate,
     this.gender,
@@ -28,9 +32,11 @@ class RegisterIndividualRequest {
   });
 
   RegisterIndividualRequest.fromJson(Map<String, dynamic> json) {
-    firstname = json['firstname'];
-    middlename = json['middlename'];
-    lastname = json['lastname'];
+    firstname = json['firstName'];
+    middlename = json['middleName'];
+    lastname = json['lastName'];
+    role = json['role'];
+    designatedArea = json['designatedArea'];
     suffix = json['suffix'];
     pin = json['pin'];
     birthDate = json['birthDate'];
@@ -43,10 +49,12 @@ class RegisterIndividualRequest {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['firstname'] = this.firstname;
-    data['middlename'] = this.middlename;
-    data['lastname'] = this.lastname;
+    data['firstName'] = this.firstname;
+    data['middleName'] = this.middlename;
+    data['lastName'] = this.lastname;
     data['suffix'] = this.suffix;
+    data['role'] = this.role;
+    data['designatedArea'] = this.designatedArea;
     data['pin'] = this.pin;
     data['birthDate'] = this.birthDate;
     data['gender'] = this.gender == Gender.male ? "male" : "female";

@@ -24,13 +24,15 @@ class RestClient {
 
   Future<StandardResponse> registerIndividual(
       RegisterIndividualRequest data) async {
-    Response response = await _dio.post("/register/individual", data: data);
+    Response response = await _dio.post("/auth/register", data: data);
+    print(response);
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
   Future<StandardResponse> register(RegisterIndividualRequest data) async {
-    Response response = await _dio.post("/api/auth/register", data: data);
+    Response response = await _dio.post("/auth/register", data: data);
+    print(response);
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
@@ -73,8 +75,8 @@ class RestClient {
   }
 
   Future<StandardResponse> login(String contactNumber, String pin) async {
-    Response response = await _dio
-        .post("/login", data: {"contactNumber": contactNumber, "pin": pin});
+    Response response = await _dio.post("/auth/login",
+        data: {"contactNumber": contactNumber, "pin": pin});
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
@@ -107,7 +109,8 @@ class RestClient {
 
   Future<StandardResponse> verifyOtp(String otp, String contactNumber) async {
     Response response = await _dio.post("/otp/verify", data: {
-      "code": otp,
+      "otp": otp,
+      "contactNumber": contactNumber,
     });
 
     return apiCatcher(StandardResponse.fromJson(response.data));
@@ -118,12 +121,13 @@ class RestClient {
       await _dio.head("/users?contactNumber=$mobileNumber");
       return true;
     } on DioError catch (e) {
+      print(e);
       return false;
     }
   }
 
   Future<StandardResponse> getProfileInfo() async {
-    Response response = await _dio.get("/profile");
+    Response response = await _dio.get("/users/getProfile");
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }

@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/data/local_db/queue/register_queue_db.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';

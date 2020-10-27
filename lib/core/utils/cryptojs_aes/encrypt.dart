@@ -6,9 +6,9 @@ String qrCodeObject(User user) {
   return jsonEncode({
     "_id": user.id,
     "displayId": user.displayId,
-    "firstname": user.firstName,
-    "middlename": user.middleName,
-    "lastname": user.lastName,
+    "firstName": user.firstName,
+    "middleName": user.middleName,
+    "lastName": user.lastName,
     "suffix": user.suffix,
     "isVerified": user.isVerified,
     "profileImageUrl": user.profileImageUrl,
