@@ -9,8 +9,9 @@ abstract class VerificationEvent extends Equatable {
 
 class OnContinueButtonPressed extends VerificationEvent {
   final String otp;
+  final String contactNumber;
 
-  OnContinueButtonPressed({this.otp});
+  OnContinueButtonPressed({@required this.otp, @required this.contactNumber});
 }
 
 class OnResendPressed extends VerificationEvent {

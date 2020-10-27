@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/image/image.utils.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
@@ -33,14 +34,9 @@ class ProfileRepositoryImpl extends ProfileRepository {
   Future<Session> fetchUserInfo() async {
     StandardResponse userInfoResponse = await restClient.getProfileInfo();
     Session session = await getCurrentSession();
+    userInfoResponse.data['profileImageFileId'] =
+        await parseImage(userInfoResponse.data['profileImageFileId']);
 
-    Map<String, String> env = await loadEnvFile();
-    if (userInfoResponse.data['profileImageUrl']
-        .contains("54.179.150.142:3000")) {
-      userInfoResponse.data['profileImageUrl'] = userInfoResponse
-          .data['profileImageUrl']
-          .replaceAll('54.179.150.142', env['HOST_URL']);
-    }
     await sessionDb
         .save({"token": session.token, "user": userInfoResponse.data});
     return await getCurrentSession();

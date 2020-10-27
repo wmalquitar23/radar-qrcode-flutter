@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 
 import 'platform_bottom_sheet.dart';
 
@@ -42,4 +43,10 @@ class ImageUtils {
       ],
     );
   }
+}
+
+Future<String> parseImage(String imageId) async {
+  Map<String, String> env = await loadEnvFile();
+
+  return env['API_URL'] + "/files/" + imageId;
 }
