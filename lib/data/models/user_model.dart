@@ -24,6 +24,7 @@ class User extends RadarModel {
   final String displayId;
   final String establishmentName;
   final Requirement requirement;
+  final String designatedArea;
 
   User({
     this.id,
@@ -42,6 +43,7 @@ class User extends RadarModel {
     this.displayId,
     this.establishmentName,
     this.requirement,
+    this.designatedArea,
   });
 
   String get fullName =>

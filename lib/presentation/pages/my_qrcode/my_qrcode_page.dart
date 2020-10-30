@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/strings/user_addresss_string.dart';
@@ -20,6 +21,7 @@ class MyQRCodePage extends StatefulWidget {
 
 class _MyQRCodePageState extends State<MyQRCodePage> {
   var _encryptedQr;
+  var _user;
 
   void _onLoad() async {
     BlocProvider.of<MyQRCodeBloc>(context).add(
@@ -27,14 +29,51 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
     );
   }
 
-  void _downloadQR(DownloadType downloadType, BuildContext context) {
-    BlocProvider.of<MyQRCodeBloc>(context).add(
-      OnDownloadButtonClick(
-        downloadType: downloadType,
-        qrData: _encryptedQr,
-        buildContext: context,
+  void _requestMediaStoragePermissionFromAppSettings() {
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text("Radar needs to access your Storage"),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text(
+                "Please grant storage permission in App Settings.\n",
+              ),
+              Text(
+                "To enable this feature, click App Settings below and enable storage under the Permissions menu.",
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("App Settings"),
+            onPressed: () {
+              openAppSettings();
+              Navigator.of(context).pop();
+            },
+          )
+        ],
       ),
     );
+  }
+
+  void _downloadQR(QRDownloadType downloadType, BuildContext context) async {
+    if (await Permission.storage.request().isGranted) {
+      BlocProvider.of<MyQRCodeBloc>(context).add(
+        OnDownloadButtonClick(
+          downloadType: downloadType,
+          user: _user,
+          qrData: _encryptedQr,
+          buildContext: context,
+        ),
+      );
+    } else {
+      if (await Permission.storage.isPermanentlyDenied) {
+        _requestMediaStoragePermissionFromAppSettings();
+      }
+    }
   }
 
   @override
@@ -49,6 +88,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
         child: BlocConsumer<MyQRCodeBloc, MyQRCodeState>(
           listener: (context, state) async {
             if (state.getUserSuccess != null) {
+              _user = state.getUserSuccess.user;
               _encryptedQr = state.getUserSuccess.jsonQrCode;
             }
 
@@ -291,12 +331,12 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
         children: [
           PrimaryButton(
             text: "DOWNLOAD POSTER (A4 SIZE)",
-            onPressed: () => _downloadQR(DownloadType.poster, context),
+            onPressed: () => _downloadQR(QRDownloadType.poster, context),
           ),
           SizedBox(height: 20),
           PrimaryButton(
             text: "DOWNLOAD STICKER (3.5in x 6in)",
-            onPressed: () => _downloadQR(DownloadType.sticker, context),
+            onPressed: () => _downloadQR(QRDownloadType.sticker, context),
           ),
         ],
       ),

@@ -41,6 +41,7 @@ class UserMapper extends RadarMapper<User> {
       displayId: map['displayId'],
       establishmentName: map['firstName'],
       requirement: requirementMapper.fromMap(map['requirementDoc']),
+      designatedArea: map['designatedArea'],
     );
   }
 

@@ -49,4 +49,19 @@ class GetUserSuccess extends MyQRCodeState {
   List<Object> get props => [user, jsonQrCode];
 }
 
-enum DownloadType {poster, sticker}
+enum QRDownloadType { poster, sticker }
+
+extension QRownloadTypeExtension on QRDownloadType {
+  String get name => describeEnum(this);
+
+  String get getValue {
+    switch (this) {
+      case QRDownloadType.poster:
+        return "poster";
+      case QRDownloadType.sticker:
+        return "sticker";
+      default:
+        return null;
+    }
+  }
+}

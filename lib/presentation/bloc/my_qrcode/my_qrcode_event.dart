@@ -12,16 +12,18 @@ class GetUserData extends MyQRCodeEvent {}
 class UserOnLoad extends MyQRCodeEvent {}
 
 class OnDownloadButtonClick extends MyQRCodeEvent {
-  final DownloadType downloadType;
+  final QRDownloadType downloadType;
   final String qrData;
+  final User user;
   final BuildContext buildContext;
 
   OnDownloadButtonClick({
     @required this.downloadType,
     @required this.qrData,
+    @required this.user,
     @required this.buildContext,
   });
 
   @override
-  List<Object> get props => [downloadType, qrData, buildContext];
+  List<Object> get props => [downloadType, user, qrData, buildContext];
 }
