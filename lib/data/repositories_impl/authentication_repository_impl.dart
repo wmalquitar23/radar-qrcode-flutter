@@ -77,12 +77,14 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     String pin,
     String contactNumber,
     UserAddress userAddress,
+    String email,
   ) async {
     registerQueueDb.save(
       {
         "firstName": establishmentName,
         "pin": pin,
-        "designatedArea": "",
+        "designatedArea": "Entrance 1",
+        "email": email,
         "role": "establishment",
         "contactNumber": contactNumber,
         "address": userAddressMapper.toMap(userAddress),

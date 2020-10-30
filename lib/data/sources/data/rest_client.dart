@@ -46,8 +46,8 @@ class RestClient {
 
   Future<StandardResponse> registerEstablishment(
       RegisterEstablishmentRequest registerEstablishmentRequest) async {
-    Response response = await _dio.post("/register/establishment",
-        data: registerEstablishmentRequest);
+    Response response =
+        await _dio.post("/auth/register", data: registerEstablishmentRequest);
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }

@@ -6,6 +6,9 @@ class RegisterEstablishmentRequest {
   String pin;
   String contactNumber;
   UserAddress userAddress;
+  String email;
+  String designatedArea;
+  String role;
 
   UserAddressMapper _userAddressMapper = UserAddressMapper();
 
@@ -13,21 +16,31 @@ class RegisterEstablishmentRequest {
     this.firstname,
     this.pin,
     this.contactNumber,
-    this.userAddress
+    this.userAddress,
+    this.email,
+    this.designatedArea,
   });
 
   RegisterEstablishmentRequest.fromJson(Map<String, dynamic> json) {
-    firstname = json['firstname'];
+    firstname = json['firstName'];
     pin = json['pin'];
     contactNumber = json['contactNumber'];
-    userAddress = json['address'] != null ? _userAddressMapper.fromMap(json['address']) : null;
+    email = json['email'];
+    role = json['role'];
+    designatedArea = json['designatedArea'];
+    userAddress = json['address'] != null
+        ? _userAddressMapper.fromMap(json['address'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['firstname'] = this.firstname;
+    data['firstName'] = this.firstname;
     data['pin'] = this.pin;
     data['contactNumber'] = this.contactNumber;
+    data['email'] = this.email;
+    data['designatedArea'] = this.designatedArea;
+    data['role'] = this.role;
     if (this.userAddress != null) {
       data['address'] = _userAddressMapper.toMap(this.userAddress);
     }
