@@ -57,12 +57,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
 
   @override
   Future<void> uploadVerificationId(File file) async {
-    Map<String, String> env = await loadEnvFile();
     StandardResponse response = await restClient.fileUpload(file);
-    Session session = await getCurrentSession();
-    await restClient.submitRequirements({
-      "userId": session.user.id,
-      "fileUrl": env['API_URL'] + response.data['url']
-    });
+    await restClient.submitRequirements({"fileId": response.data['fileId']});
   }
 }
