@@ -87,7 +87,7 @@ class RestClient {
         file.path,
       )
     });
-    Response response = await _dio.post("/file/upload", data: data);
+    Response response = await _dio.post("/files", data: data);
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 

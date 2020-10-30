@@ -26,8 +26,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
   Future<void> uploadProfileImage(File file) async {
     Map<String, String> env = await loadEnvFile();
     StandardResponse response = await restClient.fileUpload(file);
-    await updateUser(
-        {"profileImageUrl": env['API_URL'] + response.data['url']});
+    await updateUser({"profileImageFileId": response.data['fileId']});
   }
 
   @override
