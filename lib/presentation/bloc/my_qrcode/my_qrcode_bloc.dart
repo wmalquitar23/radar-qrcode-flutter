@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/aes.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/encrypt.dart';
 import 'package:radar_qrcode_flutter/core/utils/qr_code/poster_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/qr_code/sticker_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
@@ -75,8 +76,16 @@ class MyQRCodeBloc extends Bloc<MyQRCodeEvent, MyQRCodeState> {
         ToastUtil.showToast(
             event.buildContext, "Poster Downloaded Succesfully!");
       } else {
-        // Download Sticker
-        print("Sticker :" + event.qrData);
+        final stickerByteData = await StickerUtil().generateImageByteData(
+          user: event.user,
+          qrData: event.qrData,
+        );
+
+        await saveImage(
+          event.user.displayId,
+          event.downloadType.getValue,
+          stickerByteData,
+        );
         ToastUtil.showToast(
             event.buildContext, "Sticker Downloaded Succesfully!");
       }
