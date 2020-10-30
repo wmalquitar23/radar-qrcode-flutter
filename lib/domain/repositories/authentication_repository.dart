@@ -26,6 +26,7 @@ abstract class AuthenticationRepository {
     String pin,
     String contactNumber,
     UserAddress address,
+    String email,
   );
 
   Future<dynamic> getRegisterQueueData();

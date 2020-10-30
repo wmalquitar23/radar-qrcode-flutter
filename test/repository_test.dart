@@ -84,6 +84,7 @@ void main() {
     var formatter = DateFormat('yyyyMMddmmss');
     var establishmentName = "Establishment${formatter.format(DateTime.now())}";
     var pin = "1234";
+    var email = "jes@dnsc.edu.ph";
     var contactNumber = "9122226789"; // Assuming number is not yet registered
     var address = UserAddress(
       streetHouseNo: "Test",
@@ -101,6 +102,7 @@ void main() {
       pin,
       contactNumber,
       address,
+      email,
     );
 
     var registrationData =

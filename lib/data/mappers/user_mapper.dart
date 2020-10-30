@@ -24,9 +24,9 @@ class UserMapper extends RadarMapper<User> {
     }
     return User(
       id: map['_id'],
-      firstName: map['firstname'],
-      lastName: map['lastname'],
-      middleName: map['middlename'] != null ? map['middlename'] : null,
+      firstName: map['firstName'],
+      lastName: map['lastName'],
+      middleName: map['middleName'] != null ? map['middleName'] : "",
       suffix: map['suffix'] != null ? map['suffix'] : null,
       birthDate: map['birthDate'] != null
           ? birthDateFormatter.parse(map['birthDate'])
@@ -34,12 +34,19 @@ class UserMapper extends RadarMapper<User> {
       gender: gender,
       contactNumber: map['contactNumber'],
       address: userAddressMapper.fromMap(map['address']),
+      email: map['email'] != null ? map['email'] : "",
+      covidStatus: map.containsKey("covidStatus")
+          ? map['covidStatus']['category']
+          : null,
       role: map['role'],
-      isVerified: map['isVerified'],
-      profileImageUrl: map['profileImageUrl'],
+      isVerified: map.containsKey("verification")
+          ? map['verification']['isVerified']
+          : null,
+      profileImageUrl:
+          map['profileImageFileId'] != null ? map['profileImageFileId'] : null,
       displayId: map['displayId'],
-      establishmentName: map['firstname'],
-      requirement: requirementMapper.fromMap(map['requirements']),
+      establishmentName: map['firstName'],
+      requirement: requirementMapper.fromMap(map['requirementDoc']),
     );
   }
 
@@ -48,13 +55,13 @@ class UserMapper extends RadarMapper<User> {
     return {
       "_id": object.id,
       "displayId": object.displayId,
-      "firstname": object.firstName,
-      "middlename": object.middleName,
-      "lastname": object.lastName,
+      "firstName": object.firstName,
+      "middleName": object.middleName,
+      "lastName": object.lastName,
       "suffix": object.suffix,
       "pin": object.pin,
       "birthDate": object.birthDate.toIso8601String(),
-      "profileImageUrl": object.profileImageUrl,
+      "profileImageFileId": object.profileImageUrl,
       "isVerified": object.isVerified,
       "role": object.role,
       "gender": object.gender,

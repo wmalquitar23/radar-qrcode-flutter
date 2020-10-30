@@ -35,6 +35,7 @@ class EstablishmentBasicInformationBloc extends Bloc<
           pin: event.pin,
           contactNumber: event.contactNumber,
           userAddress: event.userAddress,
+          email: event.email,
         );
         yield RegisterDone();
       } on DioError catch (e) {

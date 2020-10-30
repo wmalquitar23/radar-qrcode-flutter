@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/core/utils/string_utils.dart';
 import 'package:radar_qrcode_flutter/core/utils/style/textfield_theme.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
 import 'package:radar_qrcode_flutter/data/models/address/barangay_model.dart';
@@ -35,6 +36,7 @@ class _EstablishmentBasicInformationPageState
   int _pageControllerIndex;
 
   TextEditingController _establishmentNameController = TextEditingController();
+  TextEditingController _establishmentEmailController = TextEditingController();
   TextEditingController _pinController = TextEditingController();
   TextEditingController _confirmPinController = TextEditingController();
   TextEditingController _contactNumberController = TextEditingController();
@@ -45,6 +47,7 @@ class _EstablishmentBasicInformationPageState
   Barangay _selectedBarangay;
 
   bool _pinMatched = true;
+  bool _isValidEmail = true;
   bool _contactNumberIsValid = false;
   bool _basicInfoIsValid = false;
   bool _agreementCheckBox = false;
@@ -73,6 +76,18 @@ class _EstablishmentBasicInformationPageState
     }
   }
 
+  void _validateEmail() {
+    if (!StringUtils.isValidEmail(_establishmentEmailController.text)) {
+      setState(() {
+        _isValidEmail = false;
+      });
+    } else {
+      setState(() {
+        _isValidEmail = true;
+      });
+    }
+  }
+
   bool _checkValidityBasicInfo() {
     bool fieldsNotEmpty = false;
     bool isPinConfirmed = false;
@@ -94,6 +109,7 @@ class _EstablishmentBasicInformationPageState
 
     return (fieldsNotEmpty &&
         isPinConfirmed &&
+        _isValidEmail &&
         _contactNumberIsValid &&
         _agreementCheckBox &&
         _checkAddress());
@@ -128,6 +144,7 @@ class _EstablishmentBasicInformationPageState
         establishmentName: _establishmentNameController.text,
         pin: _pinController.text,
         contactNumber: _contactNumberController.text,
+        email: _establishmentEmailController.text,
         userAddress: UserAddress(
           streetHouseNo: _streetHouseNumController.text,
           brgyCode: _selectedBarangay.brgyCode,
@@ -218,6 +235,7 @@ class _EstablishmentBasicInformationPageState
                       ),
                     ),
                     _buildEstablishmentNameTextField(),
+                    _buildEstablishmentEmailTextField(),
                     _buildCreatePINTextField(),
                     _buildConfirmPINTextField(),
                     _buildContactNumberTextField(),
@@ -260,6 +278,26 @@ class _EstablishmentBasicInformationPageState
     );
   }
 
+  Widget _buildEstablishmentEmailTextField() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
+      child: ShadowWidget(
+        child: TextFormField(
+          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+          decoration: TextFieldTheme.textfieldInputDecoration(
+            hintText: "Email",
+            errorText: _isValidEmail ? null : "Invalid email",
+          ),
+          controller: _establishmentEmailController,
+          onChanged: (value) {
+            _validateEmail();
+            _onChangeValidityBasicInfo();
+          },
+        ),
+      ),
+    );
+  }
+
   Widget _buildCreatePINTextField() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
@@ -272,8 +310,8 @@ class _EstablishmentBasicInformationPageState
           ],
           obscureText: true,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
-          decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Create 4 digit PIN"),
+          decoration: TextFieldTheme.textfieldInputDecoration(
+              hintText: "Create 4 digit PIN"),
           controller: _pinController,
           onChanged: (value) {
             _validatePIN();

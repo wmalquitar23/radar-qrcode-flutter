@@ -2,6 +2,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 import 'package:intl/intl.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
+import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/date_utils.dart';
 import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/data/models/requirement.dart';
@@ -23,6 +24,8 @@ class User extends RadarModel {
   final String displayId;
   final String establishmentName;
   final Requirement requirement;
+  final String covidStatus;
+  final String email;
 
   User({
     this.id,
@@ -41,11 +44,19 @@ class User extends RadarModel {
     this.displayId,
     this.establishmentName,
     this.requirement,
+    this.covidStatus,
+    this.email,
   });
 
   String get fullName =>
       "$firstName ${middleName.length > 0 ? middleName[0] + ". " : ""}$lastName${suffix.length > 0 ? ", " + suffix : ""}"
           .toUpperCase();
+
+  Future<String> imageFormat(String imageId) async {
+    Map<String, String> env = await loadEnvFile();
+
+    return env['API_URL'] + "/files/" + imageId;
+  }
 
   String birthDateToString(DateTime birthdate) {
     DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");

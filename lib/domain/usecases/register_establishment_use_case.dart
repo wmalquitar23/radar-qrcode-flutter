@@ -12,12 +12,14 @@ class RegisterEstablishmentUseCase {
     @required String pin,
     @required String contactNumber,
     @required UserAddress userAddress,
+    @required String email,
   }) {
     return repository.registerEstablishment(
       establishmentName,
       pin,
       contactNumber,
       userAddress,
+      email,
     );
   }
 }

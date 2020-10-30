@@ -6,12 +6,13 @@ String qrCodeObject(User user) {
   return jsonEncode({
     "_id": user.id,
     "displayId": user.displayId,
-    "firstname": user.firstName,
-    "middlename": user.middleName,
-    "lastname": user.lastName,
+    "firstName": user.firstName,
+    "middleName": user.middleName,
+    "lastName": user.lastName,
     "suffix": user.suffix,
-    "isVerified": user.isVerified,
-    "profileImageUrl": user.profileImageUrl,
+    "verification": {"isVerified": user.isVerified},
+    "covidStatus": {"category": user.covidStatus},
+    "profileImageFileId": user.profileImageUrl,
     "address": UserAddressMapper().toMap(user.address),
     "birthDate": user.birthDateToString(user.birthDate),
   });
