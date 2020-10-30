@@ -12,7 +12,7 @@ String qrCodeObject(User user) {
     "suffix": user.suffix,
     "verification": {"isVerified": user.isVerified},
     "covidStatus": {"category": user.covidStatus},
-    "profileImageUrl": user.profileImageUrl,
+    "profileImageFileId": user.profileImageUrl,
     "address": UserAddressMapper().toMap(user.address),
     "birthDate": user.birthDateToString(user.birthDate),
   });

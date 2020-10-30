@@ -59,7 +59,7 @@ class UserMapper extends RadarMapper<User> {
       "suffix": object.suffix,
       "pin": object.pin,
       "birthDate": object.birthDate.toIso8601String(),
-      "profileImageUrl": object.profileImageUrl,
+      "profileImageFileId": object.profileImageUrl,
       "isVerified": object.isVerified,
       "role": object.role,
       "gender": object.gender,
