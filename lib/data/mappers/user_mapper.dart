@@ -34,6 +34,10 @@ class UserMapper extends RadarMapper<User> {
       gender: gender,
       contactNumber: map['contactNumber'],
       address: userAddressMapper.fromMap(map['address']),
+      email: map['email'] != null ? map['email'] : "",
+      covidStatus: map.containsKey("covidStatus")
+          ? map['covidStatus']['category']
+          : null,
       role: map['role'],
       isVerified: map['verification']['isVerified'],
       profileImageUrl:

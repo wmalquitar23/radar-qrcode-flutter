@@ -24,7 +24,6 @@ class ProfileRepositoryImpl extends ProfileRepository {
 
   @override
   Future<void> uploadProfileImage(File file) async {
-    Map<String, String> env = await loadEnvFile();
     StandardResponse response = await restClient.fileUpload(file);
     await updateUser({"profileImageFileId": response.data['fileId']});
   }
@@ -53,8 +52,7 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }
 
   Future<void> changePin(String oldPin, String newPin) async {
-    Session session = await getCurrentSession();
-    await restClient.changePin(oldPin, newPin, session.user.id);
+    await updateUser({"pin": newPin});
   }
 
   @override

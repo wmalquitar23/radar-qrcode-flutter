@@ -14,7 +14,7 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
   SessionDb sessionDb;
   CheckInDb checkInDb;
 
-  DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
+  DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
 
   TransactionsRepositoryImpl(this.db, this.restClient) {
     restClient = this.restClient;
@@ -26,14 +26,14 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
     if (hasConnection) {
       await checkInDb.save({
         "user": UserMapper().toMap(user),
-        "dateTime": birthdayFormatter.format(DateTime.now()),
+        "dateTime": dateFormatter.format(DateTime.now()),
         "hasUploaded": true,
       });
       await restClient.checkIn(user.id);
     } else {
       await checkInDb.save({
         "user": UserMapper().toMap(user),
-        "dateTime": birthdayFormatter.format(DateTime.now()),
+        "dateTime": dateFormatter.format(DateTime.now()),
         "hasUploaded": false,
       });
     }
@@ -43,7 +43,7 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
     List<CheckIn> localdata = await checkInDb.getAllData();
 
     await Future.forEach(localdata, (CheckIn data) async {
-      await restClient.checkIn(data.user.id);
+      await restClient.checkIn(data.user.id, dateTime: data.dateTime);
       await checkInDb.updateData(data.key);
     });
   }
