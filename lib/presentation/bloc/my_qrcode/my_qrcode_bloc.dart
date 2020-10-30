@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/aes.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/encrypt.dart';
+import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_profile_information_use_case.dart';
@@ -50,6 +53,16 @@ class MyQRCodeBloc extends Bloc<MyQRCodeEvent, MyQRCodeState> {
         );
       } else {
         _sessionSubscription?.cancel();
+      }
+    } else if (event is OnDownloadButtonClick) {
+      if (event.downloadType == DownloadType.poster) {
+        // Download Poster
+        print("Poster :" + event.qrData);
+        ToastUtil.showToast(event.buildContext, "Poster Downloaded Succesfully!");
+      } else {
+        // Download Sticker
+        print("Sticker :" + event.qrData);
+        ToastUtil.showToast(event.buildContext, "Sticker Downloaded Succesfully!");
       }
     }
   }

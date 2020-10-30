@@ -27,6 +27,16 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
     );
   }
 
+  void _downloadQR(DownloadType downloadType, BuildContext context) {
+    BlocProvider.of<MyQRCodeBloc>(context).add(
+      OnDownloadButtonClick(
+        downloadType: downloadType,
+        qrData: _encryptedQr,
+        buildContext: context,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -279,11 +289,15 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          PrimaryButton(text: "DOWNLOAD POSTER (A4 SIZE)", onPressed: (){
-            ToastUtil.showToast(context, "Hello");
-          },),
+          PrimaryButton(
+            text: "DOWNLOAD POSTER (A4 SIZE)",
+            onPressed: () => _downloadQR(DownloadType.poster, context),
+          ),
           SizedBox(height: 20),
-          PrimaryButton(text: "DOWNLOAD STICKER (3.5in x 6in)"),
+          PrimaryButton(
+            text: "DOWNLOAD STICKER (3.5in x 6in)",
+            onPressed: () => _downloadQR(DownloadType.sticker, context),
+          ),
         ],
       ),
     );
