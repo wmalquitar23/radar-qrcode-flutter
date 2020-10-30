@@ -1,4 +1,5 @@
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
+import 'package:radar_qrcode_flutter/core/utils/image/image.utils.dart';
 import 'package:radar_qrcode_flutter/data/local_db/queue/register_queue_db.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
 import 'package:radar_qrcode_flutter/data/mappers/user_address_mapper.dart';
@@ -115,6 +116,9 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       );
     }
 
+    userInfoResponse.data['user']['profileImageFileId'] =
+        await parseImage(userInfoResponse.data['user']['profileImageFileId']);
+        
     await sessionDb.save({
       "user": userInfoResponse.data['user'],
       "token": userInfoResponse.data['token']
