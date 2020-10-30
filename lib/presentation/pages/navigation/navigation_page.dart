@@ -120,6 +120,19 @@ class _NavigationPageState extends State<NavigationPage> {
                                           )
                                         : Container()
                                     : Container(),
+                                state is NavigationCheckUserRole
+                                    ? !state.isIndividual
+                                        ? NavigationItem(
+                                            iconAsset: "profile.png",
+                                            title: 'My QR Code',
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              Navigator.pushNamed(context,
+                                                  MY_QRCODE_ROUTE);
+                                            },
+                                          )
+                                        : Container()
+                                    : Container(),
                                 NavigationItem(
                                   iconAsset: "contact-us.png",
                                   title: 'Contact us',

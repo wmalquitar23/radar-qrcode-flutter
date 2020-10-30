@@ -56,7 +56,7 @@ class User extends RadarModel {
 
   String birthDateToString(DateTime birthdate) {
     DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
-    return birthdayFormatter.format(birthdate);
+    return birthdate != null ? birthdayFormatter.format(birthdate) : null;
   }
 
   int get age => birthDate != null ? DateUtils.calculateAge(birthDate) : null;
