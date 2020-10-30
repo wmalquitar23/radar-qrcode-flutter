@@ -239,53 +239,57 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
               children: [
                 _buildAddressTextField(),
                 _buildContactNumberTextField(),
-                AnimatedOpacity(
-                  opacity: localCheckInData.length != 0 ? 1.0 : 0.0,
-                  duration: Duration(seconds: 1),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
+                localCheckInData.length != 0
+                    ? AnimatedOpacity(
+                        opacity: localCheckInData.length != 0 ? 1.0 : 0.0,
+                        duration: Duration(seconds: 1),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  BlocProvider.of<EstablishmentBloc>(context)
+                                      .add(
+                                    OnSyncDataPressed(),
+                                  );
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.all(5),
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle),
+                                  child: state.syncDataProgress
+                                      ? CupertinoActivityIndicator()
+                                      : Icon(
+                                          Icons.sync_problem,
+                                          color: Colors.white,
+                                          size: 25,
+                                        ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Flexible(
+                              child: DescriptionText(
+                                title:
+                                    "${localCheckInData.length} individual/s saved from your establishment phone, please sync it to our server by pressing the sync icon.",
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                textAlign: TextAlign.start,
+                                color: ColorUtil.primaryTextColor,
+                              ),
+                            ),
+                          ],
                         ),
-                        child: GestureDetector(
-                          onTap: () {
-                            BlocProvider.of<EstablishmentBloc>(context).add(
-                              OnSyncDataPressed(),
-                            );
-                          },
-                          child: Container(
-                            margin: EdgeInsets.all(5),
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                color: Colors.red, shape: BoxShape.circle),
-                            child: state.syncDataProgress
-                                ? CupertinoActivityIndicator()
-                                : Icon(
-                                    Icons.sync_problem,
-                                    color: Colors.white,
-                                    size: 25,
-                                  ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Flexible(
-                        child: DescriptionText(
-                          title:
-                              "${localCheckInData.length} individual/s saved from your establishment phone, please sync it to our server by pressing the sync icon.",
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          textAlign: TextAlign.start,
-                          color: ColorUtil.primaryTextColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                      )
+                    : Container(),
                 SizedBox(
                   height: 20,
                 ),
@@ -393,7 +397,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                 ? "Please scan a QR Code to retrieve user's information."
                 : (totalScannedCheckInData.length < limitScanNumber
                     ? "Please scan a QR Code to retrieve user's information."
-                  : "You have reached the scan limit. Please activate your account to continue using Radar."),
+                    : "You have reached the scan limit. Please activate your account to continue using Radar."),
             color: ColorUtil.primaryTextColor,
             fontSize: 11,
             fontWeight: FontWeight.w600,
