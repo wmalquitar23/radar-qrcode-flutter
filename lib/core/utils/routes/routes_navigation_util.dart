@@ -11,6 +11,7 @@ import 'package:radar_qrcode_flutter/presentation/bloc/estab_activation_info/est
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/my_qrcode/my_qrcode_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/sign_in_verification/sign_in_verification_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/upload_id/upload_id_bloc.dart';
@@ -34,6 +35,7 @@ import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/id
 import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/upload_id_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/upload_result_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/individual_home/individual_home.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/my_qrcode/my_qrcode_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/onboard/onboard_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/profile/my_profile_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/register_as/register_as_page.dart';
@@ -240,6 +242,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         pageTransitionType: PageTransitionType.fade,
       );
       break;
+    case MY_QRCODE_ROUTE:
+      return pushNamed(
+          page: BlocProvider(
+            create: (_) => sl<MyQRCodeBloc>(),
+            child: MyQRCodePage(),
+          ),
+          settings: settings,
+          pageTransitionType: PageTransitionType.rightToLeftWithFade);
     default:
       return _errorRoute(settings);
       break;
