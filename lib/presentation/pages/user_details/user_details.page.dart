@@ -42,8 +42,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               listener: (context, state) {},
               builder: (context, state) {
                 if (state is UserDetailsInitial) {
-                  print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                  print(widget.qrInformation);
                   BlocProvider.of<UserDetailsBloc>(context).add(
                     OnLoadUserDetail(widget.qrInformation),
                   );
@@ -101,7 +99,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   }
 
   Widget _buildImage(User state) {
-    print(state?.profileImageUrl);
     return Center(
       child: Container(
         width: 120.0,

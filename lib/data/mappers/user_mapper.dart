@@ -39,7 +39,9 @@ class UserMapper extends RadarMapper<User> {
           ? map['covidStatus']['category']
           : null,
       role: map['role'],
-      isVerified: map['verification']['isVerified'],
+      isVerified: map.containsKey("verification")
+          ? map['verification']['isVerified']
+          : null,
       profileImageUrl:
           map['profileImageFileId'] != null ? map['profileImageFileId'] : null,
       displayId: map['displayId'],
