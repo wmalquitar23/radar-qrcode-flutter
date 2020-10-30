@@ -51,7 +51,7 @@ class User extends RadarModel {
   });
 
   String get fullName =>
-      "$firstName ${middleName.length > 0 ? middleName[0] + ". " : ""}$lastName${suffix.length > 0 ? ", " + suffix : ""}"
+      "$firstName ${(middleName ?? "").length > 0 ? middleName[0] + ". " : ""}$lastName${(suffix ?? "").length > 0 ? ", " + suffix : ""}"
           .toUpperCase();
 
   String get designatedAreaToUpperCase => designatedArea.toUpperCase();
