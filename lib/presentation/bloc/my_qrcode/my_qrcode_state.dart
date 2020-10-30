@@ -48,3 +48,5 @@ class GetUserSuccess extends MyQRCodeState {
   @override
   List<Object> get props => [user, jsonQrCode];
 }
+
+enum DownloadType {poster, sticker}
