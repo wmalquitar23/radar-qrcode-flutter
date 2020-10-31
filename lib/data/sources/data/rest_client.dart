@@ -140,10 +140,10 @@ class RestClient {
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
-  Future<StandardResponse> checkIn(String id, {DateTime dateTime}) async {
+  Future<StandardResponse> checkIn(String id, {String dateTime}) async {
     Response response = await _dio.post("/access-logs", data: {
       "id": id,
-      "createdAt": dateTime.toString(),
+      "createdAt": dateTime != null ? dateTime : "",
     });
 
     return apiCatcher(StandardResponse.fromJson(response.data));

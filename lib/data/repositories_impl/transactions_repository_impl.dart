@@ -14,7 +14,7 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
   SessionDb sessionDb;
   CheckInDb checkInDb;
 
-  DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
+  DateFormat dateFormatter = DateFormat("yyyy-MM-dd HH:mm:ss");
 
   TransactionsRepositoryImpl(this.db, this.restClient) {
     restClient = this.restClient;
@@ -23,17 +23,19 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
   }
 
   Future<void> checkIn(User user, bool hasConnection) async {
+    DateTime now = DateTime.now();
+    String isoDate = now.toIso8601String();
     if (hasConnection) {
       await checkInDb.save({
         "user": UserMapper().toMap(user),
-        "dateTime": dateFormatter.format(DateTime.now()),
+        "dateTime": isoDate,
         "hasUploaded": true,
       });
       await restClient.checkIn(user.id);
     } else {
       await checkInDb.save({
         "user": UserMapper().toMap(user),
-        "dateTime": dateFormatter.format(DateTime.now()),
+        "dateTime": isoDate,
         "hasUploaded": false,
       });
     }

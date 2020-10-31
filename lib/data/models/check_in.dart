@@ -4,7 +4,7 @@ import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 class CheckIn extends RadarModel {
   final int key;
   final User user;
-  final DateTime dateTime;
+  final String dateTime;
   final bool hasUploaded;
 
   CheckIn({
