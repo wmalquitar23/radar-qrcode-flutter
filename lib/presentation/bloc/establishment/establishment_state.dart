@@ -65,7 +65,7 @@ class EstablishmentState extends Equatable {
     bool syncDataSuccess = false,
     String syncDataFailureMessage,
     String establishementGetUserSuccessMessage,
-    bool updateDesignatedAreaProgress,
+    bool updateDesignatedAreaProgress = false,
     String updateDesignatedAreaFailureMessage,
   }) {
     return EstablishmentState(
@@ -90,7 +90,8 @@ class EstablishmentState extends Equatable {
           establishementGetUserSuccessMessage ?? null,
       updateDesignatedAreaProgress:
           updateDesignatedAreaProgress ?? state.updateDesignatedAreaProgress,
-      updateDesignatedAreaFailureMessage: updateDesignatedAreaFailureMessage ?? null,
+      updateDesignatedAreaFailureMessage:
+          updateDesignatedAreaFailureMessage ?? null,
     );
   }
 }
