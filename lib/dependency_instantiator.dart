@@ -60,6 +60,7 @@ import 'data/repositories_impl/authentication_repository_impl.dart';
 import 'data/repositories_impl/profile_repository_impl.dart';
 import 'data/repositories_impl/transactions_repository_impl.dart';
 import 'domain/repositories/authentication_repository.dart';
+import 'domain/usecases/update_designated_area_use_case.dart';
 import 'presentation/bloc/sign_in_verification/sign_in_verification_bloc.dart';
 import 'presentation/bloc/splash/splash_bloc.dart';
 
@@ -157,6 +158,8 @@ class DataInstantiator extends RadarDataInstantiator {
         getSessionUseCase: GetSessionUseCase(authenticationRepository),
         listenForTotalCheckInDataUseCase:
             ListenForTotalCheckInDataUseCase(transactionRepository),
+        updateDesignatedAreaUseCase:
+            UpdateDesignatedAreaUseCase(profileRepository),
       ),
     );
     sl.registerFactory<ProfileBloc>(
@@ -262,6 +265,8 @@ class DataInstantiator extends RadarDataInstantiator {
         () => ResendOTPUseCase(authenticationRepository));
     GetIt.I.registerLazySingleton<GetRapidPassContactUseCase>(
         () => GetRapidPassContactUseCase(rapidPassContactRepository));
+    GetIt.I.registerLazySingleton<UpdateDesignatedAreaUseCase>(
+        () => UpdateDesignatedAreaUseCase(profileRepository));
 
     //repositories
     GetIt.I
