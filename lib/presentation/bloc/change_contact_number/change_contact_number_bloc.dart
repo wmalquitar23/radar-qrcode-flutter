@@ -31,17 +31,17 @@ class ChangeContactNumberBloc
     if (event is ContinueButtonPressed) {
       yield RegisterProgress();
       try {
-        await registerIndividualUseCase.execute(
-          event.firstName,
-          event.lastName,
-          event.middleName,
-          event.suffix,
-          event.pin,
-          event.contactNumber,
-          event.address,
-          event.birthDate,
-          event.gender,
-        );
+        // await registerIndividualUseCase.execute(
+        //   event.firstName,
+        //   event.lastName,
+        //   event.middleName,
+        //   event.suffix,
+        //   event.pin,
+        //   event.contactNumber,
+        //   event.address,
+        //   event.birthDate,
+        //   event.gender,
+        // );
         yield RegisterDone();
       } on DioError catch (e) {
         String errorhandler = ErrorHandler().dioErrorHandler(e);

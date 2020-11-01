@@ -40,6 +40,7 @@ class IndividualBasicInformationBloc extends Bloc<
           event.userAddress,
           event.birthDate,
           event.gender,
+          event.email,
         );
         yield RegisterDone();
       } on DioError catch (e) {

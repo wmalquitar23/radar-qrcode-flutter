@@ -16,6 +16,7 @@ class RegisterPressed extends IndividualBasicInformationEvent {
   final Gender gender;
   final String pin;
   final String contactNumber;
+  final String email;
   final UserAddress userAddress;
 
   RegisterPressed({
@@ -28,6 +29,7 @@ class RegisterPressed extends IndividualBasicInformationEvent {
     this.pin,
     this.contactNumber,
     this.userAddress,
+    this.email,
   });
 }
 

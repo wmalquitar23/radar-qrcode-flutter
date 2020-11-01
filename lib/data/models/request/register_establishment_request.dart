@@ -25,7 +25,9 @@ class RegisterEstablishmentRequest {
     firstname = json['firstName'];
     pin = json['pin'];
     contactNumber = json['contactNumber'];
-    email = json['email'];
+    if (email != null) {
+      email = json['email'];
+    }
     role = json['role'];
     designatedArea = json['designatedArea'];
     userAddress = json['address'] != null
@@ -38,7 +40,9 @@ class RegisterEstablishmentRequest {
     data['firstName'] = this.firstname;
     data['pin'] = this.pin;
     data['contactNumber'] = this.contactNumber;
-    data['email'] = this.email;
+    if (data['email'] != null) {
+      data['email'] = this.email;
+    }
     data['designatedArea'] = this.designatedArea;
     data['role'] = this.role;
     if (this.userAddress != null) {

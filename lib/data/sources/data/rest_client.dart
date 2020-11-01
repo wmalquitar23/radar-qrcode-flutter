@@ -25,7 +25,6 @@ class RestClient {
   Future<StandardResponse> registerIndividual(
       RegisterIndividualRequest data) async {
     Response response = await _dio.post("/auth/register", data: data);
-    print(response);
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }

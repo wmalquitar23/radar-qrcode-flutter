@@ -19,6 +19,7 @@ abstract class AuthenticationRepository {
     UserAddress address,
     DateTime birthdate,
     Gender gender,
+    String email,
   );
 
   Future<void> registerEstablishment(

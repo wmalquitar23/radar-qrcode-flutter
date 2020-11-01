@@ -105,6 +105,25 @@ void main() {
     expect(response.data, isNotNull);
   });
 
+  test('Login', () async {
+    //GIVEN THAT
+    var contactNumber = "9451096906";
+    var pin = "5555";
+
+    try {
+      StandardResponse userInfoResponse =
+          await restClient.login(contactNumber, pin);
+      expect(userInfoResponse, isNotNull);
+      expect(userInfoResponse.data, isNotNull);
+
+      // await sessionDb.save({
+      //   "token": userInfoResponse.data['token'],
+      // });
+    } catch (e) {
+      logger.i(e);
+    }
+  });
+
   test('OTP Mobile number', () async {
     //GIVEN THAT
     var contactNumber = "9532110774";

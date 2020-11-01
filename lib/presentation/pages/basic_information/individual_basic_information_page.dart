@@ -45,6 +45,7 @@ class _IndividualBasicInformationPageState
   TextEditingController _confirmPinController = TextEditingController();
   TextEditingController _contactNumberController = TextEditingController();
   TextEditingController _streetHouseNumController = TextEditingController();
+  TextEditingController _individualEmailController = TextEditingController();
 
   Province _selectedProvince;
   City _selectedCity;
@@ -62,6 +63,7 @@ class _IndividualBasicInformationPageState
   bool _pinMatched = true;
   bool _contactNumberIsValid = false;
   bool _agreementCheckBox = false;
+  bool _isValidEmail = true;
 
   @override
   initState() {
@@ -78,6 +80,18 @@ class _IndividualBasicInformationPageState
     });
   }
 
+  void _validateEmail() {
+    if (!StringUtils.isValidEmail(_individualEmailController.text)) {
+      setState(() {
+        _isValidEmail = false;
+      });
+    } else {
+      setState(() {
+        _isValidEmail = true;
+      });
+    }
+  }
+
   void _onRegisterPressed() async {
     BlocProvider.of<IndividualBasicInformationBloc>(context).add(
       RegisterPressed(
@@ -89,6 +103,7 @@ class _IndividualBasicInformationPageState
         gender: _genderValue,
         pin: _pinController.text,
         contactNumber: _contactNumberController.text,
+        email: _individualEmailController.text,
         userAddress: UserAddress(
           streetHouseNo: _streetHouseNumController.text,
           brgyCode: _selectedBarangay.brgyCode,
@@ -250,6 +265,7 @@ class _IndividualBasicInformationPageState
                     ),
                     _buildCreatePINTextField(),
                     _buildConfirmPINTextField(),
+                    _buildIndividualEmailTextField(),
                     _buildContactNumberTextField(),
                     AddressWidget(
                       selectProvinceCallback: (selectedProvince) =>
@@ -356,6 +372,26 @@ class _IndividualBasicInformationPageState
           ),
           onChanged: (value) {
             _validatePIN();
+            _onChangeValidityBasicInfo2();
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIndividualEmailTextField() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: textFieldMargin),
+      child: ShadowWidget(
+        child: TextFormField(
+          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
+          decoration: TextFieldTheme.textfieldInputDecoration(
+            hintText: "Email",
+            errorText: _isValidEmail ? null : "Invalid email",
+          ),
+          controller: _individualEmailController,
+          onChanged: (value) {
+            _validateEmail();
             _onChangeValidityBasicInfo2();
           },
         ),

@@ -48,6 +48,7 @@ void main() {
     var suffix = "Jr";
     var pin = "1234";
     var contactNumber = "09459298175";
+    var email = "";
     var address = UserAddress(
       streetHouseNo: "Test",
       brgyCode: "Test",
@@ -69,6 +70,7 @@ void main() {
       address,
       DateTime.now(),
       Gender.male,
+      email,
     );
 
     var registrationData =
@@ -122,6 +124,7 @@ void main() {
     var suffix = "Jr";
     var pin = "1234";
     var contactNumber = "09359098175";
+    var email = "";
     var address = UserAddress(
       streetHouseNo: "Test",
       brgyCode: "Test",
@@ -143,6 +146,7 @@ void main() {
       address,
       DateTime.now(),
       Gender.male,
+      email,
     );
 
     dynamic data = await authenticationRepositoryImpl.getRegisterQueueData();
