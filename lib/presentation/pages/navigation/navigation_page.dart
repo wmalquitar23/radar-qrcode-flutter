@@ -110,7 +110,7 @@ class _NavigationPageState extends State<NavigationPage> {
                                 state is NavigationCheckUserRole
                                     ? !state.isIndividual
                                         ? NavigationItem(
-                                            iconAsset: "profile.png",
+                                            iconAsset: "activation.png",
                                             title: 'Activation',
                                             onPressed: () {
                                               Navigator.pop(context);
@@ -123,7 +123,7 @@ class _NavigationPageState extends State<NavigationPage> {
                                 state is NavigationCheckUserRole
                                     ? !state.isIndividual
                                         ? NavigationItem(
-                                            iconAsset: "profile.png",
+                                            iconAsset: "my-qr-code.png",
                                             title: 'My QR Code',
                                             onPressed: () {
                                               Navigator.pop(context);
