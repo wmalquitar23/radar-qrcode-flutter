@@ -26,6 +26,7 @@ class User extends RadarModel {
   final Requirement requirement;
   final String covidStatus;
   final String email;
+  final String designatedArea;
 
   User({
     this.id,
@@ -46,11 +47,14 @@ class User extends RadarModel {
     this.requirement,
     this.covidStatus,
     this.email,
+    this.designatedArea,
   });
 
   String get fullName =>
       "$firstName ${middleName.length > 0 ? middleName[0] + ". " : ""}$lastName${suffix.length > 0 ? ", " + suffix : ""}"
           .toUpperCase();
+
+  String get designatedAreaToUpperCase => designatedArea.toUpperCase();
 
   Future<String> imageFormat(String imageId) async {
     Map<String, String> env = await loadEnvFile();
