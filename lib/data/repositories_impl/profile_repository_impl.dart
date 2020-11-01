@@ -60,4 +60,9 @@ class ProfileRepositoryImpl extends ProfileRepository {
     StandardResponse response = await restClient.fileUpload(file);
     await restClient.submitRequirements({"fileId": response.data['fileId']});
   }
+
+  @override
+  Future<void> updateDesignatedArea(String designatedArea) async {
+    await updateUser({"designatedArea": designatedArea});
+  }
 }

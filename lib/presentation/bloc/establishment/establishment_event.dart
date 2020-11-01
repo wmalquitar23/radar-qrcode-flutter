@@ -34,3 +34,12 @@ class ProfileImageOnUpload extends EstablishmentEvent {
 class OnSyncDataPressed extends EstablishmentEvent {}
 
 class OnRefresh extends EstablishmentEvent {}
+
+class OnDesignatedAreaSubmit extends EstablishmentEvent {
+  final String designatedArea;
+
+  OnDesignatedAreaSubmit(this.designatedArea);
+
+  @override
+  List<Object> get props => [designatedArea];
+}

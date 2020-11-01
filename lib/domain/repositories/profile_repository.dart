@@ -14,4 +14,6 @@ abstract class ProfileRepository {
   Future<void> changePin(String oldPin, String newPin);
 
   Future<void> uploadVerificationId(File file);
+
+  Future<void> updateDesignatedArea(String designatedArea);
 }

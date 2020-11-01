@@ -46,6 +46,8 @@ class UserMapper extends RadarMapper<User> {
           map['profileImageFileId'] != null ? map['profileImageFileId'] : null,
       displayId: map['displayId'],
       establishmentName: map['firstName'],
+      designatedArea:
+          map['designatedArea'] != null ? map['designatedArea'] : null,
       requirement: requirementMapper.fromMap(map['requirementDoc']),
     );
   }
