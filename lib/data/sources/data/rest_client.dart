@@ -135,7 +135,7 @@ class RestClient {
   Future<StandardResponse> changePin(
       String oldPin, String newPin, String id) async {
     Response response = await _dio
-        .patch("/users/$id/pin", data: {"oldPin": oldPin, "newPin": newPin});
+        .patch("/users/$id", data: {"oldPin": oldPin, "pin": newPin});
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }

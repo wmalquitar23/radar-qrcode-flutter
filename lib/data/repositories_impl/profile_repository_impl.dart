@@ -51,7 +51,8 @@ class ProfileRepositoryImpl extends ProfileRepository {
   }
 
   Future<void> changePin(String oldPin, String newPin) async {
-    await updateUser({"pin": newPin});
+    Session session = await getCurrentSession();
+    await restClient.changePin(oldPin, newPin, session.user.id);
   }
 
   @override
