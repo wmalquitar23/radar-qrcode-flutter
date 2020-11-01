@@ -15,6 +15,7 @@ import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_with_icon_widget.dart';
+import 'package:radar_qrcode_flutter/presentation/widgets/dialogs/designated_area_dialog.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/fields/custom_textfield.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/images/circle_image_widget.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/pages/mobile_status_margin_top.dart';
@@ -37,10 +38,17 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
 
   TextEditingController _addressController = TextEditingController();
   TextEditingController _contactNumberController = TextEditingController();
+  TextEditingController _designatedAreaController = TextEditingController();
 
   void _onLoad() async {
     BlocProvider.of<EstablishmentBloc>(context).add(
       EstablishmentOnLoad(),
+    );
+  }
+
+  void _onDesignatedAreaSubmit(String value) async {
+    BlocProvider.of<EstablishmentBloc>(context).add(
+      OnDesignatedAreaSubmit(value),
     );
   }
 
@@ -93,6 +101,8 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                       UserAddressString.getValue(state.user.address);
                   _contactNumberController.text =
                       "+63${state?.user?.contactNumber}";
+                  _designatedAreaController.text =
+                      "${state?.user?.designatedAreaToUpperCase}";
                 }
 
                 if (state.user != null) {
@@ -239,6 +249,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
               children: [
                 _buildAddressTextField(),
                 _buildContactNumberTextField(),
+                _buildDesignatedAreaTextField(state),
                 localCheckInData.length != 0
                     ? AnimatedOpacity(
                         opacity: localCheckInData.length != 0 ? 1.0 : 0.0,
@@ -384,6 +395,53 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
         controller: _contactNumberController,
         readOnly: true,
       ),
+    );
+  }
+
+  Widget _buildDesignatedAreaTextField(EstablishmentState state) {
+    return CustomTextField(
+      label: "Designated Area",
+      child: TextFormField(
+        controller: _designatedAreaController,
+        readOnly: true,
+        decoration: InputDecoration(
+          suffixIcon: GestureDetector(
+            onTap: () {
+              _showDesignatedAreaDialog();
+            },
+            child: Container(
+              child: Center(
+                widthFactor: 0,
+                child: state.updateDesignatedAreaProgress
+                    ? SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CupertinoActivityIndicator())
+                    : Icon(
+                        Icons.mode_edit,
+                        size: 16,
+                      ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showDesignatedAreaDialog() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return DesignatedAreaCustomDialog(
+            designatedAreaValue: _designatedAreaController.text,
+          );
+        }).then(
+      (value) {
+        if (value != null) {
+          _onDesignatedAreaSubmit(value);
+        }
+      },
     );
   }
 

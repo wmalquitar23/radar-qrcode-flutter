@@ -13,6 +13,8 @@ class EstablishmentState extends Equatable {
   final bool syncDataSuccess;
   final String syncDataFailureMessage;
   final String establishementGetUserSuccessMessage;
+  final bool updateDesignatedAreaProgress;
+  final String updateDesignatedAreaFailureMessage;
 
   EstablishmentState({
     this.establishmentGetUserProgress,
@@ -27,6 +29,8 @@ class EstablishmentState extends Equatable {
     this.syncDataSuccess,
     this.syncDataFailureMessage,
     this.establishementGetUserSuccessMessage,
+    this.updateDesignatedAreaProgress,
+    this.updateDesignatedAreaFailureMessage,
   });
 
   @override
@@ -43,6 +47,8 @@ class EstablishmentState extends Equatable {
         syncDataSuccess,
         syncDataFailureMessage,
         establishementGetUserSuccessMessage,
+        updateDesignatedAreaProgress,
+        updateDesignatedAreaFailureMessage,
       ];
 
   factory EstablishmentState.copyWith(
@@ -59,27 +65,33 @@ class EstablishmentState extends Equatable {
     bool syncDataSuccess = false,
     String syncDataFailureMessage,
     String establishementGetUserSuccessMessage,
+    bool updateDesignatedAreaProgress,
+    String updateDesignatedAreaFailureMessage,
   }) {
     return EstablishmentState(
-        establishmentGetUserProgress:
-            establishmentGetUserProgress ?? state.establishmentGetUserProgress,
-        user: user ?? state.user,
-        establishmentGetUserFailure:
-            establishmentGetUserFailure ?? state.establishmentGetUserFailure,
-        profileUploadImageProgress:
-            profileUploadImageProgress ?? state.profileUploadImageProgress,
-        profileUploadImageSuccess:
-            profileUploadImageSuccess ?? state.profileUploadImageSuccess,
-        profileUploadImageFailureMessage: profileUploadImageFailureMessage ??
-            state.profileUploadImageFailureMessage,
-        syncDataProgress: syncDataProgress ?? state.syncDataProgress,
-        localCheckInData: localCheckInData ?? state.localCheckInData,
-        totalScannedCheckInData:
-            totalScannedCheckInData ?? state.totalScannedCheckInData,
-        syncDataSuccess: syncDataSuccess ?? state.syncDataSuccess,
-        syncDataFailureMessage: syncDataFailureMessage ?? null,
-        establishementGetUserSuccessMessage:
-            establishementGetUserSuccessMessage ?? null);
+      establishmentGetUserProgress:
+          establishmentGetUserProgress ?? state.establishmentGetUserProgress,
+      user: user ?? state.user,
+      establishmentGetUserFailure:
+          establishmentGetUserFailure ?? state.establishmentGetUserFailure,
+      profileUploadImageProgress:
+          profileUploadImageProgress ?? state.profileUploadImageProgress,
+      profileUploadImageSuccess:
+          profileUploadImageSuccess ?? state.profileUploadImageSuccess,
+      profileUploadImageFailureMessage: profileUploadImageFailureMessage ??
+          state.profileUploadImageFailureMessage,
+      syncDataProgress: syncDataProgress ?? state.syncDataProgress,
+      localCheckInData: localCheckInData ?? state.localCheckInData,
+      totalScannedCheckInData:
+          totalScannedCheckInData ?? state.totalScannedCheckInData,
+      syncDataSuccess: syncDataSuccess ?? state.syncDataSuccess,
+      syncDataFailureMessage: syncDataFailureMessage ?? null,
+      establishementGetUserSuccessMessage:
+          establishementGetUserSuccessMessage ?? null,
+      updateDesignatedAreaProgress:
+          updateDesignatedAreaProgress ?? state.updateDesignatedAreaProgress,
+      updateDesignatedAreaFailureMessage: updateDesignatedAreaFailureMessage ?? null,
+    );
   }
 }
 

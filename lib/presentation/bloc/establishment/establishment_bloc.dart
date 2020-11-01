@@ -16,6 +16,7 @@ import 'package:radar_qrcode_flutter/domain/usecases/listen_for_checkin_data_use
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/listen_for_total_checkin_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/sync_data_use_case.dart';
+import 'package:radar_qrcode_flutter/domain/usecases/update_designated_area_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/upload_profile_image_use_case.dart';
 
 part 'establishment_event.dart';
@@ -30,6 +31,7 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
   final NetworkInfoImpl networkInfo;
   final GetSessionUseCase getSessionUseCase;
   final ListenForTotalCheckInDataUseCase listenForTotalCheckInDataUseCase;
+  final UpdateDesignatedAreaUseCase updateDesignatedAreaUseCase;
 
   EstablishmentBloc({
     this.listenForSessionUseCase,
@@ -40,6 +42,7 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
     this.networkInfo,
     this.getSessionUseCase,
     this.listenForTotalCheckInDataUseCase,
+    this.updateDesignatedAreaUseCase,
   }) : super(EstablishmentInitial());
 
   StreamSubscription<Session> _sessionSubscription;
@@ -139,6 +142,33 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
       }
     }
 
+    if (event is OnDesignatedAreaSubmit) {
+      yield EstablishmentState.copyWith(
+        state,
+        updateDesignatedAreaProgress: true,
+      );
+      try {
+        if (await networkInfo.isConnected()) {
+          await updateDesignatedAreaUseCase.execute(event.designatedArea);
+          add(OnRefresh());
+        } else {
+          throw Exception("Please check your internet connection.");
+        }
+      } on DioError catch (e) {
+        String errorhandler = ErrorHandler().dioErrorHandler(e);
+        yield EstablishmentState.copyWith(state,
+            updateDesignatedAreaProgress: false,
+            updateDesignatedAreaFailureMessage: errorhandler);
+      } on Exception catch (e) {
+        logger.e(e);
+        yield EstablishmentState.copyWith(
+          state,
+          updateDesignatedAreaProgress: false,
+          updateDesignatedAreaFailureMessage: e.toString(),
+        );
+      }
+    }
+
     if (event is OnRefresh) {
       yield EstablishmentState.copyWith(
         state,
@@ -150,6 +180,8 @@ class EstablishmentBloc extends Bloc<EstablishmentEvent, EstablishmentState> {
 
           yield EstablishmentState.copyWith(
             state,
+            updateDesignatedAreaProgress: false,
+            establishmentGetUserProgress: false,
             establishementGetUserSuccessMessage: "Updated Successfully",
           );
         } else {
