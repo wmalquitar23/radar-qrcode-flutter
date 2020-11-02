@@ -49,7 +49,6 @@ class UserMapper extends RadarMapper<User> {
       designatedArea:
           map['designatedArea'] != null ? map['designatedArea'] : null,
       requirement: requirementMapper.fromMap(map['requirementDoc']),
-      designatedArea: map['designatedArea'],
     );
   }
 
