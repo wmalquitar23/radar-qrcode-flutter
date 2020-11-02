@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:ui' as ui;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -49,4 +51,12 @@ Future<String> parseImage(String imageId) async {
   Map<String, String> env = await loadEnvFile();
 
   return env['API_URL'] + "/files/" + imageId;
+}
+
+Future<ui.Image> loadUIImage(List<int> img) async {
+  final Completer<ui.Image> completer = Completer();
+  ui.decodeImageFromList(img, (ui.Image img) {
+    return completer.complete(img);
+  });
+  return completer.future;
 }

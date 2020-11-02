@@ -51,7 +51,7 @@ class User extends RadarModel {
   });
 
   String get fullName =>
-      "$firstName ${middleName.length > 0 ? middleName[0] + ". " : ""}$lastName${suffix.length > 0 ? ", " + suffix : ""}"
+      "$firstName ${(middleName ?? "").length > 0 ? middleName[0] + ". " : ""}${lastName ?? ""}${(suffix ?? "").length > 0 ? ", " + suffix : ""}"
           .toUpperCase();
 
   String get designatedAreaToUpperCase => designatedArea.toUpperCase();
@@ -64,7 +64,7 @@ class User extends RadarModel {
 
   String birthDateToString(DateTime birthdate) {
     DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
-    return birthdayFormatter.format(birthdate);
+    return birthdate != null ? birthdayFormatter.format(birthdate) : null;
   }
 
   int get age => birthDate != null ? DateUtils.calculateAge(birthDate) : null;

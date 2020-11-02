@@ -41,6 +41,7 @@ import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/esta
 import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/sign_in_use_case.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/my_qrcode/my_qrcode_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/profile/profile_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/register_as/register_as_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/success/success_bloc.dart';
@@ -226,6 +227,15 @@ class DataInstantiator extends RadarDataInstantiator {
     );
     sl.registerFactory<EstabActivationInfoBloc>(
       () => EstabActivationInfoBloc(
+        getProfileInformationUseCase:
+            GetProfileInformationUseCase(profileRepository),
+        getSessionUseCase: GetSessionUseCase(authenticationRepository),
+      ),
+    );
+    sl.registerFactory<MyQRCodeBloc>(
+      () => MyQRCodeBloc(
+        listenForSessionUseCase:
+            ListenForSessionUseCase(authenticationRepository),
         getProfileInformationUseCase:
             GetProfileInformationUseCase(profileRepository),
         getSessionUseCase: GetSessionUseCase(authenticationRepository),

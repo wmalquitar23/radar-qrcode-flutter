@@ -100,7 +100,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<void> verifyOtp(String otp) async {
+  Future<void> verifyOtp(String otp, String contactNumber) async {
     StandardResponse userInfoResponse;
 
     Map<dynamic, dynamic> registrationData = await getRegisterQueueData();

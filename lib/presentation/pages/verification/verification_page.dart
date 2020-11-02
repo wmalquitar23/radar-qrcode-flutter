@@ -63,8 +63,7 @@ class _VerificationPageState extends State<VerificationPage> {
               ),
               Container(
                 child: DescriptionText(
-                  title:
-                      "6 digit code was sent to +63${widget.contactNumber}",
+                  title: "6 digit code was sent to +63${widget.contactNumber}",
                   color: ColorUtil.secondaryTextColor,
                   fontWeight: FontWeight.w600,
                 ),
@@ -89,6 +88,7 @@ class _VerificationPageState extends State<VerificationPage> {
             _fourthDigit.toString() +
             _fifthDigit.toString() +
             _sixthDigit.toString(),
+        contactNumber: widget.contactNumber,
       ),
     );
   }

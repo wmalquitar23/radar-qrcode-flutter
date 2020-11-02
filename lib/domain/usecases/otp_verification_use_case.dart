@@ -5,7 +5,7 @@ class OtpVerificationUseCase {
 
   OtpVerificationUseCase(this.repository);
 
-  Future<void> execute(String otp) async {
-    return await repository.verifyOtp(otp);
+  Future<void> execute(String otp, String contactNumber) async {
+    return await repository.verifyOtp(otp, contactNumber);
   }
 }
