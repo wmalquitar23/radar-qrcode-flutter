@@ -109,7 +109,6 @@ class _EstablishmentBasicInformationPageState
 
     return (fieldsNotEmpty &&
         isPinConfirmed &&
-        _isValidEmail &&
         _contactNumberIsValid &&
         _agreementCheckBox &&
         _checkAddress());

@@ -45,15 +45,17 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
   @override
   Future<void> registerIndividual(
-      String firstName,
-      String lastName,
-      String middleName,
-      String suffix,
-      String pin,
-      String contactNumber,
-      UserAddress userAddress,
-      DateTime birthdate,
-      Gender gender) async {
+    String firstName,
+    String lastName,
+    String middleName,
+    String suffix,
+    String pin,
+    String contactNumber,
+    UserAddress userAddress,
+    DateTime birthdate,
+    Gender gender,
+    String email,
+  ) async {
     registerQueueDb.save(
       {
         "firstName": firstName,
@@ -67,6 +69,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         "gender": gender == Gender.male ? "male" : "female",
         "contactNumber": contactNumber,
         "address": userAddressMapper.toMap(userAddress),
+        "email": email,
       },
     );
     await restClient.otpMobileNumber(contactNumber);
@@ -118,7 +121,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
     userInfoResponse.data['user']['profileImageFileId'] =
         await parseImage(userInfoResponse.data['user']['profileImageFileId']);
-        
+
     await sessionDb.save({
       "user": userInfoResponse.data['user'],
       "token": userInfoResponse.data['token']

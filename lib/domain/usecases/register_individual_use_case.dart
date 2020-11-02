@@ -17,6 +17,7 @@ class RegisterIndividualUseCase {
     UserAddress userAddress,
     DateTime birthDate,
     Gender gender,
+    String email,
   ) {
     return repository.registerIndividual(
       firstName,
@@ -28,6 +29,7 @@ class RegisterIndividualUseCase {
       userAddress,
       birthDate,
       gender,
+      email,
     );
   }
 }
