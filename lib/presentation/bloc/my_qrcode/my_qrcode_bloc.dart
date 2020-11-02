@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/aes.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/encrypt.dart';
@@ -67,27 +68,38 @@ class MyQRCodeBloc extends Bloc<MyQRCodeEvent, MyQRCodeState> {
           qrData: event.qrData,
         );
 
-        await saveImage(
-          event.user.displayId,
-          event.downloadType.getValue,
-          posterByteData,
-        );
+        try {
+          await saveImage(
+            event.user.displayId,
+            event.downloadType.getValue,
+            posterByteData,
+          );
 
-        ToastUtil.showToast(
-            event.buildContext, "Poster Downloaded Succesfully!");
+          ToastUtil.showToast(
+              event.buildContext, "Poster Downloaded Succesfully!");
+        } catch (e) {
+          ToastUtil.showToast(
+              event.buildContext, "Something went wrong! Please try again.");
+        }
       } else {
         final stickerByteData = await StickerUtil().generateImageByteData(
           user: event.user,
           qrData: event.qrData,
         );
 
-        await saveImage(
-          event.user.displayId,
-          event.downloadType.getValue,
-          stickerByteData,
-        );
-        ToastUtil.showToast(
-            event.buildContext, "Sticker Downloaded Succesfully!");
+        try {
+          await saveImage(
+            event.user.displayId,
+            event.downloadType.getValue,
+            stickerByteData,
+          );
+
+          ToastUtil.showToast(
+              event.buildContext, "Sticker Downloaded Succesfully!");
+        } catch (e) {
+          ToastUtil.showToast(
+              event.buildContext, "Something went wrong! Please try again.");
+        }
       }
     }
   }
@@ -97,15 +109,29 @@ class MyQRCodeBloc extends Bloc<MyQRCodeEvent, MyQRCodeState> {
     String type,
     ByteData image,
   ) async {
-    final directoryName = "Radar";
+    final albumName = "Radar";
 
-    Directory directory = await getExternalStorageDirectory();
+    Directory directory = await getTemporaryDirectory();
     String path = directory.path;
     print(path);
-    await Directory('$path/$directoryName').create(recursive: true);
 
-    File('$path/$directoryName/$displayId-$type.png')
-        .writeAsBytesSync(image.buffer.asInt8List());
+    await Directory('$path/$albumName').create(recursive: true);
+    String savePath = '$path/$albumName/$displayId-$type.png';
+
+    File(savePath).writeAsBytesSync(image.buffer.asInt8List());
+
+    if (savePath != null) {
+      GallerySaver.saveImage(
+        savePath,
+        albumName: albumName,
+      ).then(
+        (bool val) {
+          print(val);
+        },
+      );
+    }
+
+    return false;
   }
 
   @override
