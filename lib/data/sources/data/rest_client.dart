@@ -143,6 +143,7 @@ class RestClient {
     Response response = await _dio.post("/access-logs", data: {
       "id": id,
       "createdAt": dateTime != null ? dateTime : "",
+      "accessType": "in",
     });
 
     return apiCatcher(StandardResponse.fromJson(response.data));

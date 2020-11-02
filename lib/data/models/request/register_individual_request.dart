@@ -47,9 +47,7 @@ class RegisterIndividualRequest {
     userAddress = json['address'] != null
         ? _userAddressMapper.fromMap(json['address'])
         : null;
-    if (email != null) {
-      email = json['email'];
-    }
+    email = json['email'];
   }
 
   Map<String, dynamic> toJson() {
@@ -67,9 +65,7 @@ class RegisterIndividualRequest {
     if (this.userAddress != null) {
       data['address'] = _userAddressMapper.toMap(this.userAddress);
     }
-    if (data['email'] != null) {
-      data['email'] = this.email;
-    }
+    data['email'] = this.email;
     return data;
   }
 }
