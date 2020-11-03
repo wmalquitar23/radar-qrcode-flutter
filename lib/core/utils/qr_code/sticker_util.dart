@@ -58,7 +58,7 @@ class StickerUtil {
   }) {
     final textPainterName = TextPainter(
       text: TextSpan(
-        text: name,
+        text: name.toUpperCase(),
         style: TextStyle(
           fontSize: 30,
           fontWeight: FontWeight.bold,
@@ -82,7 +82,7 @@ class StickerUtil {
 
     final textPainterCode = TextPainter(
       text: TextSpan(
-        text: displayId,
+        text: displayId.toUpperCase(),
         style: TextStyle(
           fontSize: 35,
           fontWeight: FontWeight.normal,
@@ -106,7 +106,7 @@ class StickerUtil {
 
     final textPainterDesignatedArea = TextPainter(
       text: TextSpan(
-        text: " $designatedArea ",
+        text: " $designatedArea ".toUpperCase(),
         style: TextStyle(
           fontSize: 40,
           fontWeight: FontWeight.bold,

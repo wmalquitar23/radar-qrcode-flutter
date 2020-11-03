@@ -58,7 +58,7 @@ class PosterUtil {
   }) {
     final textPainterName = TextPainter(
       text: TextSpan(
-        text: name,
+        text: name.toUpperCase(),
         style: TextStyle(
           fontSize: 70,
           fontWeight: FontWeight.bold,
@@ -82,7 +82,7 @@ class PosterUtil {
 
     final textPainterCode = TextPainter(
       text: TextSpan(
-        text: displayId,
+        text: displayId.toUpperCase(),
         style: TextStyle(
           fontSize: 65,
           fontWeight: FontWeight.normal,
@@ -106,7 +106,7 @@ class PosterUtil {
 
     final textPainterDesignatedArea = TextPainter(
       text: TextSpan(
-        text: " $designatedArea ",
+        text: " $designatedArea ".toUpperCase(),
         style: TextStyle(
           fontSize: 75,
           fontWeight: FontWeight.bold,
