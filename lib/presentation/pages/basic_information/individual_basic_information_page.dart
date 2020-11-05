@@ -62,7 +62,7 @@ class _IndividualBasicInformationPageState
   bool _basicInfo1IsValid = false;
   bool _basicInfo2IsValid = false;
   bool _pinMatched = true;
-  bool _contactNumberIsValid = false;
+  // bool _contactNumberIsValid = false;
   bool _agreementCheckBox = true;
   bool _isValidEmail = true;
 
@@ -159,7 +159,6 @@ class _IndividualBasicInformationPageState
 
     return (fieldsNotEmpty &&
         isPinConfirmed &&
-        _contactNumberIsValid &&
         _agreementCheckBox &&
         _checkAddress());
   }
@@ -421,8 +420,8 @@ class _IndividualBasicInformationPageState
               ToastUtil.showToast(context, state.error.toString());
             }
 
-            _contactNumberIsValid =
-                state is ContactNumberIsValid ? true : false;
+            // _contactNumberIsValid =
+            //     state is ContactNumberIsValid ? true : false;
             _onChangeValidityBasicInfo2();
           },
           buildWhen: (previousState, currentState) =>

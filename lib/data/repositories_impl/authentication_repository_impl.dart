@@ -56,7 +56,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     Gender gender,
     String email,
   ) async {
-await registerQueueDb.save(
+    await registerQueueDb.save(
       {
         "firstName": firstName,
         "middleName": middleName,
@@ -77,6 +77,9 @@ await registerQueueDb.save(
 
     StandardResponse userInfoResponse = await restClient.registerIndividual(
         RegisterIndividualRequest.fromJson(registrationData));
+
+    userInfoResponse.data['user']['profileImageFileId'] =
+        await parseImage(userInfoResponse.data['user']['profileImageFileId']);
 
     await sessionDb.save({
       "user": userInfoResponse.data['user'],
