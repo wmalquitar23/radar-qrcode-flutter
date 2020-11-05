@@ -49,6 +49,16 @@ class GetUserSuccess extends MyQRCodeState {
   List<Object> get props => [user, jsonQrCode];
 }
 
+class QRDownloadInProgress extends MyQRCodeState {
+  final QRDownloadType qrDownloadType;
+  QRDownloadInProgress(this.qrDownloadType);
+
+  @override
+  List<Object> get props => [qrDownloadType];
+}
+
+class QRDownloadIsFinished extends MyQRCodeState {}
+
 enum QRDownloadType { poster, sticker }
 
 extension QRownloadTypeExtension on QRDownloadType {

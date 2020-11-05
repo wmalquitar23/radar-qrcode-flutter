@@ -7,6 +7,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/strings/user_addresss_string.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
+import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/my_qrcode/my_qrcode_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
@@ -20,8 +21,8 @@ class MyQRCodePage extends StatefulWidget {
 }
 
 class _MyQRCodePageState extends State<MyQRCodePage> {
-  var _encryptedQr;
-  var _user;
+  String _encryptedQr;
+  User _user;
 
   void _onLoad() async {
     BlocProvider.of<MyQRCodeBloc>(context).add(
@@ -104,7 +105,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
               _onLoad();
             }
 
-            if (state.getUserSuccess != null) {
+            if (_user != null && _encryptedQr != null) {
               return SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Stack(
@@ -120,12 +121,11 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
                     ),
                     Column(
                       children: [
-                        if (state.getUserSuccess != null) ...[
+                        if (_user != null && _encryptedQr != null) ...[
                           _buildAppBar(),
-                          _buildUserInfo(state.getUserSuccess),
+                          _buildUserInfo(),
                           _buildQRInfo(
                             screenSize,
-                            state.getUserSuccess,
                             containerSize,
                           ),
                           _buildNote(),
@@ -158,7 +158,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
     );
   }
 
-  Widget _generateQrCOde(Size screenSize, GetUserSuccess state) {
+  Widget _generateQrCOde(Size screenSize) {
     return QrImage(
       data: _encryptedQr.toString() ?? "",
       foregroundColor: Colors.black,
@@ -192,7 +192,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
     );
   }
 
-  Widget _buildUserInfo(GetUserSuccess state) {
+  Widget _buildUserInfo() {
     return Container(
       child: Container(
         margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
@@ -212,14 +212,14 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       DescriptionText(
-                        title: state?.user?.fullName,
+                        title: _user?.fullName,
                         color: ColorUtil.primaryColor,
                         fontSize: 16,
                         textAlign: TextAlign.start,
                       ),
                       SizedBox(height: 3),
                       Text(
-                        UserAddressString.getValue(state?.user?.address),
+                        UserAddressString.getValue(_user?.address),
                         style: TextStyle(
                           height: 1.5,
                           fontSize: 10.0,
@@ -240,7 +240,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 10.0),
                     child: CircleImage(
-                      imageUrl: state?.user?.profileImageUrl,
+                      imageUrl: _user?.profileImageUrl,
                       size: 50.0,
                       fromNetwork: true,
                     ),
@@ -254,8 +254,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
     );
   }
 
-  Widget _buildQRInfo(
-      Size screenSize, GetUserSuccess state, double containerSize) {
+  Widget _buildQRInfo(Size screenSize, double containerSize) {
     return ShadowWidget(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.0),
@@ -282,7 +281,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
                       height: 3,
                     ),
                     DescriptionText(
-                      title: '#${state?.user?.displayId}',
+                      title: '#${_user?.displayId}',
                       color: ColorUtil.primarySubTextColor,
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
@@ -300,7 +299,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
             ),
             Container(
               margin: EdgeInsets.only(bottom: 20),
-              child: _generateQrCOde(screenSize, state),
+              child: _generateQrCOde(screenSize),
             ),
           ],
         ),
@@ -325,21 +324,29 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
   }
 
   Widget _buildButtons(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          PrimaryButton(
-            text: "DOWNLOAD POSTER (A4 SIZE)",
-            onPressed: () => _downloadQR(QRDownloadType.poster, context),
+    return BlocBuilder<MyQRCodeBloc, MyQRCodeState>(
+      builder: (context, state) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              PrimaryButton(
+                text: "DOWNLOAD POSTER (A4 SIZE)",
+                onPressed: () => _downloadQR(QRDownloadType.poster, context),
+                isLoading: state is QRDownloadInProgress &&
+                    state.qrDownloadType == QRDownloadType.poster,
+              ),
+              SizedBox(height: 20),
+              PrimaryButton(
+                text: "DOWNLOAD STICKER (3.5in x 6in)",
+                onPressed: () => _downloadQR(QRDownloadType.sticker, context),
+                isLoading: state is QRDownloadInProgress &&
+                    state.qrDownloadType == QRDownloadType.sticker,
+              ),
+            ],
           ),
-          SizedBox(height: 20),
-          PrimaryButton(
-            text: "DOWNLOAD STICKER (3.5in x 6in)",
-            onPressed: () => _downloadQR(QRDownloadType.sticker, context),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
