@@ -31,7 +31,7 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
         "dateTime": isoDate,
         "hasUploaded": true,
       });
-      await restClient.checkIn(user.id);
+      await restClient.checkIn(user.id, dateTime: isoDate);
     } else {
       await checkInDb.save({
         "user": UserMapper().toMap(user),
