@@ -9,6 +9,7 @@ import 'package:radar_qrcode_flutter/presentation/bloc/change_contact_number/cha
 import 'package:radar_qrcode_flutter/presentation/bloc/contact_us/contact_us_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/estab_activation_info/estab_activation_info_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment/establishment_bloc.dart';
+import 'package:radar_qrcode_flutter/presentation/bloc/establishment_details/establishment_details_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/establishment_signup/establishment_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual_signup/individual_basic_information_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/my_qrcode/my_qrcode_bloc.dart';
@@ -29,6 +30,7 @@ import 'package:radar_qrcode_flutter/presentation/pages/change_pin/change_pin_pa
 import 'package:radar_qrcode_flutter/presentation/pages/contact_us/contact_us_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/errors/not_found_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_activation_info/establishment_activation_information.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/establishment_details/establishment_details_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/establishment_home/establishment_home_page.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/dummy_camera_view.dart';
 import 'package:radar_qrcode_flutter/presentation/pages/identity_verification/identity_verification_page.dart';
@@ -113,6 +115,17 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           page: BlocProvider(
             create: (_) => sl<UserDetailsBloc>(),
             child: UserDetailsPage(
+              qrInformation: args,
+            ),
+          ),
+          settings: settings,
+          pageTransitionType: PageTransitionType.rightToLeftWithFade);
+      break;
+    case ESTABLISHMENT_DETAILS_ROUTE:
+      return pushNamed(
+          page: BlocProvider(
+            create: (_) => sl<EstablishmentDetailsBloc>(),
+            child: EstablishmentDetailsPage(
               qrInformation: args,
             ),
           ),

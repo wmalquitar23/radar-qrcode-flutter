@@ -5,6 +5,8 @@ import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 String qrCodeObject(User user) {
   return jsonEncode({
     "_id": user.id,
+    "role": user.role,
+    "designatedArea": user.designatedArea != null ? user.designatedArea : "",
     "displayId": user.displayId,
     "firstName": user.firstName,
     "middleName": user.middleName,

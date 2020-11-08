@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.dart';
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
+import 'package:radar_qrcode_flutter/core/utils/string_util.dart';
 import 'package:radar_qrcode_flutter/data/local_db/rapidpass_contact_db.dart';
 import 'package:radar_qrcode_flutter/data/local_db/session_db.dart';
 import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
@@ -283,8 +284,9 @@ void main() {
     test('CheckIn', () async {
       //GIVEN THAT
       String id = "5f53838759cfad1d8f00a477";
+      String accessLogType = IN;
       //WHEN
-      StandardResponse response = await restClient.checkIn(id);
+      StandardResponse response = await restClient.checkIn(id, accessLogType);
 
       //THEN SHOULD EXPECT
       print(response.data);

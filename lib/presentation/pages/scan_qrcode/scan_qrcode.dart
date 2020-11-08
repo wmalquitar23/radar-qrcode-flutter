@@ -4,6 +4,8 @@ import 'package:ai_barcode/ai_barcode.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/aes.dart';
+import 'package:radar_qrcode_flutter/data/mappers/user_mapper.dart';
+import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 
 import '../../../core/utils/routes/routes_list.dart';
 import '../../widgets/bar/custom_regular_app_bar_v2.dart';
@@ -185,11 +187,21 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
 
       dynamic jsonDecrypt = jsonDecode(decrypted);
 
-      Navigator.of(context).pop();
-      Navigator.of(context).pushReplacementNamed(
-        USER_DETAILS_ROUTE,
-        arguments: jsonDecrypt,
-      );
+      User qrcode = UserMapper().fromMap(jsonDecrypt);
+
+      if (qrcode.role == "individual") {
+        Navigator.of(context).pop();
+        Navigator.of(context).pushReplacementNamed(
+          USER_DETAILS_ROUTE,
+          arguments: jsonDecrypt,
+        );
+      } else {
+        Navigator.of(context).pop();
+        Navigator.of(context).pushReplacementNamed(
+          ESTABLISHMENT_DETAILS_ROUTE,
+          arguments: jsonDecrypt,
+        );
+      }
     } catch (e) {
       showDialog(
         context: context,

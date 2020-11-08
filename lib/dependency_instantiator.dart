@@ -62,6 +62,7 @@ import 'data/repositories_impl/profile_repository_impl.dart';
 import 'data/repositories_impl/transactions_repository_impl.dart';
 import 'domain/repositories/authentication_repository.dart';
 import 'domain/usecases/update_designated_area_use_case.dart';
+import 'presentation/bloc/establishment_details/establishment_details_bloc.dart';
 import 'presentation/bloc/sign_in_verification/sign_in_verification_bloc.dart';
 import 'presentation/bloc/splash/splash_bloc.dart';
 
@@ -143,6 +144,11 @@ class DataInstantiator extends RadarDataInstantiator {
             GetProfileInformationUseCase(profileRepository),
         networkInfo: NetworkInfoImpl(dataConnectionChecker),
         getSessionUseCase: GetSessionUseCase(authenticationRepository),
+        listenForCheckInDataUseCase:
+            ListenForCheckInDataUseCase(transactionRepository),
+        listenForTotalCheckInDataUseCase:
+            ListenForTotalCheckInDataUseCase(transactionRepository),
+        syncDataUseCase: SyncDataUseCase(transactionRepository),
       ),
     );
     sl.registerFactory<EstablishmentBloc>(
@@ -195,6 +201,13 @@ class DataInstantiator extends RadarDataInstantiator {
       () => UserDetailsBloc(
         checkInUseCase: CheckInUseCase(transactionRepository),
         networkInfo: NetworkInfoImpl(dataConnectionChecker),
+      ),
+    );
+    sl.registerFactory<EstablishmentDetailsBloc>(
+      () => EstablishmentDetailsBloc(
+        checkInUseCase: CheckInUseCase(transactionRepository),
+        networkInfo: NetworkInfoImpl(dataConnectionChecker),
+        getSessionUseCase: GetSessionUseCase(authenticationRepository),
       ),
     );
     sl.registerFactory<AddressPickerBloc>(

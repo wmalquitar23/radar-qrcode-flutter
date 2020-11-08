@@ -13,6 +13,7 @@ class CheckInMapper extends RadarMapper<CheckIn> {
       user: map.containsKey("user") ? userMapper.fromMap(map['user']) : null,
       dateTime: map['dateTime'] != null ? map['dateTime'] : null,
       hasUploaded: map['hasUploaded'],
+      accessLogType: map['accessLogType'],
     );
   }
 
