@@ -307,14 +307,19 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                 SizedBox(
                   width: 6.0,
                 ),
-                Container(
-                  width: 50.0,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, MY_PROFILE_ROUTE);
+                  },
                   child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 10.0),
-                    child: CircleImage(
-                      imageUrl: state?.user?.profileImageUrl,
-                      size: 50.0,
-                      fromNetwork: true,
+                    width: 50.0,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 10.0),
+                      child: CircleImage(
+                        imageUrl: state?.user?.profileImageUrl,
+                        size: 50.0,
+                        fromNetwork: true,
+                      ),
                     ),
                   ),
                 ),
