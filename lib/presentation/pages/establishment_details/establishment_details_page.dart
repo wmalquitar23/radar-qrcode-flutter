@@ -106,8 +106,8 @@ class _EstablishmentDetailsPageState extends State<EstablishmentDetailsPage> {
               Row(
                 children: [
                   DescriptionText(
-                    title:
-                        "${dateTime.hour.toString()}:${dateTime.minute.toString()}:${dateTime.second.toString()}",
+                    title: new DateFormat.jm()
+                        .format(DateTime.parse(dateTime.toString())),
                     color: ColorUtil.primaryTextColor,
                     fontSize: 30,
                     textAlign: TextAlign.start,
@@ -275,7 +275,9 @@ class _EstablishmentDetailsPageState extends State<EstablishmentDetailsPage> {
                   child: PrimaryButton(
                     text: 'IN',
                     fontSize: 18,
-                    color: ColorUtil.primaryColor,
+                    color: state.establishmentApproveLoading
+                        ? ColorUtil.disabledBackgroundColor
+                        : ColorUtil.primaryColor,
                     isLoading: state.establishmentApproveLoading,
                     onPressed: state.establishmentInformation != null
                         ? () {
@@ -304,7 +306,9 @@ class _EstablishmentDetailsPageState extends State<EstablishmentDetailsPage> {
                   child: PrimaryButton(
                     text: 'OUT',
                     fontSize: 18,
-                    color: ColorUtil.primaryColor,
+                    color: state.establishmentApproveLoading
+                        ? ColorUtil.disabledBackgroundColor
+                        : ColorUtil.primaryColor,
                     isLoading: state.establishmentApproveLoading,
                     onPressed: state.establishmentInformation != null
                         ? () {

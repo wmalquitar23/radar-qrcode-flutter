@@ -41,12 +41,14 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
           await checkInUseCase.execute(
             event.user,
             true,
+            accessType: event.accessLogType,
             dateTime: DateTime.now(),
           );
         } else {
           await checkInUseCase.execute(
             event.user,
             false,
+            accessType: event.accessLogType,
             dateTime: DateTime.now(),
           );
         }

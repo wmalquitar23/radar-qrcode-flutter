@@ -12,7 +12,8 @@ import '../../widgets/bar/custom_regular_app_bar_v2.dart';
 import '../../widgets/pages/mobile_status_margin_top.dart';
 
 class ScanQrcodePage extends StatefulWidget {
-  ScanQrcodePage({Key key}) : super(key: key);
+  final String currentRole;
+  ScanQrcodePage({Key key, this.currentRole}) : super(key: key);
 
   @override
   _ScanQrcodePageState createState() => _ScanQrcodePageState();
@@ -188,19 +189,25 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
       dynamic jsonDecrypt = jsonDecode(decrypted);
 
       User qrcode = UserMapper().fromMap(jsonDecrypt);
-
-      if (qrcode.role == "individual") {
-        Navigator.of(context).pop();
-        Navigator.of(context).pushReplacementNamed(
-          USER_DETAILS_ROUTE,
-          arguments: jsonDecrypt,
-        );
-      } else {
-        Navigator.of(context).pop();
-        Navigator.of(context).pushReplacementNamed(
-          ESTABLISHMENT_DETAILS_ROUTE,
-          arguments: jsonDecrypt,
-        );
+      print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+      print(widget.currentRole);
+      print(qrcode.role);
+      if (widget.currentRole != qrcode.role) {
+        if (qrcode.role == "individual") {
+          Navigator.of(context).pop();
+          Navigator.of(context).pushReplacementNamed(
+            USER_DETAILS_ROUTE,
+            arguments: jsonDecrypt,
+          );
+        } else {
+          Navigator.of(context).pop();
+          Navigator.of(context).pushReplacementNamed(
+            ESTABLISHMENT_DETAILS_ROUTE,
+            arguments: jsonDecrypt,
+          );
+        }
+      } else{
+        throw Exception("Feature not available.");
       }
     } catch (e) {
       showDialog(

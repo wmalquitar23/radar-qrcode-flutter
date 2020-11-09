@@ -7,12 +7,13 @@ class UserDetailsState extends Equatable {
   final bool userApproveFailure;
   final bool userApproveDone;
 
-  UserDetailsState(
-      {this.userInformation,
-      this.userLoadSuccess = false,
-      this.userApproveLoading = false,
-      this.userApproveFailure = false,
-      this.userApproveDone = false});
+  UserDetailsState({
+    this.userInformation,
+    this.userLoadSuccess = false,
+    this.userApproveLoading = false,
+    this.userApproveFailure = false,
+    this.userApproveDone = false,
+  });
 
   @override
   List<Object> get props => [
@@ -20,7 +21,7 @@ class UserDetailsState extends Equatable {
         userLoadSuccess,
         userApproveLoading,
         userApproveFailure,
-        userApproveDone
+        userApproveDone,
       ];
 
   factory UserDetailsState.copyWith(

@@ -464,8 +464,11 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
             child: ShadowWidget(
               child: GestureDetector(
                 onTap: () {
-                  // Navigator.pushNamed(context, ESTABLISHMENT_DETAILS_ROUTE);
-                  Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
+                  Navigator.pushNamed(
+                    context,
+                    SCAN_QRCODE_ROUTE,
+                    arguments: state.user.role,
+                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(
