@@ -62,6 +62,10 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
     });
   }
 
+  Future<List<CheckIn>> getCheckinOfflineData() async {
+    return await checkInDb.getAllData();
+  }
+
   @override
   Stream<List<CheckIn>> listenForCheckIn() {
     return checkInDb.listenForCheckIn();

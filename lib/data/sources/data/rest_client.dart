@@ -147,7 +147,7 @@ class RestClient {
       "id": id,
       "createdAt": dateTime != null ? dateTime : "",
       "accessType": accessLogType,
-    });
+    }); 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 }
