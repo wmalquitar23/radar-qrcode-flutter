@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
+import 'package:radar_qrcode_flutter/core/utils/string_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/strings/user_addresss_string.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/user_details/user_details_bloc.dart';
@@ -156,16 +158,53 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: PrimaryButton(
-                    text: 'APPROVE',
-                    color: Colors.green,
+                    text: 'IN',
+                    fontSize: 18,
+                    color: state.userApproveLoading ? ColorUtil.disabledBackgroundColor : ColorUtil.primaryColor,
                     isLoading: state.userApproveLoading,
                     onPressed: state.userInformation != null
                         ? () {
                             BlocProvider.of<UserDetailsBloc>(context).add(
-                              OnUserApprove(state.userInformation),
+                              OnUserApprove(
+                                state.userInformation,
+                                IN,
+                              ),
                             );
                           }
                         : null,
+                    hasIcon: true,
+                    icon: Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: SvgPicture.asset("assets/images/svg/in.svg",
+                          width: 25, height: 25, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: PrimaryButton(
+                    text: 'OUT',
+                    fontSize: 18,
+                    color: state.userApproveLoading ? ColorUtil.disabledBackgroundColor : ColorUtil.primaryColor,
+                    isLoading: state.userApproveLoading,
+                    onPressed: state.userInformation != null
+                        ? () {
+                            BlocProvider.of<UserDetailsBloc>(context).add(
+                              OnUserApprove(
+                                state.userInformation,
+                                OUT,
+                              ),
+                            );
+                          }
+                        : null,
+                    hasIcon: true,
+                    icon: Container(
+                      margin: EdgeInsets.only(right: 10),
+                      child: SvgPicture.asset("assets/images/svg/out.svg",
+                          width: 25, height: 25, color: Colors.white),
+                    ),
                   ),
                 ),
               ),

@@ -513,10 +513,18 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
       child: PrimaryButtonWithIcon(
         onPressed: () {
           if (user.isVerified) {
-            Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
+            Navigator.pushNamed(
+              context,
+              SCAN_QRCODE_ROUTE,
+              arguments: user.role,
+            );
           } else {
             if (totalScannedCheckInData.length < limitScanNumber) {
-              Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
+              Navigator.pushNamed(
+                context,
+                SCAN_QRCODE_ROUTE,
+                arguments: user.role,
+              );
             } else {
               return null;
             }

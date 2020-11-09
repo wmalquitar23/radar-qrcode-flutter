@@ -15,6 +15,7 @@ class OnLoadUserDetail extends UserDetailsEvent {
 
 class OnUserApprove extends UserDetailsEvent {
   final User user;
+  final String accessLogType;
 
-  OnUserApprove(this.user);
+  OnUserApprove(this.user, this.accessLogType);
 }

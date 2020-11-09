@@ -314,19 +314,19 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
               SizedBox(
                 width: 6.0,
               ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, MY_PROFILE_ROUTE);
-                  },
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, MY_PROFILE_ROUTE);
+                },
+                child: Container(
+                  width: 50.0,
                   child: Container(
-                    width: 50.0,
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 10.0),
-                      child: CircleImage(
-                        imageUrl: state?.user?.profileImageUrl,
-                        size: 50.0,
-                        fromNetwork: true,
-                      ),
+                    margin: EdgeInsets.symmetric(vertical: 10.0),
+                    child: CircleImage(
+                      imageUrl: state?.user?.profileImageUrl,
+                      size: 50.0,
+                      fromNetwork: true,
+                    ),
                   ),
                 ),
               ),
@@ -464,8 +464,11 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
             child: ShadowWidget(
               child: GestureDetector(
                 onTap: () {
-                  // Navigator.pushNamed(context, ESTABLISHMENT_DETAILS_ROUTE);
-                  Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
+                  Navigator.pushNamed(
+                    context,
+                    SCAN_QRCODE_ROUTE,
+                    arguments: state.user.role,
+                  );
                 },
                 child: Container(
                   decoration: BoxDecoration(

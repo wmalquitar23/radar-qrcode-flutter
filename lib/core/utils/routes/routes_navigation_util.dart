@@ -134,7 +134,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       break;
     case SCAN_QRCODE_ROUTE:
       return pushNamed(
-          page: ScanQrcodePage(),
+          page: ScanQrcodePage(
+            currentRole: args,
+          ),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);
       break;
