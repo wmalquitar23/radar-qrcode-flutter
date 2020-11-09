@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/data/models/request/register_establishment_request.dart';
 import 'package:radar_qrcode_flutter/data/models/request/register_individual_request.dart';
 import 'package:radar_qrcode_flutter/data/models/standard_response.dart';
+import 'package:http_parser/http_parser.dart';
 
 class RestClient {
   Dio _dio;
@@ -81,9 +82,11 @@ class RestClient {
   }
 
   Future<StandardResponse> fileUpload(File file) async {
+    
     var data = FormData.fromMap({
       "file": await MultipartFile.fromFile(
         file.path,
+        contentType: new MediaType('image', 'jpeg')
       )
     });
     Response response = await _dio.post("/files", data: data);
