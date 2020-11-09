@@ -12,6 +12,8 @@ abstract class TransactionsRepository {
 
   Future<void> syncCheckInData();
 
+  Future<List<CheckIn>> getCheckinOfflineData();
+
   Stream<List<CheckIn>> listenForCheckIn();
 
   Stream<List<CheckIn>> listenForTotalCheckIn();

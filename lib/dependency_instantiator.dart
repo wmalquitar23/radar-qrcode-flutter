@@ -61,6 +61,7 @@ import 'data/repositories_impl/authentication_repository_impl.dart';
 import 'data/repositories_impl/profile_repository_impl.dart';
 import 'data/repositories_impl/transactions_repository_impl.dart';
 import 'domain/repositories/authentication_repository.dart';
+import 'domain/usecases/get_offline_data_use_case.dart';
 import 'domain/usecases/update_designated_area_use_case.dart';
 import 'presentation/bloc/establishment_details/establishment_details_bloc.dart';
 import 'presentation/bloc/sign_in_verification/sign_in_verification_bloc.dart';
@@ -195,6 +196,7 @@ class DataInstantiator extends RadarDataInstantiator {
       () => NavigationBloc(
         logoutUseCase: LogoutUseCase(authenticationRepository),
         getSessionUseCase: GetSessionUseCase(authenticationRepository),
+        getOfflineUseCase: GetOfflineUseCase(transactionRepository),
       ),
     );
     sl.registerFactory<UserDetailsBloc>(

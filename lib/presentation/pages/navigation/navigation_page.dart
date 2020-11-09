@@ -127,8 +127,8 @@ class _NavigationPageState extends State<NavigationPage> {
                                             title: 'My QR Code',
                                             onPressed: () {
                                               Navigator.pop(context);
-                                              Navigator.pushNamed(context,
-                                                  MY_QRCODE_ROUTE);
+                                              Navigator.pushNamed(
+                                                  context, MY_QRCODE_ROUTE);
                                             },
                                           )
                                         : Container()
@@ -142,13 +142,17 @@ class _NavigationPageState extends State<NavigationPage> {
                                         context, CONTACT_US_ROUTE);
                                   },
                                 ),
-                                NavigationItem(
-                                  iconAsset: "logout.png",
-                                  title: 'Logout',
-                                  onPressed: () {
-                                    _onLogout();
-                                  },
-                                ),
+                                state is NavigationCheckUserRole
+                                    ? !state.hasLocalData
+                                        ? NavigationItem(
+                                            iconAsset: "logout.png",
+                                            title: 'Logout',
+                                            onPressed: () {
+                                              _onLogout();
+                                            },
+                                          )
+                                        : Container()
+                                    : Container(),
                                 SizedBox(height: sy(14)),
                               ],
                             ),

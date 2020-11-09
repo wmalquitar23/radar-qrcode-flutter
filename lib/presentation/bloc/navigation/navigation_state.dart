@@ -16,6 +16,7 @@ class NavigationIdle extends NavigationState {}
 class NavigationCheckUserRole extends NavigationState {
   
   final bool isIndividual;
+  final bool hasLocalData;
 
-  NavigationCheckUserRole(this.isIndividual); 
+  NavigationCheckUserRole(this.isIndividual, this.hasLocalData); 
 }
