@@ -14,6 +14,8 @@ class PrimaryButton extends StatelessWidget {
     this.color,
     this.isLoading = false,
     this.fontWeight,
+    this.hasIcon = false,
+    this.icon,
   }) : super(key: key);
 
   final String text;
@@ -25,6 +27,8 @@ class PrimaryButton extends StatelessWidget {
   final Color color;
   final bool isLoading;
   final FontWeight fontWeight;
+  final bool hasIcon;
+  final dynamic icon;
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +42,18 @@ class PrimaryButton extends StatelessWidget {
         color: color ?? ColorUtil.primaryColor,
         child: isLoading
             ? CupertinoActivityIndicator()
-            : Text(
-                text,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: this.fontSize ?? 14,
-                    fontWeight: fontWeight ?? FontWeight.w600),
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  hasIcon ? icon : Container(),
+                  Text(
+                    text,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: this.fontSize ?? 14,
+                        fontWeight: fontWeight ?? FontWeight.w600),
+                  ),
+                ],
               ),
       ),
     );

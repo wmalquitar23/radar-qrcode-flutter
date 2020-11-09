@@ -6,13 +6,24 @@ class IndividualState extends Equatable {
   final IndividualGetUserSuccess individualGetUserSuccess;
   final String individualGetuserSuccessMessage;
   final String individualGetuserFailureMessage;
+  final bool syncDataProgress;
+  final List<CheckIn> localCheckInData;
+  final List<CheckIn> totalScannedCheckInData;
+  final bool syncDataSuccess;
+  final String syncDataFailureMessage;
 
-  const IndividualState(
-      {this.individualGetuserProgress,
-      this.individualGetuserSuccess,
-      this.individualGetUserSuccess,
-      this.individualGetuserSuccessMessage,
-      this.individualGetuserFailureMessage});
+  const IndividualState({
+    this.individualGetuserProgress,
+    this.individualGetuserSuccess,
+    this.individualGetUserSuccess,
+    this.individualGetuserSuccessMessage,
+    this.individualGetuserFailureMessage,
+    this.syncDataProgress = false,
+    this.localCheckInData,
+    this.totalScannedCheckInData,
+    this.syncDataSuccess = false,
+    this.syncDataFailureMessage,
+  });
 
   @override
   List<Object> get props => [
@@ -20,7 +31,12 @@ class IndividualState extends Equatable {
         individualGetuserSuccess,
         individualGetUserSuccess,
         individualGetuserSuccessMessage,
-        individualGetuserFailureMessage
+        individualGetuserFailureMessage,
+        syncDataProgress,
+        localCheckInData,
+        totalScannedCheckInData,
+        syncDataSuccess,
+        syncDataFailureMessage,
       ];
 
   factory IndividualState.copyWith(
@@ -30,6 +46,11 @@ class IndividualState extends Equatable {
     IndividualGetUserSuccess individualGetUserSuccess,
     String individualGetuserSuccessMessage,
     String individualGetuserFailureMessage,
+    bool syncDataProgress = false,
+    List<CheckIn> localCheckInData,
+    List<CheckIn> totalScannedCheckInData,
+    bool syncDataSuccess = false,
+    String syncDataFailureMessage,
   }) {
     return IndividualState(
       individualGetuserProgress:
@@ -38,10 +59,14 @@ class IndividualState extends Equatable {
           individualGetuserSuccess ?? state.individualGetuserSuccess,
       individualGetUserSuccess:
           individualGetUserSuccess ?? state.individualGetUserSuccess,
-      individualGetuserSuccessMessage:
-          individualGetuserSuccessMessage ?? null,
-      individualGetuserFailureMessage:
-          individualGetuserFailureMessage ?? null,
+      individualGetuserSuccessMessage: individualGetuserSuccessMessage ?? null,
+      individualGetuserFailureMessage: individualGetuserFailureMessage ?? null,
+      syncDataProgress: syncDataProgress ?? state.syncDataProgress,
+      localCheckInData: localCheckInData ?? state.localCheckInData,
+      totalScannedCheckInData:
+          totalScannedCheckInData ?? state.totalScannedCheckInData,
+      syncDataSuccess: syncDataSuccess ?? state.syncDataSuccess,
+      syncDataFailureMessage: syncDataFailureMessage ?? null,
     );
   }
 }

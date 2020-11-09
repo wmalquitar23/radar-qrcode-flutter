@@ -7,6 +7,7 @@ import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/strings/user_addresss_string.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
+import 'package:radar_qrcode_flutter/data/models/check_in.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/individual/individual_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/primary_button_widget.dart';
@@ -72,7 +73,10 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                     if (state.individualGetUserSuccess != null) {
                       _encryptedQr = state.individualGetUserSuccess.jsonQrCode;
                     }
-
+                    if (state.syncDataFailureMessage != null) {
+                      ToastUtil.showToast(
+                          context, state.syncDataFailureMessage);
+                    }
                     if (state.individualGetuserFailureMessage != null) {
                       ToastUtil.showToast(
                           context, state.individualGetuserFailureMessage);
@@ -114,7 +118,11 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                                     ? _buildQRInfo(
                                         screenSize,
                                         state.individualGetUserSuccess,
-                                        containerSize)
+                                        containerSize,
+                                        state.localCheckInData,
+                                        state.totalScannedCheckInData,
+                                        state.syncDataProgress,
+                                      )
                                     : Container(),
                                 state.individualGetUserSuccess != null
                                     ? _buildHint(state.individualGetUserSuccess)
@@ -266,47 +274,46 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
 
   Widget _buildPersonInfo(IndividualGetUserSuccess state) {
     return Container(
-      child: Container(
-        margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: ColorUtil.primaryBackgroundColor,
-          borderRadius: BorderRadius.all(Radius.circular(21.0)),
-        ),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DescriptionText(
-                        title: state?.user?.fullName,
-                        color: ColorUtil.primaryColor,
-                        fontSize: 16,
-                        textAlign: TextAlign.start,
+      margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: ColorUtil.primaryBackgroundColor,
+        borderRadius: BorderRadius.all(Radius.circular(21.0)),
+      ),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DescriptionText(
+                      title: state?.user?.fullName,
+                      color: ColorUtil.primaryColor,
+                      fontSize: 16,
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(height: 3),
+                    Text(
+                      UserAddressString.getValue(state?.user?.address),
+                      style: TextStyle(
+                        height: 1.5,
+                        fontSize: 10.0,
+                        color: ColorUtil.primarySubTextColor,
+                        fontWeight: FontWeight.w600,
                       ),
-                      SizedBox(height: 3),
-                      Text(
-                        UserAddressString.getValue(state?.user?.address),
-                        style: TextStyle(
-                          height: 1.5,
-                          fontSize: 10.0,
-                          color: ColorUtil.primarySubTextColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ],
-                  ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  width: 6.0,
-                ),
+              ),
+              SizedBox(
+                width: 6.0,
+              ),
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, MY_PROFILE_ROUTE);
@@ -320,71 +327,163 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                         size: 50.0,
                         fromNetwork: true,
                       ),
-                    ),
                   ),
                 ),
-              ],
-            )
-          ],
-        ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
 
   Widget _buildQRInfo(
-      Size screenSize, IndividualGetUserSuccess state, double containerSize) {
-    return ShadowWidget(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.0),
-        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: ColorUtil.primaryBackgroundColor,
-          borderRadius: BorderRadius.all(Radius.circular(21.0)),
+    Size screenSize,
+    IndividualGetUserSuccess state,
+    double containerSize,
+    List<CheckIn> localCheckInData,
+    List<CheckIn> totalScannedCheckInData,
+    bool syncDataProgress,
+  ) {
+    return Stack(
+      children: [
+        Container(
+          margin: EdgeInsets.only(bottom: 40.0),
+          child: ShadowWidget(
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: ColorUtil.primaryBackgroundColor,
+                borderRadius: BorderRadius.all(Radius.circular(21.0)),
+              ),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DescriptionText(
+                            title: "My QR Code",
+                            color: ColorUtil.primaryTextColor,
+                            fontSize: 18,
+                          ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          DescriptionText(
+                            title: '#${state?.user?.displayId}',
+                            color: ColorUtil.primarySubTextColor,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ],
+                      ),
+                      StatusWidget(
+                        isVerified: state.user.isVerified,
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Divider(thickness: 0.3, color: ColorUtil.primarySubTextColor),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    child: _generateQrCOde(screenSize, state),
+                  ),
+                  localCheckInData.length != 0
+                      ? AnimatedOpacity(
+                          opacity: localCheckInData.length != 0 ? 1.0 : 0.0,
+                          duration: Duration(seconds: 1),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    BlocProvider.of<IndividualBloc>(context)
+                                        .add(
+                                      OnSyncDataPressed(),
+                                    );
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.all(5),
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        shape: BoxShape.circle),
+                                    child: syncDataProgress
+                                        ? CupertinoActivityIndicator()
+                                        : Icon(
+                                            Icons.sync_problem,
+                                            color: Colors.white,
+                                            size: 25,
+                                          ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: DescriptionText(
+                                  title:
+                                      "You have ${localCheckInData.length} transactions saved from your local phone, please sync it to our server by pressing the sync icon.",
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  textAlign: TextAlign.start,
+                                  color: ColorUtil.primaryTextColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 30,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DescriptionText(
-                      title: "My QR Code",
-                      color: ColorUtil.primaryTextColor,
-                      fontSize: 18,
-                    ),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    DescriptionText(
-                      title: '#${state?.user?.displayId}',
-                      color: ColorUtil.primarySubTextColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ],
+        Positioned.fill(
+          bottom: 10,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: ShadowWidget(
+              child: GestureDetector(
+                onTap: () {
+                  // Navigator.pushNamed(context, ESTABLISHMENT_DETAILS_ROUTE);
+                  Navigator.pushNamed(context, SCAN_QRCODE_ROUTE);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: ColorUtil.primaryBackgroundColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        color: ColorUtil.primaryColor, shape: BoxShape.circle),
+                    child: Image.asset('assets/images/app/qr-code.png'),
+                  ),
                 ),
-                StatusWidget(
-                  isVerified: state.user.isVerified,
-                )
-              ],
+              ),
             ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Divider(thickness: 0.3, color: ColorUtil.primarySubTextColor),
-            SizedBox(
-              height: 10.0,
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 20),
-              child: _generateQrCOde(screenSize, state),
-            ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 

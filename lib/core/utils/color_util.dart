@@ -11,5 +11,9 @@ class ColorUtil {
   static Color get verifyNumberBlackColor => Color(0xFF2B3038);
   static Color get primaryButtonColor => Color(0xffC0D9EC);
   static Color get successColor => Color(0xff56c596);
+  static Color get blackFadedColor => Color(0xffababab);
+  static Color get tagBlueColor => Color(0xffDEECF4);
+  static Color get disabledBackgroundColor => Color(0xEFEFEF).withOpacity(0.80);
   static Color get disabledColor => Color(0x00000000).withOpacity(0.58);
 }
+

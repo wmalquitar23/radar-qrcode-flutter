@@ -51,6 +51,7 @@ dependencies:
   extended_image: 1.1.0
   qr_code_scanner: ^0.0.13
   enum_to_string: ^1.0.11
+  flutter_svg: ^0.19.1
 
 
   ai_barcode: ^1.0.4
@@ -90,6 +91,7 @@ flutter:
     - assets/images/icons/
     - assets/images/app_icon/
     - assets/images/template/
+    - assets/images/svg/
     - assets/local/address/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

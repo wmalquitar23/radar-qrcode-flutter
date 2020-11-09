@@ -6,11 +6,13 @@ class CheckIn extends RadarModel {
   final User user;
   final String dateTime;
   final bool hasUploaded;
+  final String accessLogType;
 
   CheckIn({
     this.key,
     this.user,
     this.dateTime,
     this.hasUploaded,
+    this.accessLogType,
   });
 }

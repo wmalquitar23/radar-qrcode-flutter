@@ -38,9 +38,17 @@ class UserDetailsBloc extends Bloc<UserDetailsEvent, UserDetailsState> {
       );
       try {
         if (await networkInfo.isConnected()) {
-          await checkInUseCase.execute(event.user, true);
+          await checkInUseCase.execute(
+            event.user,
+            true,
+            dateTime: DateTime.now(),
+          );
         } else {
-          await checkInUseCase.execute(event.user, false);
+          await checkInUseCase.execute(
+            event.user,
+            false,
+            dateTime: DateTime.now(),
+          );
         }
       } on DioError catch (e) {
         String errorhandler = ErrorHandler().dioErrorHandler(e);
