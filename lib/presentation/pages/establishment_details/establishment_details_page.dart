@@ -222,6 +222,10 @@ class _EstablishmentDetailsPageState extends State<EstablishmentDetailsPage> {
                   SizedBox(
                     width: 8.0,
                   ),
+                ],
+              ),
+              Row(
+                children: [
                   Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
