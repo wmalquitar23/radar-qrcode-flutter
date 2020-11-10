@@ -143,7 +143,7 @@ class _EstablishmentBasicInformationPageState
         establishmentName: _establishmentNameController.text,
         pin: _pinController.text,
         contactNumber: _contactNumberController.text,
-        email: _establishmentEmailController.text,
+        email: _establishmentEmailController.text.trim(),
         userAddress: UserAddress(
           streetHouseNo: _streetHouseNumController.text,
           brgyCode: _selectedBarangay.brgyCode,

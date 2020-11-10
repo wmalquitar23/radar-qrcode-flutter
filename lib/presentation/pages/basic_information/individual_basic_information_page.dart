@@ -103,7 +103,7 @@ class _IndividualBasicInformationPageState
         gender: _genderValue,
         pin: _pinController.text,
         contactNumber: _contactNumberController.text,
-        email: _individualEmailController.text,
+        email: _individualEmailController.text.trim(),
         userAddress: UserAddress(
           streetHouseNo: _streetHouseNumController.text,
           brgyCode: _selectedBarangay.brgyCode,
