@@ -336,13 +336,13 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
                 isLoading: state is QRDownloadInProgress &&
                     state.qrDownloadType == QRDownloadType.poster,
               ),
-              SizedBox(height: 20),
-              PrimaryButton(
-                text: "DOWNLOAD STICKER (3.5in x 6in)",
-                onPressed: () => _downloadQR(QRDownloadType.sticker, context),
-                isLoading: state is QRDownloadInProgress &&
-                    state.qrDownloadType == QRDownloadType.sticker,
-              ),
+              // SizedBox(height: 20),
+              // PrimaryButton(
+              //   text: "DOWNLOAD STICKER (3.5in x 6in)",
+              //   onPressed: () => _downloadQR(QRDownloadType.sticker, context),
+              //   isLoading: state is QRDownloadInProgress &&
+              //       state.qrDownloadType == QRDownloadType.sticker,
+              // ),
             ],
           ),
         );
