@@ -63,6 +63,8 @@ class MyQRCodeBloc extends Bloc<MyQRCodeEvent, MyQRCodeState> {
       }
     } else if (event is OnDownloadButtonClick) {
       if (event.downloadType == QRDownloadType.poster) {
+        yield QRDownloadInProgress(QRDownloadType.poster);
+
         final posterByteData = await PosterUtil().generateImageByteData(
           user: event.user,
           qrData: event.qrData,
@@ -82,6 +84,7 @@ class MyQRCodeBloc extends Bloc<MyQRCodeEvent, MyQRCodeState> {
               event.buildContext, "Something went wrong! Please try again.");
         }
       } else {
+        yield QRDownloadInProgress(QRDownloadType.sticker);
         final stickerByteData = await StickerUtil().generateImageByteData(
           user: event.user,
           qrData: event.qrData,
@@ -101,6 +104,8 @@ class MyQRCodeBloc extends Bloc<MyQRCodeEvent, MyQRCodeState> {
               event.buildContext, "Something went wrong! Please try again.");
         }
       }
+
+      yield QRDownloadIsFinished();
     }
   }
 

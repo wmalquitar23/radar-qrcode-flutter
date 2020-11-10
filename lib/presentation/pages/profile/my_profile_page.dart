@@ -65,7 +65,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        _buildImage(state?.user?.profileImageUrl),
+                        _buildImage(
+                          state?.user?.profileImageUrl,
+                          state?.user?.isVerified,
+                        ),
                         SizedBox(
                           height: 10.0,
                         ),
@@ -146,7 +149,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  Widget _buildImage(String image) {
+  Widget _buildImage(String image, bool isVerified) {
     return Center(
       child: Container(
         width: 120.0,
@@ -167,22 +170,24 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 decoration: BoxDecoration(
                     color: ColorUtil.primaryBackgroundColor,
                     shape: BoxShape.circle),
-                child: GestureDetector(
-                  onTap: () {
-                    changeImage();
-                  },
-                  child: Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        color: Colors.black, shape: BoxShape.circle),
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                      size: 15,
-                    ),
-                  ),
-                ),
+                child: !isVerified
+                    ? GestureDetector(
+                        onTap: () {
+                          changeImage();
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(5),
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: Colors.black, shape: BoxShape.circle),
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                            size: 15,
+                          ),
+                        ),
+                      )
+                    : Container(),
               ),
             ),
           ],
