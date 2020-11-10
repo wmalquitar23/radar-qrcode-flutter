@@ -29,7 +29,7 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
     String accessType = IN,
     DateTime dateTime,
   }) async {
-    String isoDate = dateTime.toIso8601String();
+    String isoDate = dateTime.toUtc().toIso8601String();
     if (hasConnection) {
       await checkInDb.save({
         "user": UserMapper().toMap(user),
