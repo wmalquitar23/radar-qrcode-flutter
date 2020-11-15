@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/date_utils.dart';
 import 'package:radar_qrcode_flutter/core/utils/image/image.utils.dart';
 import 'package:radar_qrcode_flutter/core/utils/navigation/navigation_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
@@ -230,7 +231,7 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     StatusWidget(
-                      isVerified: state.user.isVerified,
+                      isVerified: user?.isVerified,
                       iconOnly: true,
                     ),
                     DescriptionText(
@@ -304,16 +305,20 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                 SizedBox(
                   height: 20,
                 ),
-                state.user.isVerified
-                    ? Container()
-                    : (totalScannedCheckInData.length < limitScanNumber
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Flexible(child: _buildWarningNote()),
-                            ],
-                          )
-                        : Container()),
+                !DateUtils.isSubscribing(
+                  user?.verification?.expirationDate,
+                  user?.isVerified,
+                  user?.createdAt,
+                )
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: _buildWarningNote(),
+                          ),
+                        ],
+                      )
+                    : Container(),
               ],
             )
           ],
@@ -451,11 +456,13 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
       child: Column(
         children: [
           DescriptionText(
-            title: user.isVerified
+            title: DateUtils.isSubscribing(
+              user?.verification?.expirationDate,
+              user?.isVerified,
+              user?.createdAt,
+            )
                 ? "Please scan a QR Code to retrieve user's information."
-                : (totalScannedCheckInData.length < limitScanNumber
-                    ? "Please scan a QR Code to retrieve user's information."
-                    : "You have reached the scan limit. Please activate your account to continue using Radar."),
+                : "Please activate your account to continue using Radar.",
             color: ColorUtil.primaryTextColor,
             fontSize: 11,
             fontWeight: FontWeight.w600,
@@ -466,9 +473,13 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
               DescriptionText(
                 title: user.isVerified
                     ? ""
-                    : (totalScannedCheckInData.length < limitScanNumber
+                    : DateUtils.isSubscribing(
+                        user?.verification?.expirationDate,
+                        user?.isVerified,
+                        user?.createdAt,
+                      )
                         ? "Activate your account to scan unlimited users."
-                        : "Click "),
+                        : "Click ",
                 color: ColorUtil.primaryTextColor,
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
@@ -479,22 +490,26 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                       context, ESTABLISHMENT_ACTIVATION_INFORMATION_ROUTE);
                 },
                 child: DescriptionText(
-                  title: user.isVerified
+                  title: DateUtils.isSubscribing(
+                    user?.verification?.expirationDate,
+                    user?.isVerified,
+                    user?.createdAt,
+                  )
                       ? ""
-                      : (totalScannedCheckInData.length < limitScanNumber
-                          ? ""
-                          : "here "),
+                      : "here ",
                   color: ColorUtil.primaryColor,
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               DescriptionText(
-                title: user.isVerified
+                title: DateUtils.isSubscribing(
+                  user?.verification?.expirationDate,
+                  user?.isVerified,
+                  user?.createdAt,
+                )
                     ? ""
-                    : (totalScannedCheckInData.length < limitScanNumber
-                        ? ""
-                        : "to activate."),
+                    : "to activate.",
                 color: ColorUtil.primaryTextColor,
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
@@ -512,30 +527,28 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
       child: PrimaryButtonWithIcon(
         onPressed: () {
-          if (user.isVerified) {
+          if (DateUtils.isSubscribing(
+            user?.verification?.expirationDate,
+            user?.isVerified,
+            user?.createdAt,
+          )) {
             Navigator.pushNamed(
               context,
               SCAN_QRCODE_ROUTE,
               arguments: user.role,
             );
           } else {
-            if (totalScannedCheckInData.length < limitScanNumber) {
-              Navigator.pushNamed(
-                context,
-                SCAN_QRCODE_ROUTE,
-                arguments: user.role,
-              );
-            } else {
-              return null;
-            }
+            return null;
           }
         },
         text: 'SCAN QR CODE',
-        color: user.isVerified
+        color: DateUtils.isSubscribing(
+          user?.verification?.expirationDate,
+          user?.isVerified,
+          user?.createdAt,
+        )
             ? ColorUtil.primaryColor
-            : (totalScannedCheckInData.length < limitScanNumber
-                ? ColorUtil.primaryColor
-                : ColorUtil.disabledColor),
+            : ColorUtil.disabledColor,
       ),
     );
   }

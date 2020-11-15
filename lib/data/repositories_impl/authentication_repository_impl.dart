@@ -87,7 +87,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       {
         "firstName": establishmentName,
         "pin": pin,
-        "designatedArea": "Entrance 1",
+        "designatedArea": "Main Entrance",
         "email": email,
         "role": "establishment",
         "contactNumber": contactNumber,

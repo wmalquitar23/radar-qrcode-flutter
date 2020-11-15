@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radar_qrcode_flutter/core/utils/color_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/date_utils.dart';
 import 'package:radar_qrcode_flutter/presentation/bloc/navigation/navigation_bloc.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/bar/custom_app_bar.dart';
 import 'package:radar_qrcode_flutter/presentation/widgets/buttons/navigation_button_item.dart';
@@ -122,15 +123,25 @@ class _NavigationPageState extends State<NavigationPage> {
                                     : Container(),
                                 state is NavigationCheckUserRole
                                     ? !state.isIndividual
-                                        ? NavigationItem(
-                                            iconAsset: "my-qr-code.png",
-                                            title: 'My QR Code',
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              Navigator.pushNamed(
-                                                  context, MY_QRCODE_ROUTE);
-                                            },
-                                          )
+                                        ? state.user.isVerified
+                                            ? (DateUtils.isSubscribing(
+                                                state?.user?.verification
+                                                    ?.expirationDate,
+                                                state?.user?.isVerified,
+                                                state?.user?.createdAt,
+                                              )
+                                                ? NavigationItem(
+                                                    iconAsset: "my-qr-code.png",
+                                                    title: 'My QR Code',
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          MY_QRCODE_ROUTE);
+                                                    },
+                                                  )
+                                                : Container())
+                                            : Container()
                                         : Container()
                                     : Container(),
                                 NavigationItem(

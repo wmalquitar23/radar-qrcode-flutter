@@ -2,13 +2,15 @@ import 'package:radar_qrcode_flutter/core/architecture/radar_app_architecture.da
 import 'package:radar_qrcode_flutter/core/enums/enums.dart';
 import 'package:radar_qrcode_flutter/data/mappers/requirement_mapper.dart';
 import 'package:radar_qrcode_flutter/data/mappers/user_address_mapper.dart';
+import 'package:radar_qrcode_flutter/data/mappers/verification_mapper.dart';
 import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:intl/intl.dart';
 
 class UserMapper extends RadarMapper<User> {
-  DateFormat birthDateFormatter = DateFormat("yyyy-MM-dd");
+  DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
   UserAddressMapper userAddressMapper = UserAddressMapper();
   RequirementMapper requirementMapper = RequirementMapper();
+  VerificationMapper verificationMapper = VerificationMapper();
   @override
   User fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
@@ -29,7 +31,7 @@ class UserMapper extends RadarMapper<User> {
       middleName: map['middleName'] != null ? map['middleName'] : "",
       suffix: map['suffix'] != null ? map['suffix'] : "",
       birthDate: map['birthDate'] != null
-          ? birthDateFormatter.parse(map['birthDate'])
+          ? dateFormatter.parse(map['birthDate'])
           : null,
       gender: gender,
       contactNumber: map['contactNumber'],
@@ -42,6 +44,7 @@ class UserMapper extends RadarMapper<User> {
       isVerified: map.containsKey("verification")
           ? map['verification']['isVerified']
           : null,
+      verification: verificationMapper.fromMap(map['verification']),
       profileImageUrl:
           map['profileImageFileId'] != null ? map['profileImageFileId'] : null,
       displayId: map['displayId'],
@@ -49,6 +52,7 @@ class UserMapper extends RadarMapper<User> {
       designatedArea:
           map['designatedArea'] != null ? map['designatedArea'] : null,
       requirement: requirementMapper.fromMap(map['requirementDoc']),
+      createdAt: dateFormatter.parse(map['createdAt']),
     );
   }
 
