@@ -16,6 +16,10 @@ import 'package:radar_qrcode_flutter/presentation/widgets/properties/shadow_widg
 import 'package:radar_qrcode_flutter/presentation/widgets/texts/description_text.dart';
 
 class MyQRCodePage extends StatefulWidget {
+  final bool isIndividual;
+
+  MyQRCodePage({@required this.isIndividual});
+
   @override
   _MyQRCodePageState createState() => _MyQRCodePageState();
 }
@@ -110,24 +114,36 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Stack(
                   children: [
-                    Container(
-                      height: containerSize,
-                      decoration: BoxDecoration(
-                        color: ColorUtil.primaryColor,
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(34.0),
-                            bottomRight: Radius.circular(34.0)),
+                    if (!widget.isIndividual) ...[
+                      Container(
+                        height: containerSize,
+                        decoration: BoxDecoration(
+                          color: Colors.brown, //ColorUtil.primaryColor,
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(34.0),
+                              bottomRight: Radius.circular(34.0)),
+                        ),
                       ),
-                    ),
+                    ],
                     Column(
                       children: [
                         if (_user != null && _encryptedQr != null) ...[
                           _buildAppBar(),
-                          _buildUserInfo(),
-                          _buildQRInfo(
-                            screenSize,
-                            containerSize,
-                          ),
+                          if (widget.isIndividual) ...[
+                            _buildTitle(),
+                            SizedBox(height: 20),
+                            _buildMyID(
+                              screenSize,
+                              containerSize,
+                            ),
+                          ],
+                          if (!widget.isIndividual) ...[
+                            _buildUserInfo(),
+                            _buildQRInfo(
+                              screenSize,
+                              containerSize,
+                            ),
+                          ],
                           _buildNote(),
                           _buildButtons(context),
                         ],
@@ -158,12 +174,12 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
     );
   }
 
-  Widget _generateQrCOde(Size screenSize) {
+  Widget _generateQrCOde(Size screenSize, {double screenPercentage = 0.70}) {
     return QrImage(
       data: _encryptedQr.toString() ?? "",
       foregroundColor: Colors.black,
       version: QrVersions.auto,
-      size: screenSize.width * 0.70,
+      size: screenSize.width * screenPercentage,
       embeddedImage: AssetImage('assets/images/app_icon/qr_icon.png'),
       embeddedImageStyle: QrEmbeddedImageStyle(
         size: Size(40, 40),
@@ -182,13 +198,34 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
   }
 
   Widget _buildAppBar() {
-    return CustomAppBar(
-      icon: Icons.arrow_back,
-      iconColor: ColorUtil.primaryBackgroundColor,
-      onTap: () {
-        Navigator.pop(context);
-      },
-      imageAsset: 'assets/images/app/logo-white.png',
+    return widget.isIndividual
+        ? CustomAppBar(
+            icon: Icons.arrow_back,
+            iconColor: Colors.black,
+            onTap: () {
+              Navigator.pop(context);
+            },
+            imageAsset: 'assets/images/app/logo-white.png',
+          )
+        : CustomAppBar(
+            icon: Icons.arrow_back,
+            iconColor: ColorUtil.primaryBackgroundColor,
+            onTap: () {
+              Navigator.pop(context);
+            },
+            imageAsset: 'assets/images/app/logo-white.png',
+          );
+  }
+
+  Widget _buildTitle() {
+    return Container(
+      child: Text(
+        'My ID',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 
@@ -248,6 +285,77 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
                 ),
               ],
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMyID(Size screenSize, double containerSize) {
+    return ShadowWidget(
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: ColorUtil.primaryBackgroundColor,
+          border: Border(
+            top: BorderSide(color: Colors.black, width: 15),
+            bottom: BorderSide(color: Color(0xFF2087d4), width: 8),
+          ),
+        ),
+        child: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10.0),
+              child: CircleImage(
+                imageUrl: _user?.profileImageUrl,
+                size: 120.0,
+                fromNetwork: true,
+                border: Border.all(
+                  color: Color(0xFF2087d4),
+                  width: 2.0,
+                ),
+              ),
+            ),
+            Text(
+              _user?.fullName,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 5),
+            Text(
+              _user?.displayId,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Divider(thickness: 1, color: Color(0xFF2087d4)),
+            SizedBox(height: 10.0),
+            Text(
+              '${_user.address.citymunName}, ${_user.address.provName}',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF282828),
+              ),
+            ),
+            SizedBox(height: 5),
+            Text(
+              '0${_user.contactNumber}',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF282828),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Container(
+              margin: EdgeInsets.only(bottom: 10),
+              child: _generateQrCOde(screenSize, screenPercentage: 0.55),
+            ),
           ],
         ),
       ),
@@ -314,7 +422,9 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
         vertical: 40,
       ),
       child: Text(
-        "Download your QR Code poster or sticker and display it somewhere visitors can see it and scan it when they arrive.",
+        widget.isIndividual
+            ? "You can download a print-ready copy of your Radar ID (Front and Back)."
+            : "Download your QR Code poster or sticker and display it somewhere visitors can see it and scan it when they arrive.",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 14,
@@ -330,19 +440,29 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              PrimaryButton(
-                text: "DOWNLOAD POSTER (A4 SIZE)",
-                onPressed: () => _downloadQR(QRDownloadType.poster, context),
-                isLoading: state is QRDownloadInProgress &&
-                    state.qrDownloadType == QRDownloadType.poster,
-              ),
-              // SizedBox(height: 20),
-              // PrimaryButton(
-              //   text: "DOWNLOAD STICKER (3.5in x 6in)",
-              //   onPressed: () => _downloadQR(QRDownloadType.sticker, context),
-              //   isLoading: state is QRDownloadInProgress &&
-              //       state.qrDownloadType == QRDownloadType.sticker,
-              // ),
+              if (widget.isIndividual) ...[
+                PrimaryButton(
+                  text: "DOWNLOAD PRINTABLE ID",
+                  onPressed: () => _downloadQR(QRDownloadType.poster, context),
+                  isLoading: state is QRDownloadInProgress &&
+                      state.qrDownloadType == QRDownloadType.poster,
+                ),
+              ],
+              if (!widget.isIndividual) ...[
+                PrimaryButton(
+                  text: "DOWNLOAD POSTER (A4 SIZE)",
+                  onPressed: () => _downloadQR(QRDownloadType.poster, context),
+                  isLoading: state is QRDownloadInProgress &&
+                      state.qrDownloadType == QRDownloadType.poster,
+                ),
+                // SizedBox(height: 20),
+                // PrimaryButton(
+                //   text: "DOWNLOAD STICKER (3.5in x 6in)",
+                //   onPressed: () => _downloadQR(QRDownloadType.sticker, context),
+                //   isLoading: state is QRDownloadInProgress &&
+                //       state.qrDownloadType == QRDownloadType.sticker,
+                // ),
+              ]
             ],
           ),
         );

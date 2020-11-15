@@ -261,7 +261,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return pushNamed(
           page: BlocProvider(
             create: (_) => sl<MyQRCodeBloc>(),
-            child: MyQRCodePage(),
+            child: MyQRCodePage(
+              isIndividual: args,
+            ),
           ),
           settings: settings,
           pageTransitionType: PageTransitionType.rightToLeftWithFade);

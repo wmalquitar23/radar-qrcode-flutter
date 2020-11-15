@@ -122,7 +122,6 @@ class _NavigationPageState extends State<NavigationPage> {
                                         : Container()
                                     : Container(),
                                 state is NavigationCheckUserRole
-                                    ? !state.isIndividual
                                         ? state.user.isVerified
                                             ? (DateUtils.isSubscribing(
                                                 state?.user?.verification
@@ -130,19 +129,22 @@ class _NavigationPageState extends State<NavigationPage> {
                                                 state?.user?.isVerified,
                                                 state?.user?.createdAt,
                                               )
-                                                ? NavigationItem(
-                                                    iconAsset: "my-qr-code.png",
-                                                    title: 'My QR Code',
+                                    ? NavigationItem(
+                                        iconAsset: "my-qr-code.png",
+                                        title: state.isIndividual
+                                            ? 'My ID'
+                                            : 'My QR Code',
                                                     onPressed: () {
                                                       Navigator.pop(context);
                                                       Navigator.pushNamed(
                                                           context,
                                                           MY_QRCODE_ROUTE);
+                                            arguments: state.isIndividual,
+                                          );
                                                     },
                                                   )
                                                 : Container())
                                             : Container()
-                                        : Container()
                                     : Container(),
                                 NavigationItem(
                                   iconAsset: "contact-us.png",
