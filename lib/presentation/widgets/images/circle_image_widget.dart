@@ -8,12 +8,14 @@ class CircleImage extends StatelessWidget {
   final String imageUrl;
   final Function onClick;
   final bool fromNetwork;
+  final Border border;
 
   const CircleImage({
     Key key,
     @required this.size,
     @required this.imageUrl,
     this.onClick,
+    this.border,
     this.fromNetwork = true,
   }) : super(key: key);
 
@@ -28,6 +30,7 @@ class CircleImage extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
+                    border: border,
                     image: DecorationImage(
                         image: fromNetwork
                             ? CachedNetworkImageProvider(imageUrl)
