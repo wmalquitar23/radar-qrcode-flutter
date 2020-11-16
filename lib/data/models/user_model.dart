@@ -6,6 +6,7 @@ import 'package:radar_qrcode_flutter/core/utils/app/env_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/date_utils.dart';
 import 'package:radar_qrcode_flutter/data/models/address/user_address_model.dart';
 import 'package:radar_qrcode_flutter/data/models/requirement.dart';
+import 'package:radar_qrcode_flutter/data/models/verification.dart';
 
 class User extends RadarModel {
   final String id;
@@ -20,6 +21,7 @@ class User extends RadarModel {
   final UserAddress address;
   final String role;
   final bool isVerified;
+  final Verification verification;
   final String profileImageUrl;
   final String displayId;
   final String establishmentName;
@@ -27,6 +29,7 @@ class User extends RadarModel {
   final String covidStatus;
   final String email;
   final String designatedArea;
+  final DateTime createdAt;
 
   User({
     this.id,
@@ -41,6 +44,7 @@ class User extends RadarModel {
     this.address,
     this.role,
     this.isVerified,
+    this.verification,
     this.profileImageUrl,
     this.displayId,
     this.establishmentName,
@@ -48,6 +52,7 @@ class User extends RadarModel {
     this.covidStatus,
     this.email,
     this.designatedArea,
+    this.createdAt,
   });
 
   String get fullName =>
@@ -68,6 +73,8 @@ class User extends RadarModel {
   }
 
   int get age => birthDate != null ? DateUtils.calculateAge(birthDate) : null;
+
+  int get remainingDaysOfSubscription => verification.expirationDate != null ? DateUtils.remainingDaysOfSubscription(verification.expirationDate, createdAt) : null;
 
   String get genderToString => gender == Gender.male
       ? EnumToString.convertToString(Gender.male, camelCase: true)

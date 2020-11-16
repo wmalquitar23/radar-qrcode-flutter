@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 import 'package:radar_qrcode_flutter/data/models/check_in.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
+import 'package:radar_qrcode_flutter/data/models/user_model.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_offline_data_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/get_session_use_case.dart';
 import 'package:radar_qrcode_flutter/domain/usecases/logout_use_case.dart';
@@ -39,9 +40,17 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
         List<CheckIn> offlineScans = await getOfflineUseCase.execute();
 
         if (session.user.role == "individual") {
-          yield NavigationCheckUserRole(true, offlineScans.length > 0);
+          yield NavigationCheckUserRole(
+            true,
+            offlineScans.length > 0,
+            session.user,
+          );
         } else {
-          yield NavigationCheckUserRole(false, offlineScans.length > 0);
+          yield NavigationCheckUserRole(
+            false,
+            offlineScans.length > 0,
+            session.user,
+          );
         }
       } catch (e) {
         Logger().e(e);
