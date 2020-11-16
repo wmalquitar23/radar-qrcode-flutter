@@ -189,9 +189,6 @@ class _ScanQrcodePageState extends State<ScanQrcodePage>
       dynamic jsonDecrypt = jsonDecode(decrypted);
 
       User qrcode = UserMapper().fromMap(jsonDecrypt);
-      print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-      print(widget.currentRole);
-      print(qrcode.role);
       if (widget.currentRole != qrcode.role) {
         if (qrcode.role == "individual") {
           Navigator.of(context).pop();

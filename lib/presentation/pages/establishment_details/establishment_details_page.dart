@@ -156,11 +156,13 @@ class _EstablishmentDetailsPageState extends State<EstablishmentDetailsPage> {
             children: [
               Row(
                 children: [
-                  DescriptionText(
-                    title: user?.fullName,
-                    color: ColorUtil.primaryColor,
-                    fontSize: 16,
-                    textAlign: TextAlign.start,
+                  Expanded(
+                    child: DescriptionText(
+                      title: user?.fullName,
+                      color: ColorUtil.primaryColor,
+                      fontSize: 16,
+                      textAlign: TextAlign.start,
+                    ),
                   ),
                   SizedBox(
                     width: 8.0,
@@ -190,73 +192,64 @@ class _EstablishmentDetailsPageState extends State<EstablishmentDetailsPage> {
   }
 
   Widget _buildEstablishmentInformation(User user) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          width: 50.0,
-          child: Container(
-            margin: EdgeInsets.symmetric(vertical: 10.0),
-            child: CircleImage(
-              imageUrl: user?.profileImageUrl,
-              size: 50.0,
-              fromNetwork: true,
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: 50.0,
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 10.0),
+              child: CircleImage(
+                imageUrl: user?.profileImageUrl,
+                size: 50.0,
+                fromNetwork: true,
+              ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 8.0,
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  DescriptionText(
-                    title: user?.fullName,
-                    color: ColorUtil.primaryColor,
-                    fontSize: 16,
-                    textAlign: TextAlign.start,
-                  ),
-                  SizedBox(
-                    width: 8.0,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
-                    decoration: BoxDecoration(
-                      color: ColorUtil.tagBlueColor,
-                      borderRadius: BorderRadius.all(Radius.circular(21.0)),
-                    ),
-                    child: DescriptionText(
-                      title: user?.designatedArea,
-                      color: ColorUtil.primaryTextColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 10,
-                    ),
-                  )
-                ],
-              ),
-              Text(
-                UserAddressString.getValue(user?.address),
-                style: TextStyle(
-                  height: 1.5,
-                  fontSize: 12.0,
-                  color: ColorUtil.primaryTextColor,
-                  fontWeight: FontWeight.w500,
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              ),
-            ],
+          SizedBox(
+            width: 8.0,
           ),
-        ),
-      ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DescriptionText(
+                  title: user?.fullName,
+                  color: ColorUtil.primaryColor,
+                  fontSize: 16,
+                  textAlign: TextAlign.start,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
+                  decoration: BoxDecoration(
+                    color: ColorUtil.tagBlueColor,
+                    borderRadius: BorderRadius.all(Radius.circular(21.0)),
+                  ),
+                  child: DescriptionText(
+                    title: user?.designatedArea,
+                    color: ColorUtil.primaryTextColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 10,
+                  ),
+                ),
+                Text(
+                  UserAddressString.getValue(user?.address),
+                  style: TextStyle(
+                    height: 1.5,
+                    fontSize: 12.0,
+                    color: ColorUtil.primaryTextColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
