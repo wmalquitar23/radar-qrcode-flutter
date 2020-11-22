@@ -15,14 +15,16 @@ class UserMapper extends RadarMapper<User> {
   User fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
     Gender gender;
-    switch (map['gender']?.toLowerCase()) {
-      case 'male':
-        gender = Gender.male;
-        break;
-      case 'female':
-        gender = Gender.female;
-        break;
-      default:
+    if (map['gender'] != null) {
+      switch (map['gender']?.toLowerCase()) {
+        case 'male':
+          gender = Gender.male;
+          break;
+        case 'female':
+          gender = Gender.female;
+          break;
+        default:
+      }
     }
     return User(
       id: map['_id'],
@@ -33,7 +35,7 @@ class UserMapper extends RadarMapper<User> {
       birthDate: map['birthDate'] != null
           ? dateFormatter.parse(map['birthDate'])
           : null,
-      gender: gender,
+      gender: gender != null ? gender : null,
       contactNumber: map['contactNumber'],
       address: userAddressMapper.fromMap(map['address']),
       email: map['email'] != null ? map['email'] : "",

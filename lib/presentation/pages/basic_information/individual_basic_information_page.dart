@@ -99,8 +99,8 @@ class _IndividualBasicInformationPageState
         lastName: _lastNameController.text,
         middleName: _middleNameController.text,
         suffix: _suffixController.text,
-        birthDate: StringUtils.convertDateFromString(_birthDateController.text),
-        gender: _genderValue,
+        birthDate: _birthDateController.text != "" ? StringUtils.convertDateFromString(_birthDateController.text) : null,
+        gender: _genderValue != null ? _genderValue : null,
         pin: _pinController.text,
         contactNumber: _contactNumberController.text,
         email: _individualEmailController.text.trim(),
@@ -122,10 +122,10 @@ class _IndividualBasicInformationPageState
 
     changeCount += _firstNameController.text.isNotEmpty ? 1 : 0;
     changeCount += _lastNameController.text.isNotEmpty ? 1 : 0;
-    changeCount += _birthDateController.text.isNotEmpty ? 1 : 0;
-    changeCount += _genderController.text.isNotEmpty ? 1 : 0;
+    // changeCount += _birthDateController.text.isNotEmpty ? 1 : 0;
+    // changeCount += _genderController.text.isNotEmpty ? 1 : 0;
 
-    return changeCount == 4 ? true : false;
+    return changeCount == 2 ? true : false;
   }
 
   void _validatePIN() {
@@ -729,7 +729,7 @@ class _IndividualBasicInformationPageState
     return Container(
       margin: EdgeInsets.symmetric(vertical: textFieldMargin),
       child: PrimaryButton(
-        text: "CONTINUE",
+        text: "Continue",
         isLoading: state is RegisterProgress ? true : false,
         fontSize: 14,
         onPressed: _basicInfo2IsValid ? () => _onRegisterPressed() : null,
