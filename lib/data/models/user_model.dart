@@ -74,9 +74,22 @@ class User extends RadarModel {
 
   int get age => birthDate != null ? DateUtils.calculateAge(birthDate) : null;
 
-  int get remainingDaysOfSubscription => verification.expirationDate != null ? DateUtils.remainingDaysOfSubscription(verification.expirationDate, createdAt) : null;
+  int get remainingDaysOfSubscription => verification.expirationDate != null
+      ? DateUtils.remainingDaysOfSubscription(
+          verification.expirationDate, createdAt)
+      : null;
 
-  String get genderToString => gender == Gender.male
-      ? EnumToString.convertToString(Gender.male, camelCase: true)
-      : EnumToString.convertToString(Gender.female, camelCase: true);
+  // String get genderToString => gender == Gender.male
+  //     ? EnumToString.convertToString(Gender.male, camelCase: true)
+  //     : EnumToString.convertToString(Gender.female, camelCase: true);
+
+  String genderToString() {
+    if (gender != null) {
+      return gender == Gender.male
+          ? EnumToString.convertToString(Gender.male, camelCase: true)
+          : EnumToString.convertToString(Gender.female, camelCase: true);
+    } else {
+      return "";
+    }
+  }
 }

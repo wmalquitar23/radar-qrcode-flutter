@@ -51,12 +51,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
                 if (state is ProfileGetDataSuccess) {
                   DateFormat birthdayFormatter = DateFormat("yyyy-MM-dd");
-
+                  
                   _addressController.text =
                       UserAddressString.getValue(state?.user?.address);
-                  _dateBirthController.text =
-                      birthdayFormatter.format(state?.user?.birthDate);
-                  _genderController.text = state?.user?.genderToString;
+                  _dateBirthController.text = state?.user?.birthDate != null ? 
+                      birthdayFormatter.format(state?.user?.birthDate) : "";
+                  _genderController.text = state?.user?.genderToString();
                   _contactNumberController.text =
                       "+63${state?.user?.contactNumber}";
 
