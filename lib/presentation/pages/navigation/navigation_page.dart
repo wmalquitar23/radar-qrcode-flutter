@@ -114,9 +114,13 @@ class _NavigationPageState extends State<NavigationPage> {
                                             iconAsset: "activation.png",
                                             title: 'Activation',
                                             onPressed: () {
-                                              Navigator.pop(context);
-                                              Navigator.pushNamed(context,
+                                              Navigator.popAndPushNamed(context,
                                                   ESTABLISHMENT_ACTIVATION_INFORMATION_ROUTE);
+
+                                              /// MARK: Comment for awhile
+                                              // Navigator.pop(context);
+                                              // Navigator.pushNamed(context,
+                                              //     ESTABLISHMENT_ACTIVATION_INFORMATION_ROUTE);
                                             },
                                           )
                                         : Container()

@@ -104,6 +104,8 @@ class _EstablishmentHomePageState extends State<EstablishmentHomePage> {
                       "+63${state?.user?.contactNumber}";
                   _designatedAreaController.text =
                       "${state?.user?.designatedAreaToUpperCase}";
+
+                  print("name: ${state.user?.fullName}");
                 }
 
                 if (state.user != null) {
