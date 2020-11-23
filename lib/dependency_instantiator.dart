@@ -112,6 +112,8 @@ class DataInstantiator extends RadarDataInstantiator {
       () => SplashBloc(
         getSessionUseCase: GetSessionUseCase(authenticationRepository),
         getAppInfoUseCase: GetAppInfoUseCase(),
+        getProfileInformationUseCase: GetProfileInformationUseCase(profileRepository),
+        networkInfo: NetworkInfoImpl(dataConnectionChecker),
       ),
     );
     sl.registerFactory<RegisterAsBloc>(
