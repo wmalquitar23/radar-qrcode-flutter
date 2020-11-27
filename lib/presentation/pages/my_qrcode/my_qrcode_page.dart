@@ -118,7 +118,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
                       Container(
                         height: containerSize,
                         decoration: BoxDecoration(
-                          color: Colors.brown, //ColorUtil.primaryColor,
+                          color: ColorUtil.primaryColor,
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(34.0),
                               bottomRight: Radius.circular(34.0)),
@@ -443,9 +443,9 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
               if (widget.isIndividual) ...[
                 PrimaryButton(
                   text: "DOWNLOAD PRINTABLE ID",
-                  onPressed: () => _downloadQR(QRDownloadType.poster, context),
+                  onPressed: () => _downloadQR(QRDownloadType.id, context),
                   isLoading: state is QRDownloadInProgress &&
-                      state.qrDownloadType == QRDownloadType.poster,
+                      state.qrDownloadType == QRDownloadType.id,
                 ),
               ],
               if (!widget.isIndividual) ...[

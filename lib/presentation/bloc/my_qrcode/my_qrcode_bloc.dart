@@ -7,11 +7,13 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/aes.dart';
 import 'package:radar_qrcode_flutter/core/utils/cryptojs_aes/encrypt.dart';
 import 'package:radar_qrcode_flutter/core/utils/qr_code/poster_util.dart';
+import 'package:radar_qrcode_flutter/core/utils/qr_code/qr_id_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/qr_code/sticker_util.dart';
 import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
 import 'package:radar_qrcode_flutter/data/models/session_model.dart';
@@ -62,47 +64,88 @@ class MyQRCodeBloc extends Bloc<MyQRCodeEvent, MyQRCodeState> {
         _sessionSubscription?.cancel();
       }
     } else if (event is OnDownloadButtonClick) {
-      if (event.downloadType == QRDownloadType.poster) {
-        yield QRDownloadInProgress(QRDownloadType.poster);
+      final downloadType = event.downloadType;
 
-        final posterByteData = await PosterUtil().generateImageByteData(
-          user: event.user,
-          qrData: event.qrData,
-        );
+      switch (downloadType) {
+        case QRDownloadType.poster:
+          yield QRDownloadInProgress(QRDownloadType.poster);
 
-        try {
-          await saveImage(
-            event.user.displayId,
-            event.downloadType.getValue,
-            posterByteData,
-          );
+          try {
+            final posterByteData = await PosterUtil().generateImageByteData(
+              user: event.user,
+              qrData: event.qrData,
+            );
 
-          ToastUtil.showToast(
-              event.buildContext, "Poster Downloaded Succesfully!");
-        } catch (e) {
-          ToastUtil.showToast(
-              event.buildContext, "Something went wrong! Please try again.");
-        }
-      } else {
-        yield QRDownloadInProgress(QRDownloadType.sticker);
-        final stickerByteData = await StickerUtil().generateImageByteData(
-          user: event.user,
-          qrData: event.qrData,
-        );
+            await saveImage(
+              event.user.displayId,
+              event.downloadType.getValue,
+              posterByteData,
+            );
 
-        try {
-          await saveImage(
-            event.user.displayId,
-            event.downloadType.getValue,
-            stickerByteData,
-          );
+            ToastUtil.showToast(
+                event.buildContext, "Poster Downloaded Succesfully!");
+          } catch (e) {
+            ToastUtil.showToast(
+                event.buildContext, "Something went wrong! Please try again.");
+          }
+          break;
+        case QRDownloadType.sticker:
+          yield QRDownloadInProgress(QRDownloadType.sticker);
 
-          ToastUtil.showToast(
-              event.buildContext, "Sticker Downloaded Succesfully!");
-        } catch (e) {
-          ToastUtil.showToast(
-              event.buildContext, "Something went wrong! Please try again.");
-        }
+          try {
+            final stickerByteData = await StickerUtil().generateImageByteData(
+              user: event.user,
+              qrData: event.qrData,
+            );
+
+            await saveImage(
+              event.user.displayId,
+              event.downloadType.getValue,
+              stickerByteData,
+            );
+
+            ToastUtil.showToast(
+                event.buildContext, "Sticker Downloaded Succesfully!");
+          } catch (e) {
+            ToastUtil.showToast(
+                event.buildContext, "Something went wrong! Please try again.");
+          }
+          break;
+        case QRDownloadType.id:
+          yield QRDownloadInProgress(QRDownloadType.id);
+
+          try {
+            final frontByteData = await QRIDUtil().generateFrontIDByteData();
+
+            // await Future.delayed(Duration(milliseconds: 1000));
+
+            await saveImage(
+              event.user.displayId,
+              'front',
+              frontByteData,
+            );
+
+            // await Future.delayed(Duration(milliseconds: 1000));
+            // To be updated
+            // final backByteData = await QRIDUtil().generateBackIDByteData(
+            //   user: event.user,
+            //   qrData: event.qrData,
+            // );
+
+            // await saveImage(
+            //   event.user.displayId,
+            //   backByteData,
+            // );
+
+            ToastUtil.showToast(
+                event.buildContext, "Printable ID Downloaded Succesfully!");
+          } catch (e) {
+            ToastUtil.showToast(
+                event.buildContext, "Something went wrong! Please try again.");
+          }
+          break;
+        default:
+          print("Invalid Type");
       }
 
       yield QRDownloadIsFinished();
@@ -121,7 +164,8 @@ class MyQRCodeBloc extends Bloc<MyQRCodeEvent, MyQRCodeState> {
     print(path);
 
     await Directory('$path/$albumName').create(recursive: true);
-    String savePath = '$path/$albumName/$displayId-$type.png';
+    String savePath =
+        '$path/$albumName/$displayId-$type${DateTime.now().millisecondsSinceEpoch}.png';
 
     File(savePath).writeAsBytesSync(image.buffer.asInt8List());
 

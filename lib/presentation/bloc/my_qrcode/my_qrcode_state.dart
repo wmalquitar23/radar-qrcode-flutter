@@ -59,7 +59,7 @@ class QRDownloadInProgress extends MyQRCodeState {
 
 class QRDownloadIsFinished extends MyQRCodeState {}
 
-enum QRDownloadType { poster, sticker }
+enum QRDownloadType { poster, sticker, id }
 
 extension QRownloadTypeExtension on QRDownloadType {
   String get name => describeEnum(this);
@@ -70,6 +70,8 @@ extension QRownloadTypeExtension on QRDownloadType {
         return "poster";
       case QRDownloadType.sticker:
         return "sticker";
+      case QRDownloadType.id:
+        return "id";
       default:
         return null;
     }
