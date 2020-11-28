@@ -144,9 +144,9 @@ class _IndividualBasicInformationPageState
     int changeCount = 0;
     changeCount += _pinController.text.isNotEmpty ? 1 : 0;
     changeCount += _confirmPinController.text.isNotEmpty ? 1 : 0;
-    changeCount += _streetHouseNumController.text.isNotEmpty ? 1 : 0;
+    // changeCount += _streetHouseNumController.text.isNotEmpty ? 1 : 0;
 
-    if (changeCount == 3) {
+    if (changeCount == 2) {
       fieldsNotEmpty = true;
     }
 
@@ -515,7 +515,7 @@ class _IndividualBasicInformationPageState
           readOnly: true,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Gender"),
+              TextFieldTheme.textfieldInputDecoration(hintText: "Gender (optional)"),
         ),
       ),
     );
@@ -595,7 +595,7 @@ class _IndividualBasicInformationPageState
           controller: _birthDateController,
           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w700),
           decoration:
-              TextFieldTheme.textfieldInputDecoration(hintText: "Birth Date"),
+              TextFieldTheme.textfieldInputDecoration(hintText: "Birth Date (optional)"),
         ),
       ),
     );
