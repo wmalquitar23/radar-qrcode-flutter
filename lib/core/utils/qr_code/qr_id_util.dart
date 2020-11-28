@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:ui' as ui;
@@ -45,7 +46,7 @@ class QRIDUtil {
       version: QrVersions.auto,
       embeddedImage: qrIcon,
       embeddedImageStyle: QrEmbeddedImageStyle(
-        size: Size(70, 70),
+        size: Size(80, 80),
       ),
     );
   }
@@ -56,37 +57,87 @@ class QRIDUtil {
     return await loadUIImage(Uint8List.view(byteBuffer));
   }
 
+  Future<ui.Image> getImageFromURL(String url) async {
+    Completer<ImageInfo> completer = Completer();
+    var img = new NetworkImage(url);
+    img
+        .resolve(ImageConfiguration())
+        .addListener(ImageStreamListener((ImageInfo info, bool _) {
+      completer.complete(info);
+    }));
+    ImageInfo imageInfo = await completer.future;
+    return imageInfo.image;
+  }
+
   Future<ui.Image> _generateProfileImage(String url) async {
-    final image = Image.network(url);
+    final profileSize = 274.0;
+
+    final profileImage = await getImageFromURL(url);
+
+    final recorder = ui.PictureRecorder();
+    final canvas = _createCanvas(recorder);
+
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, profileSize, profileSize),
+      Paint()
+        ..color = Colors.grey
+        ..style = PaintingStyle.fill
+        ..strokeWidth = 7,
+    );
+
+    canvas.drawImageRect(
+      profileImage,
+      Rect.fromCenter(
+        center: Offset(profileImage.width / 2, profileImage.height / 2),
+        width: (profileImage.height > profileImage.width
+                ? profileImage.height
+                : profileImage.width)
+            .toDouble(),
+        height: (profileImage.height > profileImage.width
+                ? profileImage.height
+                : profileImage.width)
+            .toDouble(),
+      ),
+      Rect.fromLTWH(0, 0, profileSize, profileSize),
+      Paint(),
+    );
+
+    final picture = recorder.endRecording();
+    final image = await picture.toImage(
+        _imageSize.width.toInt(), _imageSize.height.toInt());
+    final data = await image.toByteData(format: ImageByteFormat.png);
+    return await loadUIImage(Uint8List.view(data.buffer));
   }
 
   void _writeIndividualDetail({
     @required Canvas canvas,
     @required String name,
     @required String displayId,
-    @required String designatedArea,
+    @required String address,
+    @required String number,
   }) {
+    final labelXOffset = 605.0;
+    final maxWidth = 380.0;
+
     final textPainterName = TextPainter(
       text: TextSpan(
         text: name.toUpperCase(),
         style: TextStyle(
           fontSize: 30,
-          fontWeight: FontWeight.bold,
           color: Colors.black,
           // backgroundColor: Colors.black
         ),
       ),
       textDirection: TextDirection.ltr,
-      textAlign: TextAlign.center,
     )..layout(
         minWidth: 0,
-        maxWidth: 573,
+        maxWidth: maxWidth,
       );
     textPainterName.paint(
       canvas,
       Offset(
-        225 + ((573 - textPainterName.width) / 2),
-        995,
+        labelXOffset,
+        115 - (textPainterName.height / 2),
       ),
     );
 
@@ -94,47 +145,62 @@ class QRIDUtil {
       text: TextSpan(
         text: displayId.toUpperCase(),
         style: TextStyle(
-          fontSize: 35,
-          fontWeight: FontWeight.normal,
+          fontSize: 30,
           color: Colors.black,
           // backgroundColor: Colors.black
         ),
       ),
       textDirection: TextDirection.ltr,
-      textAlign: TextAlign.center,
     )..layout(
         minWidth: 0,
-        maxWidth: 573,
+        maxWidth: maxWidth,
       );
     textPainterCode.paint(
       canvas,
       Offset(
-        225 + ((573 - textPainterCode.width) / 2),
-        995 + textPainterName.height + 15,
+        labelXOffset,
+        200,
       ),
     );
 
-    final textPainterDesignatedArea = TextPainter(
+    final textPainterAddress = TextPainter(
       text: TextSpan(
-        text: " $designatedArea ".toUpperCase(),
+        text: "$address ".toUpperCase(),
         style: TextStyle(
-          fontSize: 40,
-          fontWeight: FontWeight.bold,
+          fontSize: 25,
           color: Colors.black,
-          backgroundColor: Color(0xFFcedfe7),
+        ),
+      ),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(
+        minWidth: 0,
+        maxWidth: maxWidth,
+      );
+    textPainterAddress.paint(
+      canvas,
+      Offset(labelXOffset, 287),
+    );
+
+    final textPainterNumber = TextPainter(
+      text: TextSpan(
+        text: "0$number",
+        style: TextStyle(
+          fontSize: 25,
+          color: Colors.black,
         ),
       ),
       textDirection: TextDirection.ltr,
-      textAlign: TextAlign.center,
     )..layout(
         minWidth: 0,
-        maxWidth: 573,
+        maxWidth: maxWidth,
       );
-    textPainterDesignatedArea.paint(
+
+    textPainterNumber.paint(
       canvas,
       Offset(
-        225 + ((573 - textPainterDesignatedArea.width) / 2),
-        (995 + textPainterName.height + textPainterCode.height) + 30,
+        labelXOffset,
+        325,
       ),
     );
   }
@@ -159,10 +225,12 @@ class QRIDUtil {
   }) async {
     final templateImage = await _getBackTemplateImage();
     final qrIcon = await _getQRIcon();
+    final profileImage = await _generateProfileImage(user.profileImageUrl);
 
     final recorder = ui.PictureRecorder();
     final canvas = _createCanvas(recorder);
 
+    canvas.drawImage(profileImage, Offset(228.0, 183.0), Paint());
     canvas.drawImage(templateImage, Offset(0.0, 0.0), Paint());
 
     final paintedQR = _paintQR(qrIcon, qrData);
@@ -177,9 +245,11 @@ class QRIDUtil {
 
     _writeIndividualDetail(
       canvas: canvas,
-      name: user.firstName,
+      name: user.fullName,
       displayId: user.displayId,
-      designatedArea: user.designatedArea,
+      address:
+          "${user.address.brgyName}, ${user.address.citymunName}, ${user.address.provName}",
+      number: user.contactNumber,
     );
 
     final picture = recorder.endRecording();

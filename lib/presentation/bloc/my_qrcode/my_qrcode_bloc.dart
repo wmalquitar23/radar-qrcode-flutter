@@ -117,7 +117,7 @@ class MyQRCodeBloc extends Bloc<MyQRCodeEvent, MyQRCodeState> {
           try {
             final frontByteData = await QRIDUtil().generateFrontIDByteData();
 
-            // await Future.delayed(Duration(milliseconds: 1000));
+            await Future.delayed(Duration(milliseconds: 1000));
 
             await saveImage(
               event.user.displayId,
@@ -125,17 +125,20 @@ class MyQRCodeBloc extends Bloc<MyQRCodeEvent, MyQRCodeState> {
               frontByteData,
             );
 
-            // await Future.delayed(Duration(milliseconds: 1000));
-            // To be updated
-            // final backByteData = await QRIDUtil().generateBackIDByteData(
-            //   user: event.user,
-            //   qrData: event.qrData,
-            // );
+            await Future.delayed(Duration(milliseconds: 3000));
 
-            // await saveImage(
-            //   event.user.displayId,
-            //   backByteData,
-            // );
+            final backByteData = await QRIDUtil().generateBackIDByteData(
+              user: event.user,
+              qrData: event.qrData,
+            );
+
+            await saveImage(
+              event.user.displayId,
+              'back',
+              backByteData,
+            );
+
+            await Future.delayed(Duration(milliseconds: 5000));
 
             ToastUtil.showToast(
                 event.buildContext, "Printable ID Downloaded Succesfully!");
