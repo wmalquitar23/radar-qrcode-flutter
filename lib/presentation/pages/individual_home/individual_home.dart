@@ -165,7 +165,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
           ? PrimaryButton(
               text: state.user.requirement.isSubmitted
                   ? "Pending Verification"
-                  : "Verify Identity",
+                  : "Submit Valid ID",
               color: state.user.requirement.isSubmitted
                   ? ColorUtil.disabledColor
                   : ColorUtil.primaryColor,
@@ -500,7 +500,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                 ? (state.user.requirement.isSubmitted
                     ? "Your document has been successfully uploaded for review."
                     : "In order to complete the verification, please take a picture of your valid government or company ID card.")
-                : "Help local authorities by sharing \nyour information with them.",
+                : "",
             color: ColorUtil.primaryTextColor,
             fontSize: 11,
             fontWeight: FontWeight.w600,
