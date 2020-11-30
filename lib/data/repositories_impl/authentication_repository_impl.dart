@@ -65,8 +65,10 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         "designatedArea": "",
         "suffix": suffix,
         "pin": pin,
-        "birthDate": birthdate != null ? birthdayFormatter.format(birthdate) : null,
-        "gender": gender != null ? (gender == Gender.male ? "male" : "female") : null,
+        "birthDate":
+            birthdate != null ? birthdayFormatter.format(birthdate) : null,
+        "gender":
+            gender != null ? (gender == Gender.male ? "male" : "female") : null,
         "contactNumber": contactNumber,
         "address": userAddressMapper.toMap(userAddress),
         "email": email,

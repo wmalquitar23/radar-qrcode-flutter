@@ -42,7 +42,9 @@ class RegisterIndividualRequest {
     suffix = json['suffix'];
     pin = json['pin'];
     birthDate = json['birthDate'];
-    gender = json['gender'] == "male" ? Gender.male : Gender.female;
+    gender = json['gender'] != null
+        ? (json['gender'] == "male" ? Gender.male : Gender.female)
+        : null;
     contactNumber = json['contactNumber'];
     userAddress = json['address'] != null
         ? _userAddressMapper.fromMap(json['address'])
@@ -60,7 +62,9 @@ class RegisterIndividualRequest {
     data['designatedArea'] = this.designatedArea;
     data['pin'] = this.pin;
     data['birthDate'] = this.birthDate;
-    data['gender'] = this.gender == Gender.male ? "male" : "female";
+    data['gender'] = this.gender != null
+        ? (this.gender == Gender.male ? "male" : "female")
+        : null;
     data['contactNumber'] = this.contactNumber;
     if (this.userAddress != null) {
       data['address'] = _userAddressMapper.toMap(this.userAddress);

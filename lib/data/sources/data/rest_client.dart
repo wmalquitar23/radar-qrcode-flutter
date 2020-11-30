@@ -82,12 +82,9 @@ class RestClient {
   }
 
   Future<StandardResponse> fileUpload(File file) async {
-    
     var data = FormData.fromMap({
-      "file": await MultipartFile.fromFile(
-        file.path,
-        contentType: new MediaType('image', 'jpeg')
-      )
+      "file": await MultipartFile.fromFile(file.path,
+          contentType: new MediaType('image', 'jpeg'))
     });
     Response response = await _dio.post("/files", data: data);
     return apiCatcher(StandardResponse.fromJson(response.data));
@@ -136,18 +133,19 @@ class RestClient {
 
   Future<StandardResponse> changePin(
       String oldPin, String newPin, String id) async {
-    Response response = await _dio
-        .patch("/users/$id", data: {"oldPin": oldPin, "pin": newPin});
+    Response response =
+        await _dio.patch("/users/$id", data: {"oldPin": oldPin, "pin": newPin});
 
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 
-  Future<StandardResponse> checkIn(String id, String accessLogType, {String dateTime}) async {
+  Future<StandardResponse> checkIn(String id, String accessLogType,
+      {String dateTime}) async {
     Response response = await _dio.post("/access-logs", data: {
       "id": id,
       "createdAt": dateTime != null ? dateTime : "",
       "accessType": accessLogType,
-    }); 
+    });
     return apiCatcher(StandardResponse.fromJson(response.data));
   }
 }
