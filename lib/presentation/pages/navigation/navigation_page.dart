@@ -122,29 +122,46 @@ class _NavigationPageState extends State<NavigationPage> {
                                         : Container()
                                     : Container(),
                                 state is NavigationCheckUserRole
-                                        ? state.user.isVerified
+                                    ? state.user.isVerified
+                                        ? (state.user.role == "establishment"
                                             ? (DateUtils.isSubscribing(
                                                 state?.user?.verification
                                                     ?.expirationDate,
                                                 state?.user?.isVerified,
                                                 state?.user?.createdAt,
                                               )
-                                    ? NavigationItem(
-                                        iconAsset: "my-qr-code.png",
-                                        title: state.isIndividual
-                                            ? 'My ID'
-                                            : 'My QR Code',
+                                                ? NavigationItem(
+                                                    iconAsset: "my-qr-code.png",
+                                                    title: state.isIndividual
+                                                        ? 'My ID'
+                                                        : 'My QR Code',
                                                     onPressed: () {
                                                       Navigator.pop(context);
                                                       Navigator.pushNamed(
-                                                          context,
-                                                          MY_QRCODE_ROUTE);
-                                            arguments: state.isIndividual,
-                                          );
+                                                        context,
+                                                        MY_QRCODE_ROUTE,
+                                                        arguments:
+                                                            state.isIndividual,
+                                                      );
                                                     },
                                                   )
                                                 : Container())
-                                            : Container()
+                                            : NavigationItem(
+                                                iconAsset: "my-qr-code.png",
+                                                title: state.isIndividual
+                                                    ? 'My ID'
+                                                    : 'My QR Code',
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  Navigator.pushNamed(
+                                                    context,
+                                                    MY_QRCODE_ROUTE,
+                                                    arguments:
+                                                        state.isIndividual,
+                                                  );
+                                                },
+                                              ))
+                                        : Container()
                                     : Container(),
                                 NavigationItem(
                                   iconAsset: "contact-us.png",
