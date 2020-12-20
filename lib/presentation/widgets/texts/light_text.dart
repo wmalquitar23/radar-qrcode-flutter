@@ -6,10 +6,12 @@ class LightText extends StatelessWidget {
     Key key,
     @required this.text,
     this.horizontalPadding,
+    this.fontSize,
   }) : super(key: key);
 
   final String text;
   final double horizontalPadding;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class LightText extends StatelessWidget {
             text,
             style: TextStyle(
               color: Colors.white,
-              fontSize: sy(10),
+              fontSize: fontSize ?? sy(10),
               fontWeight: FontWeight.w200,
               letterSpacing: 1,
             ),
