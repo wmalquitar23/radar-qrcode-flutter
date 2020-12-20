@@ -1,13 +1,12 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:radar_qrcode_flutter/core/utils/routes/routes_list.dart';
-import 'package:radar_qrcode_flutter/core/utils/toasts/toast_util.dart';
+import 'package:radar_qrcode_flutter/presentation/pages/terms_and_conditions/terms_and_conditions.dart';
 import 'package:relative_scale/relative_scale.dart';
 
 import '../../../core/utils/color_util.dart';
 import '../../widgets/buttons/standard_button_widget.dart';
 import '../../widgets/texts/light_text.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class OnboardPage extends StatelessWidget {
   const OnboardPage({Key key}) : super(key: key);
@@ -21,7 +20,8 @@ class OnboardPage extends StatelessWidget {
             height: height,
             width: width,
             color: ColorUtil.onboardBackground,
-            padding: EdgeInsets.only(top: sy(24), bottom: sy(10), left: sy(24), right: sy(24) ),
+            padding: EdgeInsets.only(
+                top: sy(24), bottom: sy(10), left: sy(24), right: sy(24)),
             child: Column(
               children: [
                 Padding(
@@ -89,16 +89,24 @@ class OnboardPage extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            await _launchURL(context);
+                            await Navigator.push<bool>(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TermsAndConditionsPage(
+                                  readOnly: true,
+                                  isAgree: false
+                                ),
+                              ),
+                            );
                           },
                           child: Text(
                             'Privacy Policy and Terms & Conditions',
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: sy(10),
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 1,
-                            ),
+                                color: Colors.white,
+                                fontSize: sy(8),
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1,
+                                fontFamily: 'Arial'),
                           ),
                         ),
                       ],
@@ -111,15 +119,5 @@ class OnboardPage extends StatelessWidget {
         );
       },
     );
-  }
-
-  _launchURL(BuildContext context) async {
-    const url = 'https://radarph.online/tc.pdf';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-        ToastUtil.showToast(
-            context, "URL error.");
-    }
   }
 }

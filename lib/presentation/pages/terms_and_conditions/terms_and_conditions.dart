@@ -11,9 +11,13 @@ import 'package:radar_qrcode_flutter/presentation/widgets/texts/paragraph_text.d
 
 class TermsAndConditionsPage extends StatefulWidget {
   final bool isAgree;
+  final bool readOnly;
 
-  const TermsAndConditionsPage({Key key, @required this.isAgree})
-      : super(key: key);
+  const TermsAndConditionsPage({
+    Key key,
+    @required this.isAgree,
+    this.readOnly = false,
+  }) : super(key: key);
   @override
   _TermsAndConditionsPageState createState() => _TermsAndConditionsPageState();
 }
@@ -55,8 +59,9 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
       child: MobileStatusMarginTop(
         child: CustomRegularAppBar(
           isContainerScrollable: false,
-          hasLeading: false,
           backgroundColor: Colors.transparent,
+          hasLeading: widget.readOnly,
+          title: widget.readOnly ? "TERMS AND CONDITION" : "",
           body: Stack(
             children: [
               SingleChildScrollView(
@@ -64,7 +69,13 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                 physics: BouncingScrollPhysics(),
                 child: Container(
                   padding: EdgeInsets.fromLTRB(
-                      0.0, 50, 15.0, MediaQuery.of(context).size.height * 0.20),
+                    0.0,
+                    widget.readOnly ? 20 : 50,
+                    15.0,
+                    widget.readOnly
+                        ? 0
+                        : MediaQuery.of(context).size.height * 0.20,
+                  ),
                   child: Column(
                     children: [
                       Padding(
@@ -72,15 +83,19 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            HeaderText(
-                              title: "TERMS AND CONDITION",
-                              textAlign: TextAlign.left,
-                              fontWeight: FontWeight.w500,
-                              color: ColorUtil.primaryColor,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
+                            widget.readOnly
+                                ? Container()
+                                : HeaderText(
+                                    title: "TERMS AND CONDITION",
+                                    textAlign: TextAlign.left,
+                                    fontWeight: FontWeight.w500,
+                                    color: ColorUtil.primaryColor,
+                                  ),
+                            widget.readOnly
+                                ? Container()
+                                : SizedBox(
+                                    height: 10,
+                                  ),
                             ParagraphText(
                               label: DEFINITIONS.label,
                               content: DEFINITIONS.content,
@@ -176,109 +191,119 @@ class _TermsAndConditionsPageState extends State<TermsAndConditionsPage> {
                           ],
                         ),
                       ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: _agreementCheckBox,
-                            onChanged: (value) {
-                              setState(() {
-                                _agreementCheckBox = value;
-                                _scrollListener();
-                              });
-                            },
-                          ),
-                          Flexible(
-                            child: DescriptionText(
-                              textAlign: TextAlign.start,
-                              title:
-                                  "Notify me of your future updates, promos and services.",
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.w600,
-                              color: ColorUtil.primaryTextColor,
+                      widget.readOnly
+                          ? Container()
+                          : Row(
+                              children: [
+                                Checkbox(
+                                  value: _agreementCheckBox,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _agreementCheckBox = value;
+                                      _scrollListener();
+                                    });
+                                  },
+                                ),
+                                Flexible(
+                                  child: DescriptionText(
+                                    textAlign: TextAlign.start,
+                                    title:
+                                        "Notify me of your future updates, promos and services.",
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorUtil.primaryTextColor,
+                                  ),
+                                )
+                              ],
                             ),
-                          )
-                        ],
-                      ),
                       SizedBox(
-                        height: 20,
+                        height: widget.readOnly ? 0 : 20,
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15.0),
-                        child: DescriptionText(
-                          textAlign: TextAlign.start,
-                          title:
-                              "By clicking I Accept, the USER agrees to the Terms and Conditions and Privacy Policy of this Agreement.",
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w600,
-                          color: ColorUtil.primaryTextColor,
-                        ),
-                      ),
+                      widget.readOnly
+                          ? Container()
+                          : Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 15.0),
+                              child: DescriptionText(
+                                textAlign: TextAlign.start,
+                                title:
+                                    "By clicking I Accept, the USER agrees to the Terms and Conditions and Privacy Policy of this Agreement.",
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w600,
+                                color: ColorUtil.primaryTextColor,
+                              ),
+                            ),
                     ],
                   ),
                 ),
               ),
-              Positioned(
-                child: new Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.20,
-                    decoration: BoxDecoration(
-                      color: ColorUtil.primaryBackgroundColor,
-                      gradient: LinearGradient(
-                        begin: const FractionalOffset(0.0, 0.0),
-                        end: const FractionalOffset(0.0, 0.5),
-                        colors: [
-                          Colors.white.withOpacity(0.0),
-                          ColorUtil.primaryBackgroundColor,
-                        ],
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 20),
-                                child: SecondaryButton(
-                                  onPressed: () {
-                                    Navigator.pop(context, false);
-                                  },
-                                  height: 45,
-                                  text: 'Decline',
-                                  fontSize: 12,
-                                ),
+              widget.readOnly
+                  ? Container()
+                  : Positioned(
+                      child: new Align(
+                        alignment: FractionalOffset.bottomCenter,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.20,
+                          decoration: BoxDecoration(
+                            color: ColorUtil.primaryBackgroundColor,
+                            gradient: LinearGradient(
+                              begin: const FractionalOffset(0.0, 0.0),
+                              end: const FractionalOffset(0.0, 0.5),
+                              colors: [
+                                Colors.white.withOpacity(0.0),
+                                ColorUtil.primaryBackgroundColor,
+                              ],
+                            ),
+                          ),
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
+                                      child: SecondaryButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, false);
+                                        },
+                                        height: 45,
+                                        text: 'Decline',
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
+                                      child: PrimaryButton(
+                                        onPressed: () {
+                                          if (hasScrolledAtBottom) {
+                                            Navigator.pop(context, true);
+                                          }
+                                        },
+                                        height: 45,
+                                        text: 'I accept',
+                                        fontSize: 12,
+                                        color: hasScrolledAtBottom
+                                            ? ColorUtil.primaryColor
+                                            : Colors.grey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 20),
-                                child: PrimaryButton(
-                                  onPressed: () {
-                                    Navigator.pop(context, true);
-                                  },
-                                  height: 45,
-                                  text: 'I accept',
-                                  fontSize: 12,
-                                  color: hasScrolledAtBottom
-                                      ? ColorUtil.primaryColor
-                                      : Colors.grey,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              )
+                    )
             ],
           ),
         ),
