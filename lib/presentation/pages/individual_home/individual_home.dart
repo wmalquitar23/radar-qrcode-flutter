@@ -132,7 +132,7 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
                                         state.individualGetUserSuccess)
                                     : Container(),
                                 SizedBox(
-                                  height: 50,
+                                  height: 20,
                                 )
                               ],
                             ),
@@ -158,83 +158,90 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
     );
   }
 
+  Widget notVerifiedButton(IndividualGetUserSuccess state) {
+    return PrimaryButton(
+        text: state.user.requirement.isSubmitted
+            ? "Pending Verification"
+            : "Submit Valid ID",
+        color: state.user.requirement.isSubmitted
+            ? ColorUtil.disabledColor
+            : ColorUtil.primaryColor,
+        onPressed: () {
+          if (state.user.requirement.isSubmitted) {
+            return null;
+          } else {
+            // set up the buttons
+            Widget cancelButton = FlatButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            );
+            Widget continueButton = FlatButton(
+              child: Text("Proceed"),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.of(context).pushNamed(IDENTITY_VERIFICATION_ROUTE);
+              },
+            );
+
+            // set up the AlertDialog
+            AlertDialog alert = AlertDialog(
+              title: Text("Important Note"),
+              content: DescriptionText(
+                title:
+                    "Please change your profile image with your recent picture before sending your ID for validation. Note that you can no longer change your profile image once your account is validated.",
+                fontWeight: FontWeight.w500,
+                color: ColorUtil.primaryTextColor,
+                textAlign: TextAlign.left,
+              ),
+              actions: [
+                cancelButton,
+                continueButton,
+              ],
+            );
+
+            // show the dialog
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return alert;
+              },
+            );
+          }
+        });
+  }
+
+  Widget getInTouchText() {
+    return Column(
+      children: [
+        DescriptionText(
+          title: "For Profile updates and any other concerns, please ",
+          color: ColorUtil.primaryTextColor,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, CONTACT_US_ROUTE);
+          },
+          child: DescriptionText(
+            title: "get in touch with us",
+            color: ColorUtil.primaryColor,
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildVerifyIdentityButton(IndividualGetUserSuccess state) {
     return Container(
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20),
       child: !state.user.isVerified
-          ? PrimaryButton(
-              text: state.user.requirement.isSubmitted
-                  ? "Pending Verification"
-                  : "Submit Valid ID",
-              color: state.user.requirement.isSubmitted
-                  ? ColorUtil.disabledColor
-                  : ColorUtil.primaryColor,
-              onPressed: () {
-                if (state.user.requirement.isSubmitted) {
-                  return null;
-                } else {
-                  // set up the buttons
-                  Widget cancelButton = FlatButton(
-                    child: Text("Cancel"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  );
-                  Widget continueButton = FlatButton(
-                    child: Text("Proceed"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.of(context)
-                          .pushNamed(IDENTITY_VERIFICATION_ROUTE);
-                    },
-                  );
-
-                  // set up the AlertDialog
-                  AlertDialog alert = AlertDialog(
-                    title: Text("Important Note"),
-                    content: DescriptionText(
-                      title:
-                          "Please change your profile image with your recent picture before sending your ID for validation. Note that you can no longer change your profile image once your account is validated.",
-                      fontWeight: FontWeight.w500,
-                      color: ColorUtil.primaryTextColor,
-                      textAlign: TextAlign.left,
-                    ),
-                    actions: [
-                      cancelButton,
-                      continueButton,
-                    ],
-                  );
-
-                  // show the dialog
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alert;
-                    },
-                  );
-                }
-              })
-          : Column(
-              children: [
-                DescriptionText(
-                  title: "For Profile updates and any other concerns, please ",
-                  color: ColorUtil.primaryTextColor,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, CONTACT_US_ROUTE);
-                  },
-                  child: DescriptionText(
-                    title: "get in touch with us",
-                    color: ColorUtil.primaryColor,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
+          ? notVerifiedButton(state)
+          : getInTouchText(),
     );
   }
 
@@ -491,16 +498,20 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
   }
 
   Widget _buildHint(IndividualGetUserSuccess state) {
+    String verifiedStatusMessage = "";
+    if(!state.user.isVerified){
+      if(state.user.requirement.isSubmitted){
+        verifiedStatusMessage = "Your document has been successfully uploaded for review.";
+      }else{
+        verifiedStatusMessage = "In order to complete the verification, please take a picture of your valid government or company ID card.";
+      }
+    }
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: verifiedStatusMessage != "" ? 30.0 : 0.0),
       child: Column(
         children: [
           DescriptionText(
-            title: !state.user.isVerified
-                ? (state.user.requirement.isSubmitted
-                    ? "Your document has been successfully uploaded for review."
-                    : "In order to complete the verification, please take a picture of your valid government or company ID card.")
-                : "",
+            title: verifiedStatusMessage,
             color: ColorUtil.primaryTextColor,
             fontSize: 11,
             fontWeight: FontWeight.w600,
@@ -508,5 +519,6 @@ class _IndividualHomePageState extends State<IndividualHomePage> {
         ],
       ),
     );
+    
   }
 }

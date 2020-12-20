@@ -20,10 +20,12 @@ class RapidPassContactRepositoryImpl extends RapidPassContactRepository {
 
     // Get Contact from API via Rest Client
     if (rapidPassContact == null) {
-      rapidPassContact = await Future.value(RapidPassContact(
-        mobileNumber: "09971669233",
-        emailAddress: "phonradar@gmail.com",
-      ));
+      rapidPassContact = await Future.value(
+        RapidPassContact(
+          mobileNumber: "09397677395",
+          emailAddress: "phonradar@gmail.com",
+        ),
+      );
 
       await rapidPassContactDb.saveContact(rapidPassContact);
     }
