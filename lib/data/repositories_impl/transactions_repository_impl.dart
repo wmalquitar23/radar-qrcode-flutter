@@ -40,6 +40,7 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
       await restClient.checkIn(
         user.id,
         accessType,
+        designatedArea: user.designatedArea != null ? user.designatedArea : "",
         dateTime: isoDate,
       );
     } else {
@@ -56,7 +57,6 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
     List<CheckIn> localdata = await checkInDb.getAllData();
 
     await Future.forEach(localdata, (CheckIn data) async {
-      print(data.user.designatedArea);
       await restClient.checkIn(
         data.user.id,
         data.accessLogType,

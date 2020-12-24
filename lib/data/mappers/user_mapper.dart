@@ -78,6 +78,7 @@ class UserMapper extends RadarMapper<User> {
       "gender": object.gender,
       "contactNumber": object.contactNumber,
       "address": userAddressMapper.toMap(object.address),
+      "designatedArea": object.designatedArea != null ? object.designatedArea : null,
     };
   }
 }
