@@ -22,7 +22,7 @@ class RapidPassContactRepositoryImpl extends RapidPassContactRepository {
     if (rapidPassContact == null) {
       rapidPassContact = await Future.value(
         RapidPassContact(
-          mobileNumber: "09397677395",
+          mobileNumber: "09212479833",
           emailAddress: "phonradar@gmail.com",
         ),
       );
