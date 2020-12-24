@@ -56,11 +56,12 @@ class TransactionsRepositoryImpl extends TransactionsRepository {
     List<CheckIn> localdata = await checkInDb.getAllData();
 
     await Future.forEach(localdata, (CheckIn data) async {
+      print(data.user.designatedArea);
       await restClient.checkIn(
         data.user.id,
         data.accessLogType,
         dateTime: data.dateTime,
-        designatedArea: data.user.designatedArea,
+        designatedArea: data.user.designatedArea != null ? data.user.designatedArea : "",
       );
       await checkInDb.updateData(data.key);
     });
